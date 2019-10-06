@@ -88,14 +88,14 @@
 
 <meta name="description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 <meta property="og:type" content="article">
-<meta property="og:title" content="c++学习笔记">
-<meta property="og:url" content="http://yoursite.com/2019/10/05/c++学习笔记/index.html">
+<meta property="og:title" content="c++学习笔记（c++编程基础）">
+<meta property="og:url" content="http://yoursite.com/2019/10/05/c++学习笔记 （c++编程基础）/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-05T10:05:22.439Z">
+<meta property="og:updated_time" content="2019-10-06T10:18:59.777Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="c++学习笔记">
+<meta name="twitter:title" content="c++学习笔记（c++编程基础）">
 <meta name="twitter:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/05/c++学习笔记/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/05/c++学习笔记 （c++编程基础）/">
 
 
 
 
 
-  <title>c++学习笔记 | zhz'blog</title>
+  <title>c++学习笔记（c++编程基础） | zhz'blog</title>
   
 
 
@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/05/c++学习笔记/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/05/c++学习笔记 （c++编程基础）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -310,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">c++学习笔记</h1>
+          <h1 class="post-title" itemprop="name headline">c++学习笔记（c++编程基础）</h1>
         
 
         <div class="post-meta">
@@ -464,6 +464,20 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*pi ;  <span class="comment">// 求ival的值</span></span><br></pre></td></tr></table></figure>
 
 <p>等于是操作pi所指的对象，在我理解里就是直接对0x5a6f7780这个地址里写入的值进行操作</p>
+<h3 id="文件的读写"><a href="#文件的读写" class="headerlink" title="文件的读写"></a>文件的读写</h3><p>头文件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>打开可供写入的文件</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ofstream outfile ( "文件名")；</span><br></pre></td></tr></table></figure>
+
+<p>注： 此举会使文件中原有数据全部清空</p>
+<p>追加模式写入文件（会写在文件末尾）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ofstream <span class="title">outfile</span><span class="params">(<span class="string">"文件名"</span> , ios_base::app)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>读取文件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ifstream <span class="title">infile</span><span class="params">(<span class="string">"文件名"</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>注： 从开头开始读取</p>
 
       
     </div>
@@ -490,7 +504,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/05/c++学习笔记/" title="c++学习笔记">http://yoursite.com/2019/10/05/c++学习笔记/</a>
+    <a href="http://yoursite.com/2019/10/05/c++学习笔记 （c++编程基础）/" title="c++学习笔记（c++编程基础）">http://yoursite.com/2019/10/05/c++学习笔记 （c++编程基础）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -521,6 +535,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/06/c++学习笔记（面向过程的编程风格）/" rel="prev" title="c++学习笔记（面向过程的编程风格）">
+                c++学习笔记（面向过程的编程风格） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -599,7 +617,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -636,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-namespace"><span class="nav-number">1.</span> <span class="nav-text">using namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件运算符-‘-’-和’-’"><span class="nav-number">3.</span> <span class="nav-text">条件运算符 ‘?’ 和’:’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环语句之switch"><span class="nav-number">4.</span> <span class="nav-text">循环语句之switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array和Vector-数组"><span class="nav-number">5.</span> <span class="nav-text">Array和Vector 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">5.1.</span> <span class="nav-text">Array :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vector"><span class="nav-number">5.2.</span> <span class="nav-text">Vector :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">6.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">6.1.</span> <span class="nav-text">注：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-namespace"><span class="nav-number">1.</span> <span class="nav-text">using namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件运算符-‘-’-和’-’"><span class="nav-number">3.</span> <span class="nav-text">条件运算符 ‘?’ 和’:’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环语句之switch"><span class="nav-number">4.</span> <span class="nav-text">循环语句之switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array和Vector-数组"><span class="nav-number">5.</span> <span class="nav-text">Array和Vector 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">5.1.</span> <span class="nav-text">Array :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vector"><span class="nav-number">5.2.</span> <span class="nav-text">Vector :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">6.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">6.1.</span> <span class="nav-text">注：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的读写"><span class="nav-number">7.</span> <span class="nav-text">文件的读写</span></a></li></ol></div>
             
 
           </div>
