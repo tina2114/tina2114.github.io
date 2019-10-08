@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动">
+<meta name="description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动 inline函数1234567891011121">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c++学习笔记（面向过程的编程风格）">
 <meta property="og:url" content="http://yoursite.com/2019/10/06/c++学习笔记（面向过程的编程风格）/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动">
+<meta property="og:description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动 inline函数1234567891011121">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-06T10:29:54.053Z">
+<meta property="og:updated_time" content="2019-10-08T10:02:42.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c++学习笔记（面向过程的编程风格）">
-<meta name="twitter:description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动">
+<meta name="twitter:description" content="传值与传址传值：只是讲其的值进行复制，再在函数里进行改变，但实际上，那个地址上的值没有任何变动 在调用函数时，会创建一块栈空间，保存了这个模块中的形参，一旦函数执行完毕，就会pop。 过程就是  sub   mov   add  当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。 传址：直接对地址上的值进行变动 inline函数1234567891011121">
 
 
 
@@ -401,6 +401,10 @@
 <p>过程就是  sub   mov   add </p>
 <p>当我们将vec[ix]这样的对象传入函数，默认情况下其值会被复制一份，成为意义上的形参。</p>
 <p>传址：直接对地址上的值进行变动</p>
+<h3 id="inline函数"><a href="#inline函数" class="headerlink" title="inline函数"></a>inline函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">//函数定义为inline即:内联函数</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">char</span>* <span class="title">dbtest</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (i % <span class="number">2</span> &gt; <span class="number">0</span>) ? <span class="string">"奇"</span> : <span class="string">"偶"</span>;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">for</span> (i=<span class="number">1</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">       <span class="built_in">printf</span>(<span class="string">"i:%d    奇偶性:%s /n"</span>, i, dbtest(i));    </span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子就是标准的内联函数的用法，使用inline修饰带来的好处我们表面看不出来，其实，在内部的工作就是在每个for循环的内部任何调用dbtest(i)的地方都换成了(i%2&gt;0)?”奇”:”偶”，这样就<strong>避免了频繁调用函数对栈内存重复开辟所带来的消耗</strong>。</p>
+<p>（不懂的可以拿poc去gcc，看汇编分析）</p>
 
       
     </div>
@@ -573,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#传值与传址"><span class="nav-number">1.</span> <span class="nav-text">传值与传址</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#传值与传址"><span class="nav-number">1.</span> <span class="nav-text">传值与传址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inline函数"><span class="nav-number">2.</span> <span class="nav-text">inline函数</span></a></li></ol></div>
             
 
           </div>
