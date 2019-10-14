@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-08T10:09:32.126Z">
+<meta property="og:updated_time" content="2019-10-14T11:43:16.032Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c++学习笔记（c++编程基础）">
 <meta name="twitter:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
@@ -480,6 +480,60 @@
 <p>注： 从开头开始读取</p>
 <h3 id="‘-‘-amp-“-“"><a href="#‘-‘-amp-“-“" class="headerlink" title="‘  ‘ &amp; “  “"></a>‘  ‘ &amp; “  “</h3><p>‘a’代表了字母a</p>
 <p>“a”代表了一个字符数组，该数组包含两个字符： 1. a      2. ‘\x00’</p>
+<p>a++ 与 ++a的稍许差别</p>
+<h3 id="a-与-a的稍许差别"><a href="#a-与-a的稍许差别" class="headerlink" title="a++ 与 ++a的稍许差别"></a>a++ 与 ++a的稍许差别</h3><p>对于a++，它先拷贝自己的副本，然后对真值+1。</p>
+<p>对于++a,它只是在真值上+1/</p>
+<p>如test1</p>
+<p>a=1;</p>
+<table>
+<thead>
+<tr>
+<th>栈</th>
+<th>运算式</th>
+<th>真值</th>
+<th>副本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>低位</td>
+<td>a++</td>
+<td>7</td>
+<td>6</td>
+</tr>
+<tr>
+<td></td>
+<td>++a</td>
+<td>6</td>
+<td>无</td>
+</tr>
+<tr>
+<td></td>
+<td>a++</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr>
+<td></td>
+<td>++a</td>
+<td>4</td>
+<td>无</td>
+</tr>
+<tr>
+<td></td>
+<td>a++</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>高位</td>
+<td>++a</td>
+<td>2</td>
+<td>无</td>
+</tr>
+</tbody></table>
+<p>此时，a的真值为7，自低位输出，如有副本则输出副本，无副本输出现在a的真值7</p>
+<p>结果： 6 7 4 7 2 7</p>
+<p>（这里得感谢Delort师傅的文章）</p>
 
       
     </div>
@@ -619,7 +673,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -656,7 +710,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-namespace"><span class="nav-number">1.</span> <span class="nav-text">using namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件运算符-‘-’-和’-’"><span class="nav-number">3.</span> <span class="nav-text">条件运算符 ‘?’ 和’:’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环语句之switch"><span class="nav-number">4.</span> <span class="nav-text">循环语句之switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array和Vector-数组"><span class="nav-number">5.</span> <span class="nav-text">Array和Vector 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">5.1.</span> <span class="nav-text">Array :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vector"><span class="nav-number">5.2.</span> <span class="nav-text">Vector :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">6.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">6.1.</span> <span class="nav-text">注：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的读写"><span class="nav-number">7.</span> <span class="nav-text">文件的读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#‘-‘-amp-“-“"><span class="nav-number">8.</span> <span class="nav-text">‘  ‘ &amp; “  “</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-namespace"><span class="nav-number">1.</span> <span class="nav-text">using namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件运算符-‘-’-和’-’"><span class="nav-number">3.</span> <span class="nav-text">条件运算符 ‘?’ 和’:’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环语句之switch"><span class="nav-number">4.</span> <span class="nav-text">循环语句之switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array和Vector-数组"><span class="nav-number">5.</span> <span class="nav-text">Array和Vector 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">5.1.</span> <span class="nav-text">Array :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vector"><span class="nav-number">5.2.</span> <span class="nav-text">Vector :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">6.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">6.1.</span> <span class="nav-text">注：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的读写"><span class="nav-number">7.</span> <span class="nav-text">文件的读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#‘-‘-amp-“-“"><span class="nav-number">8.</span> <span class="nav-text">‘  ‘ &amp; “  “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-与-a的稍许差别"><span class="nav-number">9.</span> <span class="nav-text">a++ 与 ++a的稍许差别</span></a></li></ol></div>
             
 
           </div>
