@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="一个实验的poc 12345678910111213141516171819202122232425262728#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;unsigned long * target = 0;void init()&amp;#123;	setbuf(stdin,0);	setbuf(stdo">
+<meta name="description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下： ​    将所有的“#define”删除，并且展开所有的宏定义。 ​    处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pwn unlink">
-<meta property="og:url" content="http://yoursite.com/2019/10/04/pwn  unlink/index.html">
+<meta property="og:title" content="程序员的自我修养（整理）">
+<meta property="og:url" content="http://yoursite.com/2019/10/18/程序员的自我修养（整理）/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="一个实验的poc 12345678910111213141516171819202122232425262728#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;unsigned long * target = 0;void init()&amp;#123;	setbuf(stdin,0);	setbuf(stdo">
+<meta property="og:description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下： ​    将所有的“#define”删除，并且展开所有的宏定义。 ​    处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-06T06:27:40.233Z">
+<meta property="og:updated_time" content="2019-10-16T10:06:43.989Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pwn unlink">
-<meta name="twitter:description" content="一个实验的poc 12345678910111213141516171819202122232425262728#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;unsigned long * target = 0;void init()&amp;#123;	setbuf(stdin,0);	setbuf(stdo">
+<meta name="twitter:title" content="程序员的自我修养（整理）">
+<meta name="twitter:description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下： ​    将所有的“#define”删除，并且展开所有的宏定义。 ​    处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#">
 
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/04/pwn  unlink/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/18/程序员的自我修养（整理）/">
 
 
 
 
 
-  <title>pwn unlink | zhz'blog</title>
+  <title>程序员的自我修养（整理） | zhz'blog</title>
   
 
 
@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/pwn  unlink/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/18/程序员的自我修养（整理）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -310,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pwn unlink</h1>
+          <h1 class="post-title" itemprop="name headline">程序员的自我修养（整理）</h1>
         
 
         <div class="post-meta">
@@ -322,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-04T14:41:33+08:00">
-                2019-10-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-18T12:23:45+08:00">
+                2019-10-18
               </time>
             
 
@@ -396,9 +396,18 @@
       
 
       
-        <p>一个实验的poc</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> * target = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">	setbuf(<span class="built_in">stdin</span>,<span class="number">0</span>);</span><br><span class="line">	setbuf(<span class="built_in">stdout</span>,<span class="number">0</span>);</span><br><span class="line">	setbuf(<span class="built_in">stderr</span>,<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> * ptr1 = <span class="built_in">malloc</span>(<span class="number">0x88</span>);</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> * ptr2 = <span class="built_in">malloc</span>(<span class="number">0x88</span>);</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> * ptr3 = <span class="built_in">malloc</span>(<span class="number">0x18</span>);</span><br><span class="line">	target = ptr1;</span><br><span class="line">	ptr1[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	ptr1[<span class="number">1</span>] = <span class="number">0x81</span>;</span><br><span class="line">	ptr1[<span class="number">2</span>] = (<span class="keyword">unsigned</span> <span class="keyword">long</span>)(&amp;target) - <span class="number">0x18</span>;</span><br><span class="line">	ptr1[<span class="number">3</span>] = (<span class="keyword">unsigned</span> <span class="keyword">long</span>)(&amp;target) - <span class="number">0x10</span>;</span><br><span class="line">	ptr2[<span class="number">-2</span>] = <span class="number">0x80</span>;</span><br><span class="line">	ptr2[<span class="number">-1</span>] = <span class="number">0x90</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"target = %p before free\n"</span>,target);</span><br><span class="line">	<span class="built_in">free</span>(ptr2);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"target = %p after free\n"</span>,target);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"pid = %d\n"</span>,getpid());</span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+        <h3 id="编译与链接"><a href="#编译与链接" class="headerlink" title="编译与链接"></a>编译与链接</h3><p>在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接</p>
+<h4 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h4><p>预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：</p>
+<p>​    将所有的“#define”删除，并且展开所有的宏定义。</p>
+<p>​    处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。</p>
+<p>​    处理“#include”预编译指令，将被包含的文件插入到该预编译指令的位置，注意，这个过程是递归进行的，也就是说被包含的文件可能还包含其他文件。</p>
+<p>​    删除所有的注释“\\“和”/**/“。</p>
+<p>​    添加行号和文件标识名，比如#2”hello.c“ 2，以便于编译时编译器产生调试用的行号信息以及用于编译时产生编译错误或警告时能够显示行号.</p>
+<p>​    保留所有的#prcagma编译器指令，因为编译器需要使用它们。</p>
+<p>经过预处理的.i文件不包含任何宏定义，因为所有的宏已经被展开。</p>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>编译过程就是把预处理完的文件进行一系列词法分析，语法分析，语义分析以及优化后生产相应的汇编代码。（因为过菜，待细细整理后再详写）</p>
+<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><p>汇编器将汇编代码转为机器码的过程</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>菜鸡写不出来，呜呜，还是等详细看完再写吧</p>
 
       
     </div>
@@ -425,7 +434,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/04/pwn  unlink/" title="pwn unlink">http://yoursite.com/2019/10/04/pwn  unlink/</a>
+    <a href="http://yoursite.com/2019/10/18/程序员的自我修养（整理）/" title="程序员的自我修养（整理）">http://yoursite.com/2019/10/18/程序员的自我修养（整理）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -447,8 +456,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/04/byte ctf (pwn)/" rel="next" title="byte ctf (pwn)">
-                <i class="fa fa-chevron-left"></i> byte ctf (pwn)
+              <a href="/2019/10/18/搭建博客的一些坑/" rel="next" title="搭建博客的一些坑">
+                <i class="fa fa-chevron-left"></i> 搭建博客的一些坑
               </a>
             
           </div>
@@ -457,8 +466,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/04/对于栈迁移技术的学习/" rel="prev" title="对于栈迁移技术的学习">
-                对于栈迁移技术的学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/18/第五空间线下赛（pwn）/" rel="prev" title="第五空间线下赛（pwn）">
+                第五空间线下赛（pwn） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -511,8 +520,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -556,6 +574,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译与链接"><span class="nav-number">1.</span> <span class="nav-text">编译与链接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#预处理"><span class="nav-number">1.1.</span> <span class="nav-text">预处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编"><span class="nav-number">3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
