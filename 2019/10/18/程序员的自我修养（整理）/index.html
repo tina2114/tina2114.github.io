@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：  将所有的“#define”删除，并且展开所有的宏定义。  处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。">
+<meta name="description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：  将所有的“#define”删除，并且展开所有的宏定义。 处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。 处">
 <meta property="og:type" content="article">
 <meta property="og:title" content="程序员的自我修养（整理）">
 <meta property="og:url" content="http://yoursite.com/2019/10/18/程序员的自我修养（整理）/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：  将所有的“#define”删除，并且展开所有的宏定义。  处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。">
+<meta property="og:description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：  将所有的“#define”删除，并且展开所有的宏定义。 处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。 处">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-18T04:50:19.321Z">
+<meta property="og:updated_time" content="2019-10-18T04:53:04.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="程序员的自我修养（整理）">
-<meta name="twitter:description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：  将所有的“#define”删除，并且展开所有的宏定义。  处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。">
+<meta name="twitter:description" content="编译与链接在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接 预处理预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：  将所有的“#define”删除，并且展开所有的宏定义。 处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。 处">
 
 
 
@@ -399,15 +399,12 @@
         <h3 id="编译与链接"><a href="#编译与链接" class="headerlink" title="编译与链接"></a>编译与链接</h3><p>在linux下，使用gcc编译程序的时候，需要经历四步过程，分别是预处理，编译，汇编和链接</p>
 <h4 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h4><p>预处理过程主要处理源代码中以“#”开始的预编译指令。比如“#include”，“#define”等，主要处理规则如下：</p>
 <ol>
-<li><p>将所有的“#define”删除，并且展开所有的宏定义。</p>
-<ol start="2">
+<li>将所有的“#define”删除，并且展开所有的宏定义。</li>
 <li>处理所有条件预编译指令，比如：“#if”，“#ifdef”，“#elif”，“#else”，”#endif”。<ol start="3">
 <li>处理“#include”预编译指令，将被包含的文件插入到该预编译指令的位置，注意，这个过程是递归进行的，也就是说被包含的文件可能还包含其他文件。</li>
 <li>删除所有的注释“\\“和”/**/“。</li>
 <li>添加行号和文件标识名，比如#2”hello.c“ 2，以便于编译时编译器产生调试用的行号信息以及用于编译时产生编译错误或警告时能够显示行号.</li>
 <li>保留所有的#prcagma编译器指令，因为编译器需要使用它们。</li>
-</ol>
-</li>
 </ol>
 </li>
 </ol>
