@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>360赛</title>
+      <link href="/2019/10/19/360%E8%B5%9B/"/>
+      <url>/2019/10/19/360%E8%B5%9B/</url>
+      
+        <content type="html"><![CDATA[<h3 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h3><p>这题还是有点意思的，考点在于补码与unsigned int。</p><p>首先观察bypass1，第一个if判断是不允许出现“ - ”号， 第二个if判断是x &lt;= 359 , y &lt;=  359 , x-y = 360</p><p>那么自然考虑－数。</p><!-- 原码是最直观的表示方式：最高位表示符号(0表示正，1表示负) --><!--补码的表示方法是:--><!--正数的补码就是其本身--><!--负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后+1. (即在反码的基础上+1)--><!--[+1] = [00000001]原 = [00000001]反 = [00000001]补--><!--[-1] = [10000001]原 = [11111110]反 = [11111111]补--><p>而我们可以根据ida观察到，此次的两个bypass都是unsigned int，而 unsigned int的特点是：最高位不作为符号位，所有位都表示值。</p><h4 id="bypass1"><a href="#bypass1" class="headerlink" title="bypass1"></a>bypass1</h4><p>故此，0xFFFF FFFF   ( 1111 1111 1111 1111 1111 1111 1111 1111)就表示-1</p><p>所以bypass1 可以通过x = 359 , y = 4294967295 绕过</p><h4 id="bypass2"><a href="#bypass2" class="headerlink" title="bypass2"></a>bypass2</h4><p>第二个是乘法，且条件为x &gt; 1 &amp;&amp; y &gt; 360 &amp;&amp; x * y =360</p><p>这次利用整数溢出</p><p>4294967295 + 361 = 4294967656 （0001 0000 0000 0000 0000 0000 0001 0110 1000）</p><p>毫无疑问超过了32位，unsigned int 取前32位，自然就是0000 0000 0000 0000 0000 0001 0110 1000</p><p>所以 只要x * y = 4294967656就可以通过</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>第五空间线下赛（pwn）</title>
       <link href="/2019/10/18/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E7%BA%BF%E4%B8%8B%E8%B5%9B%EF%BC%88pwn%EF%BC%89/"/>
       <url>/2019/10/18/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E7%BA%BF%E4%B8%8B%E8%B5%9B%EF%BC%88pwn%EF%BC%89/</url>
