@@ -406,11 +406,11 @@
 <p> 我们看到<code>__libc_message</code>一行输出了<code>*** %s ***: %s terminated\n</code>。这里的参数分别是msg和<code>__libc_argv[0]</code>。<code>char *argv[]</code>是main函数的参数，<code>argv[0]</code>存储的就是程序名，且这个argv[0]就存在于栈上。</p>
 <p>这里贴一个vidar的 Veritas501 师傅的讲解</p>
 <p>可见，__libc_message 的第二个<code>%s</code>输出的是argv[0]，argv[0]是指向第一个启动参数字符串的指针，而在栈中，大概是这样一个画风 </p>
-<p><img src="/2019/10/23/对于canary的ssp leak打法的学习（好像又名Stack smash）/D:%5Cblog%5CHexo%5Csource%5Cimages%5Ccanary_a768142147ca3976598941b5c6c67161.png" alt="canary_a768142147ca3976598941b5c6c67161"></p>
+<p><img src="//yoursite.com/2019/10/23/对于canary的ssp leak打法的学习（好像又名Stack smash）/D:%5Cblog%5CHexo%5Csource%5Cimages%5Ccanary_a768142147ca3976598941b5c6c67161.png" alt="canary_a768142147ca3976598941b5c6c67161"></p>
 <p>所以SSP leak的玩法就是通过修改栈上的argv[0]指针，从而让<code>__stack_chk_fail</code>被触发后输出我们想要知道的东西。 </p>
 <p>所以……  这位vidar的pwn王意思就是，管他三七二十一，暴力覆盖就是了，别管多长，只要你要的数据的地址你能拿到，覆盖！</p>
 <p>这里放一个例题，三叶草的纳新题，canary2</p>
-<p><img src="/2019/10/23/对于canary的ssp leak打法的学习（好像又名Stack smash）/D:%5Cblog%5CHexo%5Csource%5Cimages%5CQQ%E5%9B%BE%E7%89%8720191023235955.png" alt="QQ图片20191023235955"></p>
+<p><img src="//yoursite.com/2019/10/23/对于canary的ssp leak打法的学习（好像又名Stack smash）/D:%5Cblog%5CHexo%5Csource%5Cimages%5CQQ%E5%9B%BE%E7%89%8720191023235955.png" alt="QQ图片20191023235955"></p>
 <p>一看，无法泄露，也不能爆破，那自然就想到ssp leak打法</p>
 <p>flag的地址在buf里面，你又能通过printf  get  buf地址。 那剩下的就只有暴力覆盖了</p>
 <p>这里贴上exp：</p>
@@ -466,8 +466,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/20/fastedbin attack 探究/" rel="next" title="fastedbin attack 探究">
-                <i class="fa fa-chevron-left"></i> fastedbin attack 探究
+              <a href="/2019/10/19/360赛/" rel="next" title="360赛">
+                <i class="fa fa-chevron-left"></i> 360赛
               </a>
             
           </div>
@@ -475,6 +475,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/28/fastedbin-attack-探究/" rel="prev" title="fastedbin attack 探究">
+                fastedbin attack 探究 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
