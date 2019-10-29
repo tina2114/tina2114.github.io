@@ -4,6 +4,32 @@
   
     
     <entry>
+      <title>堆的整理</title>
+      <link href="/2019/10/29/%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D/"/>
+      <url>/2019/10/29/%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D/</url>
+      
+        <content type="html"><![CDATA[<h3 id="malloc-consolidate"><a href="#malloc-consolidate" class="headerlink" title="malloc_consolidate"></a>malloc_consolidate</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>malloc_consolidate() 函数是定义在 malloc.c 中的一个函数，用于将 fastbin 中的空闲 chunk 合并整理到 unsorted_bin 中以及进行初始化堆的工作，在 malloc() 以及 free() 中均有可能调用 malloc_consolidate() 函数。</p><h4 id="malloc-consolidate调用条件"><a href="#malloc-consolidate调用条件" class="headerlink" title="malloc_consolidate调用条件"></a>malloc_consolidate调用条件</h4><h5 id="1-malloc-large-bin"><a href="#1-malloc-large-bin" class="headerlink" title="1. malloc large bin"></a>1. malloc large bin</h5><p> 假如malloc的size大于small bin的范围，先调用malloc_consolidate将fastbin 合并为unsorted bin </p><p>在64位系统下，small bin &lt;0x400</p><p>在32位系统下，small bin &lt;0x200</p><h5 id="2-top-chunk不够空间"><a href="#2-top-chunk不够空间" class="headerlink" title="2. top chunk不够空间"></a>2. top chunk不够空间</h5><p>下面是简单的测试代码</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line"><span class="keyword">void</span>* h1 = <span class="built_in">malloc</span>(<span class="number">0x68</span>);    </span><br><span class="line"><span class="keyword">void</span>* h2 = <span class="built_in">malloc</span>(<span class="number">0x20e48</span>);    </span><br><span class="line"><span class="built_in">free</span>(h1);    </span><br><span class="line"><span class="built_in">malloc</span>(<span class="number">0x300</span>);    </span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h5 id="3-在free函数在各种合并前后chunk之后的size大于FASTBIN-CONSOLIDATION-THRESHOLD-也就是65536"><a href="#3-在free函数在各种合并前后chunk之后的size大于FASTBIN-CONSOLIDATION-THRESHOLD-也就是65536" class="headerlink" title="3. 在free函数在各种合并前后chunk之后的size大于FASTBIN_CONSOLIDATION_THRESHOLD 也就是65536"></a>3. 在free函数在各种合并前后chunk之后的size大于FASTBIN_CONSOLIDATION_THRESHOLD 也就是65536</h5><p>比较容易实现的是与top chunk合并后size大于FASTBIN_CONSOLIDATION_THRESHOLD 具体大概是下面的流程</p><ol><li>判断chunk是否属于fastbin，如果不是，继续</li><li>判断chunk是否属于map的，如果不是，继续</li><li>假如下一个chunk是top chunk，合并</li><li>判断当前chunk的size是否大于FASTBIN_CONSOLIDATION_THRESHOLD，假如大于，调用malloc_consolidate</li></ol><p>测试代码如下</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line"><span class="keyword">void</span>* h1 = <span class="built_in">malloc</span>(<span class="number">0x68</span>);    </span><br><span class="line"><span class="keyword">void</span>* h2 = <span class="built_in">malloc</span>(<span class="number">0xa8</span>);    </span><br><span class="line"><span class="keyword">void</span>* h3 = <span class="built_in">malloc</span>(<span class="number">0xa8</span>);    </span><br><span class="line"><span class="built_in">free</span>(h1);    </span><br><span class="line"><span class="built_in">free</span>(h3);    </span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>复现题目中探究的一些杂记</title>
+      <link href="/2019/10/29/%E2%80%9D%E5%A4%8D%E7%8E%B0%E9%A2%98%E7%9B%AE%E4%B8%AD%E6%8E%A2%E7%A9%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E6%9D%82%E8%AE%B0%E2%80%9C/"/>
+      <url>/2019/10/29/%E2%80%9D%E5%A4%8D%E7%8E%B0%E9%A2%98%E7%9B%AE%E4%B8%AD%E6%8E%A2%E7%A9%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E6%9D%82%E8%AE%B0%E2%80%9C/</url>
+      
+        <content type="html"><![CDATA[<h2 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h2><p>在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。</p><p>在64位系统下，small bin &lt;0x400</p><p>在32位系统下，small bin &lt;0x200</p><p>所以你输入0x400字节数据，就会触发malloc_consolidate，使得fasted bin里的堆块合并到unsorted bin里面。</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>对于ret2dl_resolve的探究</title>
       <link href="/2019/10/28/%E5%AF%B9%E4%BA%8Eret2-resolve%E7%9A%84%E6%8E%A2%E7%A9%B6/"/>
       <url>/2019/10/28/%E5%AF%B9%E4%BA%8Eret2-resolve%E7%9A%84%E6%8E%A2%E7%A9%B6/</url>
