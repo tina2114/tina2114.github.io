@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571553628633.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571557000576.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571554995553.png">
-<meta property="og:updated_time" content="2019-11-03T05:53:27.998Z">
+<meta property="og:updated_time" content="2019-11-04T14:29:20.001Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastedbin attack 探究">
 <meta name="twitter:description" content="总结一下， fasted bin attack有两种打法 第一种是侧重free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。 第二种是侧重fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 （其实个人感觉，总的来说，最终目的都是针对于fd进行操作） 第一种：fake chunkfastbin double free Fastbin Double Free">
@@ -434,10 +434,10 @@
 
 <img src="/2019/10/28/fastedbin-attack-探究/1571551912003.png">
 
-<p>成功修改！</p>
+<p>成功修改！注意，这里使用了堆叠技巧。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 
-<p>将整个0x91的伪造堆块放入unsorted bin里面</p>
+<p>将整个0x91的伪造堆块放入unsorted bin里面，这里系统以为它将chunk1与chunk2一起放入了unsorted bin，但是实际上只放入了chunk1</p>
 <img src="/2019/10/28/fastedbin-attack-探究/1571552115654.png">
 
 <img src="/2019/10/28/fastedbin-attack-探究/1571552133076.png">
@@ -446,7 +446,7 @@
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x18</span>)</span><br></pre></td></tr></table></figure>
 
-<p>这里是为了create分割堆块，使得unsorted bin的地址落入第三个堆块的内容里。同时为了下面的fastedbin attack做准备。</p>
+<p>这里是为了create分割堆块，使得unsorted bin的地址落入chunk2的内容里。因为chunk2实际上没有被free，所以允许show出地址。同时为了下面的fastedbin attack做准备。</p>
 <img src="/2019/10/28/fastedbin-attack-探究/1571552279804.png">
 
 
@@ -501,7 +501,7 @@
   <p><span>本文标题:</span><a href="/2019/10/28/fastedbin-attack-探究/">fastedbin attack 探究</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
-  <p><span>最后更新:</span>2019年11月03日 - 13:11</p>
+  <p><span>最后更新:</span>2019年11月04日 - 22:11</p>
   <p><span>原始链接:</span><a href="/2019/10/28/fastedbin-attack-探究/" title="fastedbin attack 探究">http://yoursite.com/2019/10/28/fastedbin-attack-探究/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/fastedbin-attack-探究/" aria-label="复制成功！"></i></span>
   </p>
