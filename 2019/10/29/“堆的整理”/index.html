@@ -95,7 +95,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103123730845.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103125527078.png">
-<meta property="og:updated_time" content="2019-11-04T14:30:44.439Z">
+<meta property="og:updated_time" content="2019-11-05T15:04:22.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆的整理">
 <meta name="twitter:description" content="堆的结构malloc chunk 1234567891011121314chunk-&amp;gt; +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+        |             Size of previous chunk, if unallocated (P clear)  |        +-+-+-+">
@@ -440,10 +440,15 @@
 </ul>
 <p>以上都可以进行leak。</p>
 <h4 id="UAF"><a href="#UAF" class="headerlink" title="UAF"></a>UAF</h4><p> uaf漏洞产生的主要原因是释放了一个堆块后，并没有将该指针置为NULL，这样导致该指针处于悬空的状态，同样被释放的内存如果被恶意构造数据，就有可能会被利用。 </p>
+<p>根本原因：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">应用程序调用free()释放内存时，如果内存块小于256kb，dlmalloc并不马上将内存块释放回内存，而是将内存块标记为空闲状态。这么做的原因有两个：一是内存块不一定能马上释放会内核（比如内存块不是位于堆顶端），二是供应用程序下次申请内存使用（这是主要原因）。当dlmalloc中空闲内存量达到一定值时dlmalloc才将空闲内存释放会内核。如果应用程序申请的内存大于256kb，dlmalloc调用mmap()向内核申请一块内存，返回返还给应用程序使用。如果应用程序释放的内存大于256kb，dlmalloc马上调用munmap()释放内存。dlmalloc不会缓存大于256kb的内存块，因为这样的内存块太大了，最好不要长期占用这么大的内存资源。</span><br></pre></td></tr></table></figure>
+
+<p>（所以你看到的某些ptr = null  , ptr = 0。 然后进入到堆块里查看内容，发现堆块里的内容还是能看得到以前写入的数据，但是不能读取，就是这了。它被打上了空闲标记，但是没有真正清除（大概是这个意思吧？））</p>
 <p>一种是直接进行free，且没有进行任何限制的</p>
 <p><img src="//yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103123730845.png" alt="image-20191103123730845"></p>
 <p><img src="//yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103125527078.png" alt="image-20191103125527078"></p>
 <p>这种直接malloc,delete,show。</p>
+<p>另一种就是*没悬空，其他该置零的置零。</p>
 
       
     </div>
@@ -463,7 +468,7 @@
   <p><span>本文标题:</span><a href="/2019/10/29/“堆的整理”/">堆的整理</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月29日 - 23:10</p>
-  <p><span>最后更新:</span>2019年11月04日 - 22:11</p>
+  <p><span>最后更新:</span>2019年11月05日 - 23:11</p>
   <p><span>原始链接:</span><a href="/2019/10/29/“堆的整理”/" title="堆的整理">http://yoursite.com/2019/10/29/“堆的整理”/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/29/“堆的整理”/" aria-label="复制成功！"></i></span>
   </p>
