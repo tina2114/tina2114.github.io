@@ -86,22 +86,22 @@
 
 
 
-<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag   maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往">
+<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
 <meta property="og:type" content="article">
 <meta property="og:title" content="红帽杯pwn wp">
 <meta property="og:url" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag   maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往">
+<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222819651.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222903850.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222943178.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111223104658.png">
-<meta property="og:updated_time" content="2019-11-11T15:17:13.138Z">
+<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
+<meta property="og:updated_time" content="2019-11-11T15:21:15.666Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="红帽杯pwn wp">
-<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag   maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222819651.png">
+<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
 
 
 
@@ -404,13 +404,17 @@
         <h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>程序静态链接，真恶心，呕。</p>
 <p>首先分析程序流</p>
 <p>main</p>
-<p><img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222819651.png" alt="image-20191111222819651"></p>
+<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+
 <p>catflag</p>
-<p> <img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222903850.png" alt="image-20191111222903850"></p>
+<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
+
 <p>maby is good</p>
-<p><img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222943178.png" alt="image-20191111222943178"></p>
+<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
+
 <p>give me</p>
-<p><img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111223104658.png" alt="image-20191111223104658"></p>
+<img src="/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
+
 <p>该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里面读3个字节，随后把这个mmap分配的内 存地址赋给一个函数指针，并且执行，在这里把它称为函数v3。</p>
 <p>红箭头指的就是关键地址，我们可以直接分析该模块的汇编。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov eax, [ebp+var_14]  //这里就是mov eax, v3</span><br><span class="line">call eax  //这就是关键点，执行v3</span><br></pre></td></tr></table></figure>
