@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="盛世之下，总有人为你负重前行。">
+<meta name="description" content="poppop指令首先把ESP指向的堆栈元素内容复制到一个32位或64位的操作数中，再增加ESP的值。如果操作数是32位的，ESP+4，如果操作数是64位的，ESP+8。 ​     123pop reg/mem32pop reg/mem32  pushpush指令首先减少ESP的值，再将源操作数复制到堆栈。如果操作数是32位的，ESP-4，如果操作数是64位的，ESP-8。 12push reg/">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编笔记">
 <meta property="og:url" content="http://yoursite.com/2019/11/11/汇编笔记/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="盛世之下，总有人为你负重前行。">
+<meta property="og:description" content="poppop指令首先把ESP指向的堆栈元素内容复制到一个32位或64位的操作数中，再增加ESP的值。如果操作数是32位的，ESP+4，如果操作数是64位的，ESP+8。 ​     123pop reg/mem32pop reg/mem32  pushpush指令首先减少ESP的值，再将源操作数复制到堆栈。如果操作数是32位的，ESP-4，如果操作数是64位的，ESP-8。 12push reg/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-11T13:39:49.597Z">
+<meta property="og:updated_time" content="2019-11-11T15:02:22.743Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="汇编笔记">
-<meta name="twitter:description" content="盛世之下，总有人为你负重前行。">
+<meta name="twitter:description" content="poppop指令首先把ESP指向的堆栈元素内容复制到一个32位或64位的操作数中，再增加ESP的值。如果操作数是32位的，ESP+4，如果操作数是64位的，ESP+8。 ​     123pop reg/mem32pop reg/mem32  pushpush指令首先减少ESP的值，再将源操作数复制到堆栈。如果操作数是32位的，ESP-4，如果操作数是64位的，ESP-8。 12push reg/">
 
 
 
@@ -396,7 +396,14 @@
       
 
       
-        
+        <h3 id="pop"><a href="#pop" class="headerlink" title="pop"></a>pop</h3><p>pop指令首先把ESP指向的堆栈元素内容复制到一个32位或64位的操作数中，再增加ESP的值。如果操作数是32位的，ESP+4，如果操作数是64位的，ESP+8。</p>
+<p>​    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pop reg/mem32</span><br><span class="line"></span><br><span class="line">pop reg/mem32</span><br></pre></td></tr></table></figure>
+
+<h3 id="push"><a href="#push" class="headerlink" title="push"></a>push</h3><p>push指令首先减少ESP的值，再将源操作数复制到堆栈。如果操作数是32位的，ESP-4，如果操作数是64位的，ESP-8。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push reg/mem32</span><br><span class="line">push reg/mem64</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     
@@ -415,7 +422,7 @@
   <p><span>本文标题:</span><a href="/2019/11/11/汇编笔记/">汇编笔记</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年11月11日 - 21:11</p>
-  <p><span>最后更新:</span>2019年11月11日 - 21:11</p>
+  <p><span>最后更新:</span>2019年11月11日 - 23:11</p>
   <p><span>原始链接:</span><a href="/2019/11/11/汇编笔记/" title="汇编笔记">http://yoursite.com/2019/11/11/汇编笔记/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/汇编笔记/" aria-label="复制成功！"></i></span>
   </p>
@@ -539,8 +546,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -584,6 +600,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pop"><span class="nav-number">1.</span> <span class="nav-text">pop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push"><span class="nav-number">2.</span> <span class="nav-text">push</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

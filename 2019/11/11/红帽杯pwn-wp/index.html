@@ -86,21 +86,21 @@
 
 
 
-<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag  maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里">
+<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag   maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往">
 <meta property="og:type" content="article">
 <meta property="og:title" content="红帽杯pwn wp">
 <meta property="og:url" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag  maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里">
+<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag   maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222819651.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222903850.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222943178.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111223104658.png">
-<meta property="og:updated_time" content="2019-11-11T14:57:48.915Z">
+<meta property="og:updated_time" content="2019-11-11T15:13:43.631Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="红帽杯pwn wp">
-<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag  maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里">
+<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main  catflag   maby is good  give me  该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往">
 <meta name="twitter:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222819651.png">
 
 
@@ -406,7 +406,7 @@
 <p>main</p>
 <p><img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222819651.png" alt="image-20191111222819651"></p>
 <p>catflag</p>
-<p><img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222903850.png" alt="image-20191111222903850"></p>
+<p> <img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222903850.png" alt="image"></p>
 <p>maby is good</p>
 <p><img src="//yoursite.com/2019/11/11/红帽杯pwn-wp/D:%5Cblog%5CHexo%5Csource_posts%5C%E7%BA%A2%E5%B8%BD%E6%9D%AFpwn-wp%5Cimage-20191111222943178.png" alt="image-20191111222943178"></p>
 <p>give me</p>
@@ -438,7 +438,7 @@
   <p><span>本文标题:</span><a href="/2019/11/11/红帽杯pwn-wp/">红帽杯pwn wp</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年11月11日 - 22:11</p>
-  <p><span>最后更新:</span>2019年11月11日 - 22:11</p>
+  <p><span>最后更新:</span>2019年11月11日 - 23:11</p>
   <p><span>原始链接:</span><a href="/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" aria-label="复制成功！"></i></span>
   </p>
