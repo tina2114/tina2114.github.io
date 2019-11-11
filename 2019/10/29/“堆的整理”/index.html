@@ -93,13 +93,13 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="堆的结构malloc chunk 1234567891011121314chunk-&amp;gt; +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+        |             Size of previous chunk, if unallocated (P clear)  |        +-+-+-+">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103123730845.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103125527078.png">
-<meta property="og:updated_time" content="2019-11-05T15:04:22.108Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/29/“堆的整理”/image-20191103123730845.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/29/“堆的整理”/image-20191103125527078.png">
+<meta property="og:updated_time" content="2019-11-11T15:24:47.025Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆的整理">
 <meta name="twitter:description" content="堆的结构malloc chunk 1234567891011121314chunk-&amp;gt; +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+        |             Size of previous chunk, if unallocated (P clear)  |        +-+-+-+">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103123730845.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/29/“堆的整理”/image-20191103123730845.png">
 
 
 
@@ -445,8 +445,12 @@
 
 <p>（所以你看到的某些ptr = null  , ptr = 0。 然后进入到堆块里查看内容，发现堆块里的内容还是能看得到以前写入的数据，但是不能读取，就是这了。它被打上了空闲标记，但是没有真正清除（大概是这个意思吧？））</p>
 <p>一种是直接进行free，且没有进行任何限制的</p>
-<p><img src="//yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103123730845.png" alt="image-20191103123730845"></p>
-<p><img src="//yoursite.com/2019/10/29/“堆的整理”/D:%5Cblog%5CHexo%5Csource_posts%5C%E2%80%9C%E5%A0%86%E7%9A%84%E6%95%B4%E7%90%86%E2%80%9D%5Cimage-20191103125527078.png" alt="image-20191103125527078"></p>
+<img src="/2019/10/29/“堆的整理”/image-20191103123730845.png">
+
+<img src="/2019/10/29/“堆的整理”/image-20191103125527078.png">
+
+
+
 <p>这种直接malloc,delete,show。</p>
 <p>另一种就是*没悬空，其他该置零的置零。</p>
 
@@ -468,7 +472,7 @@
   <p><span>本文标题:</span><a href="/2019/10/29/“堆的整理”/">堆的整理</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月29日 - 23:10</p>
-  <p><span>最后更新:</span>2019年11月05日 - 23:11</p>
+  <p><span>最后更新:</span>2019年11月11日 - 23:11</p>
   <p><span>原始链接:</span><a href="/2019/10/29/“堆的整理”/" title="堆的整理">http://yoursite.com/2019/10/29/“堆的整理”/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/29/“堆的整理”/" aria-label="复制成功！"></i></span>
   </p>
