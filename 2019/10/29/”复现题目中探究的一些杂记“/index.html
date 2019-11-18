@@ -86,17 +86,20 @@
 
 
 
-<meta name="description" content="scanf在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。 在64位系统下，small bin &amp;lt;0x400 在32位系统下，small bin &amp;lt;0x200 所以你输入0x400字节数据，就会触发malloc_consolidate，使得fasted bin里的堆块合并到unsorted bin里面。">
+<meta name="description" content="记录一点自己的疑难点，越学真的是越发感觉自己的菜。 杂记1例如 12345678#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;int main()&amp;#123;	init();	unsigned long * ptr1 = malloc(0x88);	target = ptr1;	ptr1[0+0x10]">
 <meta property="og:type" content="article">
 <meta property="og:title" content="复现题目中探究的一些杂记">
 <meta property="og:url" content="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="scanf在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。 在64位系统下，small bin &amp;lt;0x400 在32位系统下，small bin &amp;lt;0x200 所以你输入0x400字节数据，就会触发malloc_consolidate，使得fasted bin里的堆块合并到unsorted bin里面。">
+<meta property="og:description" content="记录一点自己的疑难点，越学真的是越发感觉自己的菜。 杂记1例如 12345678#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;int main()&amp;#123;	init();	unsigned long * ptr1 = malloc(0x88);	target = ptr1;	ptr1[0+0x10]">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-29T16:03:59.068Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200718.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200746.png">
+<meta property="og:updated_time" content="2019-11-14T12:08:44.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复现题目中探究的一些杂记">
-<meta name="twitter:description" content="scanf在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。 在64位系统下，small bin &amp;lt;0x400 在32位系统下，small bin &amp;lt;0x200 所以你输入0x400字节数据，就会触发malloc_consolidate，使得fasted bin里的堆块合并到unsorted bin里面。">
+<meta name="twitter:description" content="记录一点自己的疑难点，越学真的是越发感觉自己的菜。 杂记1例如 12345678#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;int main()&amp;#123;	init();	unsigned long * ptr1 = malloc(0x88);	target = ptr1;	ptr1[0+0x10]">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200718.png">
 
 
 
@@ -396,7 +399,17 @@
       
 
       
-        <h2 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h2><p>在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。</p>
+        <p>记录一点自己的疑难点，越学真的是越发感觉自己的菜。</p>
+<h3 id="杂记1"><a href="#杂记1" class="headerlink" title="杂记1"></a>杂记1</h3><p>例如</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> * ptr1 = <span class="built_in">malloc</span>(<span class="number">0x88</span>);</span><br><span class="line">	target = ptr1;</span><br><span class="line">	ptr1[<span class="number">0</span>+<span class="number">0x10</span>] = <span class="number">0x66</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此处的ptr1[0+0x10]是对下标索引的操作（就是指针）。[]里移动0x01在64位里就是8字节光标的移动</p>
+<h3 id="杂记2"><a href="#杂记2" class="headerlink" title="杂记2"></a>杂记2</h3><p>静态编译中hook的找法</p>
+<img src="/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200718.png">
+
+<img src="/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200746.png">
+
+<h3 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h3><p>在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。</p>
 <p>在64位系统下，small bin &lt;0x400</p>
 <p>在32位系统下，small bin &lt;0x200</p>
 <p>所以你输入0x400字节数据，就会触发malloc_consolidate，使得fasted bin里的堆块合并到unsorted bin里面。</p>
@@ -419,7 +432,7 @@
   <p><span>本文标题:</span><a href="/2019/10/29/”复现题目中探究的一些杂记“/">复现题目中探究的一些杂记</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月29日 - 23:10</p>
-  <p><span>最后更新:</span>2019年10月30日 - 00:10</p>
+  <p><span>最后更新:</span>2019年11月14日 - 20:11</p>
   <p><span>原始链接:</span><a href="/2019/10/29/”复现题目中探究的一些杂记“/" title="复现题目中探究的一些杂记">http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/" aria-label="复制成功！"></i></span>
   </p>
@@ -570,7 +583,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -607,7 +620,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#scanf"><span class="nav-number">1.</span> <span class="nav-text">scanf</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记1"><span class="nav-number">1.</span> <span class="nav-text">杂记1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记2"><span class="nav-number">2.</span> <span class="nav-text">杂记2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scanf"><span class="nav-number">3.</span> <span class="nav-text">scanf</span></a></li></ol></div>
             
 
           </div>
