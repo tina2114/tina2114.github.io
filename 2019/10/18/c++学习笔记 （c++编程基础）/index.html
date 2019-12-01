@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-14T11:43:16.032Z">
+<meta property="og:updated_time" content="2019-11-30T13:49:42.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c++学习笔记（c++编程基础）">
 <meta name="twitter:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
@@ -458,12 +458,12 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">1024</span> ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> * pi ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> *pi = &amp;ival ; <span class="comment">//pi初值设置为ival所在的内存地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//提领pi，借以访问它所指向的对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>  ( *pi ! =<span class="number">1024</span> )  <span class="comment">// 读取ival的值</span></span><br><span class="line"></span><br><span class="line">​	*pi = <span class="number">1024</span> ;  <span class="comment">//写值到 ival</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h4><p>​    </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pi ;  <span class="comment">//计算p1所持有的内存地址</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> pi ;  <span class="comment">//计算存放p1指针的地址里的内容</span></span><br><span class="line">&amp;pi ;  <span class="comment">//指存放pi指针的地址</span></span><br><span class="line">*pi ;  <span class="comment">//指pi指针所指向的地址里的内容，等于是操作pi所指的对象。</span></span><br></pre></td></tr></table></figure>
 
-<p>此举形同操作“指针对象”本身，在我理解中类似于指针指向的某地址中写入的0x5a6f7780这个地址（pwn爷爷们大概都懂是什么意思，我也就不赘述了）</p>
+
+
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*pi ;  <span class="comment">// 求ival的值</span></span><br></pre></td></tr></table></figure>
 
-<p>等于是操作pi所指的对象，在我理解里就是直接对0x5a6f7780这个地址里写入的值进行操作</p>
 <h3 id="文件的读写"><a href="#文件的读写" class="headerlink" title="文件的读写"></a>文件的读写</h3><p>头文件</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br></pre></td></tr></table></figure>
 

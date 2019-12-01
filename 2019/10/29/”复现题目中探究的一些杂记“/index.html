@@ -95,7 +95,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200718.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200746.png">
-<meta property="og:updated_time" content="2019-11-14T12:08:44.596Z">
+<meta property="og:updated_time" content="2019-11-25T13:20:29.185Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="复现题目中探究的一些杂记">
 <meta name="twitter:description" content="记录一点自己的疑难点，越学真的是越发感觉自己的菜。 杂记1例如 12345678#include&amp;lt;stdio.h&amp;gt;#include&amp;lt;stdlib.h&amp;gt;#include&amp;lt;unistd.h&amp;gt;int main()&amp;#123;	init();	unsigned long * ptr1 = malloc(0x88);	target = ptr1;	ptr1[0+0x10]">
@@ -409,6 +409,8 @@
 
 <img src="/2019/10/29/”复现题目中探究的一些杂记“/QQ图片20191114200746.png">
 
+<h3 id="杂记3"><a href="#杂记3" class="headerlink" title="杂记3"></a>杂记3</h3><p> mprotect(add,len,prot)rdi = add ； rsi = len ；rdx = prot； </p>
+<p> prot=7 是可读可写可执行 </p>
 <h3 id="scanf"><a href="#scanf" class="headerlink" title="scanf"></a>scanf</h3><p>在linux 16版本中，scanf输入的数据过大超过linux栈空间的最大值（8m），就会自动调用堆块来储存数据。</p>
 <p>在64位系统下，small bin &lt;0x400</p>
 <p>在32位系统下，small bin &lt;0x200</p>
@@ -432,7 +434,7 @@
   <p><span>本文标题:</span><a href="/2019/10/29/”复现题目中探究的一些杂记“/">复现题目中探究的一些杂记</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月29日 - 23:10</p>
-  <p><span>最后更新:</span>2019年11月14日 - 20:11</p>
+  <p><span>最后更新:</span>2019年11月25日 - 21:11</p>
   <p><span>原始链接:</span><a href="/2019/10/29/”复现题目中探究的一些杂记“/" title="复现题目中探究的一些杂记">http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/29/”复现题目中探究的一些杂记“/" aria-label="复制成功！"></i></span>
   </p>
@@ -620,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记1"><span class="nav-number">1.</span> <span class="nav-text">杂记1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记2"><span class="nav-number">2.</span> <span class="nav-text">杂记2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scanf"><span class="nav-number">3.</span> <span class="nav-text">scanf</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记1"><span class="nav-number">1.</span> <span class="nav-text">杂记1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记2"><span class="nav-number">2.</span> <span class="nav-text">杂记2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#杂记3"><span class="nav-number">3.</span> <span class="nav-text">杂记3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scanf"><span class="nav-number">4.</span> <span class="nav-text">scanf</span></a></li></ol></div>
             
 
           </div>
