@@ -104,7 +104,8 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571553628633.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571557000576.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/1571554995553.png">
-<meta property="og:updated_time" content="2019-11-04T14:29:20.001Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/D:%5Cblog%5CHexo%5Csource_posts%5C%C2%96fastedbin-attack-%E6%8E%A2%E7%A9%B6%5Cimage-20191208011303551.png">
+<meta property="og:updated_time" content="2019-12-08T03:27:49.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastedbin attack 探究">
 <meta name="twitter:description" content="总结一下， fasted bin attack有两种打法 第一种是侧重free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。 第二种是侧重fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 （其实个人感觉，总的来说，最终目的都是针对于fd进行操作） 第一种：fake chunkfastbin double free Fastbin Double Free">
@@ -482,6 +483,40 @@
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x68</span>)<span class="comment">#6</span></span><br><span class="line">edit(<span class="number">5</span>, <span class="number">0x23</span> + <span class="number">8</span>, <span class="string">''</span> * <span class="number">0x23</span> + p64(libc_addr + libc.symbols[<span class="string">'system'</span>]))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">0</span>,<span class="number">8</span>,<span class="string">'/bin/sh\x00'</span>)</span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
 
+<h2 id="fasted-bin-attack注意事项"><a href="#fasted-bin-attack注意事项" class="headerlink" title="fasted bin attack注意事项"></a>fasted bin attack注意事项</h2><p>（实际上只是自己笨，记录一点fasted bin的各种检测，以及各种绕过检测，成功attack的方法）</p>
+<h3 id="（一）"><a href="#（一）" class="headerlink" title="（一）"></a>（一）</h3><p>先来看ptmalloc的响应用户内存分配要求的具体步骤：</p>
+<blockquote>
+<p>1) 获取分配区的锁，为了防止多个线程同时访问同一个分配区，在进行分配之前需要 取得分配区域的锁。线程先查看线程私有实例中是否已经存在一个分配区，如果存 在尝试对该分配区加锁，如果加锁成功，使用该分配区分配内存，否则，该线程搜 索分配区循环链表试图获得一个空闲（没有加锁）的分配区。如果所有的分配区都 已经加锁，那么 ptmalloc 会开辟一个新的分配区，把该分配区加入到全局分配区循 环链表和线程的私有实例中并加锁，然后使用该分配区进行分配操作。开辟出来的 新分配区一定为非主分配区，因为主分配区是从父进程那里继承来的。开辟非主分 配区时会调用 mmap()创建一个 sub-heap，并设置好 top chunk。 </p>
+<p>2) 将用户的请求大小转换为实际需要分配的 chunk 空间大小。  </p>
+<p>3) 判断所需分配chunk的大小是否满足chunk_size &lt;= max_fast (max_fast 默认为 64B)， 如果是的话，则转下一步，否则跳到第 5 步。 </p>
+<p>4) 首先尝试在 fast bins 中取一个所需大小的 chunk 分配给用户。如果可以找到，则分 配结束。否则转到下一步。 </p>
+</blockquote>
+<p>其实看到第四步就可，我们只讲述fast bin范围内的。</p>
+<h3 id="（二）"><a href="#（二）" class="headerlink" title="（二）"></a>（二）</h3><p>fast bin是一个单链表，是一个LIFO(<em>Last in, first out</em>后进先出)</p>
+<p>即</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ptr1 = <span class="built_in">malloc</span>(<span class="number">0x20</span>)#chunk1;</span><br><span class="line">    ptr2 = <span class="built_in">malloc</span>(<span class="number">0x30</span>)#chunk2;</span><br><span class="line">    ptr3 = <span class="built_in">malloc</span>(<span class="number">0x40</span>)#chunk3;</span><br><span class="line">    <span class="built_in">free</span>(ptr1);</span><br><span class="line">    <span class="built_in">free</span>(ptr2);</span><br><span class="line">    <span class="built_in">free</span>(ptr3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们仿照《glibc内存管理》一书中对于bins数组的结构来展示fast bin链表</p>
+<p><img src="//yoursite.com/2019/10/28/fastedbin-attack-探究/D:%5Cblog%5CHexo%5Csource_posts%5C%C2%96fastedbin-attack-%E6%8E%A2%E7%A9%B6%5Cimage-20191208011303551.png" alt="image-20191208011303551"></p>
+<p>在fast bin的链表中结构为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">fast bin &lt;|-- chunk1</span><br><span class="line">chunk1 : fd = </span><br><span class="line">chunk1 : bk()</span><br><span class="line">chunk1 &lt;|-- chunk2</span><br><span class="line">chunk2 : fd = chunk1</span><br><span class="line">chunk2 : bk()</span><br><span class="line">chunk2 &lt;|-- chunk3</span><br><span class="line">chunk3 : fd = chunk2</span><br><span class="line">chunk3 : bk()</span><br></pre></td></tr></table></figure>
+
+<p>再次进行调用的时候，是先取用chunk3再取用chunk2再取用chunk1。这就是FILO。</p>
+<p>至于为什么新free的chunk不直接插到靠近fast bin的地方，如果直接插到靠近fast bin的地方话每次都要迭代到最后一个chunk然后把它的fd赋值为新的chunk的地址，而使用LIFO，我们只需要修改fastbinsY[0]指针的值和新的chunk的值，花费在fastbin链有很多的时候肯定是更少的</p>
+<h3 id="（三）"><a href="#（三）" class="headerlink" title="（三）"></a>（三）</h3><p>此时讲述的是malloc - free后的再次malloc环节</p>
+<p>在我们进行fasted bin attack 打 hook，从 fastbin 中取出 chunk 的时候会对 chunk 的size 做检查，也就是这个任意位置的 chunk 的 size 位必须构造。</p>
+<p>来看fastbin获取index的源码</p>
+<blockquote>
+<p>/* offset 2 to use otherwise unindexable first 2 bins */<br> #define fastbin_index(sz) \   </p>
+<p>​    ((((unsigned int)(sz)) &gt;&gt; (SIZE_SZ == 8 ? 4 : 3)) - 2) </p>
+<p>宏 fastbin_index(sz)用于获得 fast bin 在 fast bins 数组中的 index，由于 bin[0]和 bin[1]中 的chunk不存在，所以需要减2。</p>
+</blockquote>
+<p>个人理解：在64位里也就是(sz) &gt;&gt; 4获取Index。因此很多时候就可以构造0x7f大小的fastbin，代替很难找到的0x71\0x70大小的fastbin。</p>
+<p>举个例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastbin -&gt; 0x602078</span><br></pre></td></tr></table></figure>
+
+<p>fastbin在malloc的时候会对size进行检查，也就是检查address+8的值是否为合法size。（即检查0x602080）</p>
+<p>至于检测的方法，就是上面获取index的源码，进行&gt;&gt;运算，这就是我们为什么可以利用unsorted bin任意地址写，配合fasted bin attack的原因了。</p>
 
       
     </div>
@@ -501,7 +536,7 @@
   <p><span>本文标题:</span><a href="/2019/10/28/fastedbin-attack-探究/">fastedbin attack 探究</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
-  <p><span>最后更新:</span>2019年11月04日 - 22:11</p>
+  <p><span>最后更新:</span>2019年12月08日 - 11:12</p>
   <p><span>原始链接:</span><a href="/2019/10/28/fastedbin-attack-探究/" title="fastedbin attack 探究">http://yoursite.com/2019/10/28/fastedbin-attack-探究/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/fastedbin-attack-探究/" aria-label="复制成功！"></i></span>
   </p>
@@ -652,7 +687,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -689,7 +724,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一种：fake-chunk"><span class="nav-number">1.</span> <span class="nav-text">第一种：fake chunk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fastbin-double-free"><span class="nav-number">1.1.</span> <span class="nav-text">fastbin double free</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#House-Of-Spirit"><span class="nav-number">1.2.</span> <span class="nav-text">House Of Spirit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二种：利用fd指针"><span class="nav-number">2.</span> <span class="nav-text">第二种：利用fd指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Arbitrary-Alloc"><span class="nav-number">2.1.</span> <span class="nav-text">Arbitrary Alloc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#easy-pwn"><span class="nav-number">2.1.1.</span> <span class="nav-text">easy_pwn</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一种：fake-chunk"><span class="nav-number">1.</span> <span class="nav-text">第一种：fake chunk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fastbin-double-free"><span class="nav-number">1.1.</span> <span class="nav-text">fastbin double free</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#House-Of-Spirit"><span class="nav-number">1.2.</span> <span class="nav-text">House Of Spirit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二种：利用fd指针"><span class="nav-number">2.</span> <span class="nav-text">第二种：利用fd指针</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Arbitrary-Alloc"><span class="nav-number">2.1.</span> <span class="nav-text">Arbitrary Alloc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#easy-pwn"><span class="nav-number">2.1.1.</span> <span class="nav-text">easy_pwn</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fasted-bin-attack注意事项"><span class="nav-number">3.</span> <span class="nav-text">fasted bin attack注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#（一）"><span class="nav-number">3.1.</span> <span class="nav-text">（一）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（二）"><span class="nav-number">3.2.</span> <span class="nav-text">（二）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（三）"><span class="nav-number">3.3.</span> <span class="nav-text">（三）</span></a></li></ol></li></ol></div>
             
 
           </div>
