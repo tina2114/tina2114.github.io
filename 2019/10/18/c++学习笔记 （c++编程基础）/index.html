@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-30T13:49:42.810Z">
+<meta property="og:updated_time" content="2020-03-05T01:23:24.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c++学习笔记（c++编程基础）">
 <meta name="twitter:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
@@ -412,10 +412,10 @@
 <p>​        ?  如果expr 为 true ， 就执行这里</p>
 <p>​        :  如果expr 为 false ， 就执行这里</p>
 <p>如何判定 true 与 false呢，此例就是看上面条件表达式 是否为0，0为false，其余为true。</p>
-<h3 id="循环语句之switch"><a href="#循环语句之switch" class="headerlink" title="循环语句之switch"></a>循环语句之switch</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>( <span class="keyword">int</span> number)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">case</span> <span class="number">1</span> :</span><br><span class="line"></span><br><span class="line">​		语句块 ;</span><br><span class="line"></span><br><span class="line">​		<span class="keyword">break</span> ;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">case</span> <span class="number">2</span> :</span><br><span class="line"></span><br><span class="line">​		语句块 ;</span><br><span class="line"></span><br><span class="line">​		<span class="keyword">break</span> ;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">case</span> ......</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">default</span> :</span><br><span class="line">        语句块 ;</span><br><span class="line">        <span class="keyword">break</span> ;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="循环语句之switch"><a href="#循环语句之switch" class="headerlink" title="循环语句之switch"></a>循环语句之switch</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>( <span class="keyword">int</span> number || <span class="keyword">char</span> <span class="built_in">string</span>)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">case</span> <span class="number">1</span> :</span><br><span class="line"></span><br><span class="line">​		语句块 ;</span><br><span class="line"></span><br><span class="line">​		<span class="keyword">break</span> ;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">case</span> <span class="number">2</span> :</span><br><span class="line"></span><br><span class="line">​		语句块 ;</span><br><span class="line"></span><br><span class="line">​		<span class="keyword">break</span> ;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">case</span> ......</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">default</span> :</span><br><span class="line">        语句块 ;</span><br><span class="line">        <span class="keyword">break</span> ;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ol>
-<li><p>switch () 中表达式的值必须为整数</p>
+<li><p>switch () 中表达式的值必须为整数或者字符串</p>
 </li>
 <li><p>表达式的值依次与case 进行比较，符合便执行该case，全没符合，如果有default，便开始执行default ，如果default也没有，就不执行任何操作</p>
 </li>
@@ -673,7 +673,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -730,7 +730,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
