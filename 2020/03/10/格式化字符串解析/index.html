@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="通常来说，最常见的是printf，那么我也就根据printf来解析。 首先来看该函数的调用格式： printf(“&amp;lt;格式化字符串&amp;gt;”, &amp;lt;参量表&amp;gt;) 很多的时候，问题其实出现在参量表，因为在进入 printf 之后，函数首先获取第一个参数，一个一个读取其字符会遇到两种情况 ​    当前字符不是 %，直接输出到相应标准输出。 ​    当前字符是 %， 继续读取下一个字符">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-10T13:06:10.695Z">
+<meta property="og:updated_time" content="2020-04-04T10:23:12.710Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="格式化字符串解析">
 <meta name="twitter:description" content="通常来说，最常见的是printf，那么我也就根据printf来解析。 首先来看该函数的调用格式： printf(“&amp;lt;格式化字符串&amp;gt;”, &amp;lt;参量表&amp;gt;) 很多的时候，问题其实出现在参量表，因为在进入 printf 之后，函数首先获取第一个参数，一个一个读取其字符会遇到两种情况 ​    当前字符不是 %，直接输出到相应标准输出。 ​    当前字符是 %， 继续读取下一个字符">
@@ -419,6 +419,11 @@
 <p>xx赋值几就几个字符，例如打印2就xx%N$n，由于又需要按字节对齐（否则程序会崩溃）那么我们就需要在$n后面补齐两个字符。</p>
 <p>这个时候，xx%N成为了第k个参数，$nxx成为了第k+1个参数，所以我们此时对于printf的利用中N就需要变成N+2</p>
 <p>注：其实，这里我们需要掌握的小技巧就是，我们没有必要必须把地址放在最前面，放在那里都可以，只要我们可以找到其对应的偏移即可。</p>
+<h5 id="BJDCTF-2nd-r2t4"><a href="#BJDCTF-2nd-r2t4" class="headerlink" title="[BJDCTF 2nd]r2t4"></a>[BJDCTF 2nd]r2t4</h5><p>一个标准的覆盖内存例子。</p>
+<p>格式化字符串漏洞，更改<code>__stack_chk_fail</code>的got表为后门函数地址。</p>
+<p>payload=’%64c%9$hn%1510c%10$hn’+p64(0x601018+2)+p64(0x601018)</p>
+<p>%64c%9$hn此处是以两个字节为单位，写入64个</p>
+<p>%1510c%10$hn这里写入的可不是1510，而是需要加上前面%64c%9$hn写入的64个字节。</p>
 <h4 id="覆盖大数字"><a href="#覆盖大数字" class="headerlink" title="覆盖大数字"></a>覆盖大数字</h4><p>先对Printf作一点补充:</p>
 <p>printf (“%n”,a):当遇到%n时，程序会检查已经输入了多少字符串，然后将其写入到a中。可以通过这一点来改写栈中内存。</p>
 <p>%n写入的内存最大为4字节。</p>
@@ -449,7 +454,7 @@
   <p><span>本文标题:</span><a href="/2020/03/10/格式化字符串解析/">格式化字符串解析</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2020年03月10日 - 19:03</p>
-  <p><span>最后更新:</span>2020年03月10日 - 21:03</p>
+  <p><span>最后更新:</span>2020年04月04日 - 18:04</p>
   <p><span>原始链接:</span><a href="/2020/03/10/格式化字符串解析/" title="格式化字符串解析">http://yoursite.com/2020/03/10/格式化字符串解析/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/03/10/格式化字符串解析/" aria-label="复制成功！"></i></span>
   </p>
@@ -600,7 +605,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -637,7 +642,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#泄露内存"><span class="nav-number">1.</span> <span class="nav-text">泄露内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#泄露栈内存"><span class="nav-number">1.1.</span> <span class="nav-text">泄露栈内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泄露任意地址内存"><span class="nav-number">1.2.</span> <span class="nav-text">泄露任意地址内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖内存"><span class="nav-number">2.</span> <span class="nav-text">覆盖内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖小数字"><span class="nav-number">2.1.</span> <span class="nav-text">覆盖小数字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖大数字"><span class="nav-number">2.2.</span> <span class="nav-text">覆盖大数字</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#泄露内存"><span class="nav-number">1.</span> <span class="nav-text">泄露内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#泄露栈内存"><span class="nav-number">1.1.</span> <span class="nav-text">泄露栈内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泄露任意地址内存"><span class="nav-number">1.2.</span> <span class="nav-text">泄露任意地址内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖内存"><span class="nav-number">2.</span> <span class="nav-text">覆盖内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖小数字"><span class="nav-number">2.1.</span> <span class="nav-text">覆盖小数字</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BJDCTF-2nd-r2t4"><span class="nav-number">2.1.1.</span> <span class="nav-text">[BJDCTF 2nd]r2t4</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#覆盖大数字"><span class="nav-number">2.2.</span> <span class="nav-text">覆盖大数字</span></a></li></ol></li></ol></div>
             
 
           </div>

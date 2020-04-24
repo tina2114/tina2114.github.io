@@ -93,10 +93,12 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-22T01:29:24.159Z">
+<meta property="og:image" content="http://yoursite.com/2020/03/22/docker的搭建/D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png">
+<meta property="og:updated_time" content="2020-04-03T04:36:01.126Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker的搭建">
 <meta name="twitter:description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/22/docker的搭建/D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png">
 
 
 
@@ -451,23 +453,30 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/hosts</span><br></pre></td></tr></table></figure>
 
 <p>最后就是用你的exp进行测试。</p>
-<h3 id="删除docker"><a href="#删除docker" class="headerlink" title="删除docker"></a>删除docker</h3><p>列出所有容器</p>
+<h3 id="docker镜像的保存和导出"><a href="#docker镜像的保存和导出" class="headerlink" title="docker镜像的保存和导出"></a>docker镜像的保存和导出</h3><p>1.查看要要保存的镜像的ID</p>
+<p>docker  images</p>
+<p><img src="//yoursite.com/2020/03/22/docker的搭建/D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png" alt="image-20200403110914281"></p>
+<p>2.保存镜像为tar包</p>
+<p>docker save  -o  gitlab.tar  <repository></repository></p>
+<p>3.用scp，xftp等等将已经压缩好的gitlab.tar包弄到服务器，虚拟机（你想弄到的地方）</p>
+<p>4.将gitlab.tar包导出到本地来(一定要有docker的运行环境，docker安装：<a href="https://www.jianshu.com/p/9c96ea8e6f41" target="_blank" rel="noopener">https://www.jianshu.com/p/9c96ea8e6f41</a>)</p>
+<p>docker  load  -i  gitlab.tar</p>
+<p>5.运行docker容器</p>
+<p>docker  run</p>
+<h3 id="删除docker容器"><a href="#删除docker容器" class="headerlink" title="删除docker容器"></a>删除docker容器</h3><p>1.列出所有容器</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
 
-<p>删除容器</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm &lt;id|name&gt;</span><br></pre></td></tr></table></figure>
+<p>2.停止容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop &lt;CONTAINER ID&gt;</span><br></pre></td></tr></table></figure>
 
-<p>列出镜像</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p>3.删除容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm &lt;CONTAINER ID&gt;</span><br></pre></td></tr></table></figure>
 
-<p>删除镜像</p>
+<p>4.删除镜像</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi &lt;id|name&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="docker启动和停止"><a href="#docker启动和停止" class="headerlink" title="docker启动和停止"></a>docker启动和停止</h3><p>docker images中已经存在其镜像，对其启动</p>
+<h3 id="docker启动"><a href="#docker启动" class="headerlink" title="docker启动"></a>docker启动</h3><p>docker images中已经存在其镜像，对其启动</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run my/python:v1 cal <span class="comment">##my/python:v1为镜像名和标签</span></span><br></pre></td></tr></table></figure>
-
-<p>停止容器运行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop <span class="variable">$CONTAINER_ID</span></span><br></pre></td></tr></table></figure>
 
 <p>开始容器运行</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start <span class="variable">$CONTAINER_ID</span></span><br></pre></td></tr></table></figure>
@@ -491,7 +500,7 @@
   <p><span>本文标题:</span><a href="/2020/03/22/docker的搭建/">docker的搭建</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2020年03月22日 - 09:03</p>
-  <p><span>最后更新:</span>2020年03月22日 - 09:03</p>
+  <p><span>最后更新:</span>2020年04月03日 - 12:04</p>
   <p><span>原始链接:</span><a href="/2020/03/22/docker的搭建/" title="docker的搭建">http://yoursite.com/2020/03/22/docker的搭建/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/03/22/docker的搭建/" aria-label="复制成功！"></i></span>
   </p>
@@ -560,6 +569,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/15/堆攻击手段整理总结/" rel="prev" title="堆攻击手段整理总结">
+                堆攻击手段整理总结 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -638,7 +651,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -675,7 +688,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#正常的docker安装"><span class="nav-number">1.</span> <span class="nav-text">正常的docker安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux环境下pwn题的搭建"><span class="nav-number">2.</span> <span class="nav-text">linux环境下pwn题的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境配置"><span class="nav-number">2.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注："><span class="nav-number">2.2.1.</span> <span class="nav-text">注：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除docker"><span class="nav-number">3.</span> <span class="nav-text">删除docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker启动和停止"><span class="nav-number">4.</span> <span class="nav-text">docker启动和停止</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#正常的docker安装"><span class="nav-number">1.</span> <span class="nav-text">正常的docker安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux环境下pwn题的搭建"><span class="nav-number">2.</span> <span class="nav-text">linux环境下pwn题的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境配置"><span class="nav-number">2.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注："><span class="nav-number">2.2.1.</span> <span class="nav-text">注：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker镜像的保存和导出"><span class="nav-number">3.</span> <span class="nav-text">docker镜像的保存和导出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除docker容器"><span class="nav-number">4.</span> <span class="nav-text">删除docker容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker启动"><span class="nav-number">5.</span> <span class="nav-text">docker启动</span></a></li></ol></div>
             
 
           </div>

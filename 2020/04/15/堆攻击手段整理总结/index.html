@@ -86,17 +86,20 @@
 
 
 
-<meta name="description" content="pwn2这题还是有点意思的，考点在于补码与unsigned int。 首先观察bypass1，第一个if判断是不允许出现“ - ”号， 第二个if判断是x &amp;lt;= 359 , y &amp;lt;=  359 , x-y = 360 那么自然考虑－数。             而我们可以根据ida观察到，此次的两个bypass都是unsigned int，而 unsigned int的特点是：最高位不">
+<meta name="description" content="算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。 Tcache_bintcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO 某要点这里也点出一点和fastbin的malloc机制所不同的地方 首先来看tcache bin的malloc机制  计算对应的size是否在bin中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="360赛">
-<meta property="og:url" content="http://yoursite.com/2019/10/19/360赛/index.html">
+<meta property="og:title" content="堆攻击手段整理总结">
+<meta property="og:url" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="pwn2这题还是有点意思的，考点在于补码与unsigned int。 首先观察bypass1，第一个if判断是不允许出现“ - ”号， 第二个if判断是x &amp;lt;= 359 , y &amp;lt;=  359 , x-y = 360 那么自然考虑－数。             而我们可以根据ida观察到，此次的两个bypass都是unsigned int，而 unsigned int的特点是：最高位不">
+<meta property="og:description" content="算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。 Tcache_bintcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO 某要点这里也点出一点和fastbin的malloc机制所不同的地方 首先来看tcache bin的malloc机制  计算对应的size是否在bin中">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-19T14:40:47.920Z">
+<meta property="og:image" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223524506.png">
+<meta property="og:updated_time" content="2020-04-24T14:49:16.133Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="360赛">
-<meta name="twitter:description" content="pwn2这题还是有点意思的，考点在于补码与unsigned int。 首先观察bypass1，第一个if判断是不允许出现“ - ”号， 第二个if判断是x &amp;lt;= 359 , y &amp;lt;=  359 , x-y = 360 那么自然考虑－数。             而我们可以根据ida观察到，此次的两个bypass都是unsigned int，而 unsigned int的特点是：最高位不">
+<meta name="twitter:title" content="堆攻击手段整理总结">
+<meta name="twitter:description" content="算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。 Tcache_bintcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO 某要点这里也点出一点和fastbin的malloc机制所不同的地方 首先来看tcache bin的malloc机制  计算对应的size是否在bin中">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png">
 
 
 
@@ -126,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/19/360赛/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/15/堆攻击手段整理总结/">
 
 
 
 
 
-  <title>360赛 | zhz'blog</title>
+  <title>堆攻击手段整理总结 | zhz'blog</title>
   
 
 
@@ -293,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/19/360赛/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/15/堆攻击手段整理总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -310,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">360赛</h1>
+          <h1 class="post-title" itemprop="name headline">堆攻击手段整理总结</h1>
         
 
         <div class="post-meta">
@@ -322,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-19T22:07:33+08:00">
-                2019-10-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-15T08:41:59+08:00">
+                2020-04-15
               </time>
             
 
@@ -396,29 +399,56 @@
       
 
       
-        <h3 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h3><p>这题还是有点意思的，考点在于补码与unsigned int。</p>
-<p>首先观察bypass1，第一个if判断是不允许出现“ - ”号， 第二个if判断是x &lt;= 359 , y &lt;=  359 , x-y = 360</p>
-<p>那么自然考虑－数。</p>
-<!-- 原码是最直观的表示方式：最高位表示符号(0表示正，1表示负) -->
+        <p>算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。</p>
+<h2 id="Tcache-bin"><a href="#Tcache-bin" class="headerlink" title="Tcache_bin"></a>Tcache_bin</h2><p>tcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO</p>
+<h3 id="某要点"><a href="#某要点" class="headerlink" title="某要点"></a>某要点</h3><p>这里也点出一点和fastbin的malloc机制所不同的地方</p>
+<p>首先来看tcache bin的malloc机制</p>
+<p><img src="//yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png" alt="image-20200424223103869"></p>
+<p>计算对应的size是否在bin中存在chunk，tcache是否初始化。</p>
+<p>fast bin的malloc机制主要看这一段</p>
+<p><img src="//yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223524506.png" alt="image-20200424223524506"></p>
+<p>会对malloc的chunk的size位与fast bin中chunk的size位进行检测，是否匹配。</p>
+<p>照我理解，就是malloc(0x28)的时候，会对这个malloc里的size进行fastbin中chunk获取，获取完后会进行这里的第一重检测，也就是实际chunk中的size与fastbin中取出的chunk的size进行匹配。因为这一重检测，所以我们打malloc_hook的时候经常会-0x23这种操作，来使得size匹配。</p>
+<h3 id="tcache-dup"><a href="#tcache-dup" class="headerlink" title="tcache_dup"></a>tcache_dup</h3><p>因为tcache bin检查机制的问题，可以前后两次free同一个堆块，检查机制并不会报错。也就是常说的double free技巧。</p>
+<p>这种条件适用的前提是存在一个UAF漏洞！或者也可以进行双指针同时指向同一个堆块！</p>
+<p>因为double free 是任意地址写的一种技巧，指堆上的某块内存被释放后，并没有将指向该堆块的指针清零，那么，我们就可以利用程序的其他部分对该内存进行再次的free。</p>
+<h3 id="tcache-House-of-Spirit"><a href="#tcache-House-of-Spirit" class="headerlink" title="tcache House of Spirit"></a>tcache House of Spirit</h3><p>这种手法和fatsbin的House of Spirit很类似。这点我在fastbin的攻击手段中讲述的比较详细了，这里就简要概括一下。</p>
+<p>可以说也是一种任意地址写的手段，不过得先在你想要的地方伪造堆块，并控制堆指针指向伪造堆块的mem域，将其释放，再次malloc一个相同大小的堆块就可以达成任意地址写。</p>
+<p>fastbin里面这种手法你需要对下一个区域进行堆块伪造(主要是写入正确的size位)，而在tcache bin中，你就不需要进行下一个堆块的伪造。</p>
+<h3 id="tcache-poisoning"><a href="#tcache-poisoning" class="headerlink" title="tcache poisoning"></a>tcache poisoning</h3><p>也就是常见的修改tcachebin chunk的fd域，实现任意地址写。</p>
+<p>这个我寻思，经常和tcache dup配合，double free后，进行fd修改，两种攻击组合，形成任意地址写。</p>
+<h3 id="tcache-perthread-corruption"><a href="#tcache-perthread-corruption" class="headerlink" title="tcache perthread corruption"></a>tcache perthread corruption</h3><p>每个线程通过一个tcache_perthread_struct线程本地变量保存tcache bin以及相关的chunk计数。如果我们能够修改tcache_perthread_struct这个结构体的内容，就可以完全控制malloc的内存分配。</p>
+<p>那么如何获得这个地址，并控制他呢？我们来了解下tcache的初始化过程，MAYBE_INIT_TCACHE这个宏，他在没有初始化tcache的情况下会初始化一个tcache，实际上初始化tcache的工作是由内部函数tcache_init完成的<br>###tcache_init<br>static void<br>tcache_init(void)<br>{<br>mstate ar_ptr;<br>void *victim = 0;<br>const size_t bytes = sizeof (tcache_perthread_struct);<br>也就是说，tcache_perthread_struct应该保存在堆区的底部，因为他是最先分配的内存空间。它的结构体中保存着0x20-0x90bin中chunk的数量和信息。如果我们将tcache_perthread_struct中bin的信息全部改为0707070707070707也就代表了tcache bin全部被我们填满，接下来的chunk就会free进fast or unsorted里面。</p>
+<h3 id="关于tcache下对于main-arena泄露的一些个人见解"><a href="#关于tcache下对于main-arena泄露的一些个人见解" class="headerlink" title="关于tcache下对于main_arena泄露的一些个人见解"></a>关于tcache下对于main_arena泄露的一些个人见解</h3><p>手法一:</p>
+<h4 id="tcache-entry"><a href="#tcache-entry" class="headerlink" title="tcache_entry"></a>tcache_entry</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/* We overlay this structure on the user-data portion of a chunk when</span></span><br><span class="line"><span class="comment">   the chunk is stored in the per-thread cache.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; tcache_entry;</span><br></pre></td></tr></table></figure>
 
-<!--补码的表示方法是:-->
+<h4 id="tcache-perthread-struct"><a href="#tcache-perthread-struct" class="headerlink" title="tcache_perthread_struct"></a>tcache_perthread_struct</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* There is one of these for each thread, which contains the</span></span><br><span class="line"><span class="comment">   per-thread cache (hence "tcache_perthread_struct").  Keeping</span></span><br><span class="line"><span class="comment">   overall size low is mildly important.  Note that COUNTS and ENTRIES</span></span><br><span class="line"><span class="comment">   are redundant (we could have just counted the linked list each</span></span><br><span class="line"><span class="comment">   time), this is for performance reasons.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_perthread_struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">char</span> counts[TCACHE_MAX_BINS]; </span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> TCACHE_MAX_BINS                64</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> __thread tcache_perthread_struct *tcache = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
 
-<!--正数的补码就是其本身-->
-
-<!--负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后+1. (即在反码的基础上+1)-->
-
-<!--[+1] = [00000001]原 = [00000001]反 = [00000001]补-->
-
-<!--[-1] = [10000001]原 = [11111110]反 = [11111111]补-->
-
-<p>而我们可以根据ida观察到，此次的两个bypass都是unsigned int，而 unsigned int的特点是：最高位不作为符号位，所有位都表示值。</p>
-<h4 id="bypass1"><a href="#bypass1" class="headerlink" title="bypass1"></a>bypass1</h4><p>故此，0xFFFF FFFF   ( 1111 1111 1111 1111 1111 1111 1111 1111)就表示-1</p>
-<p>所以bypass1 可以通过x = 359 , y = 4294967295 绕过</p>
-<h4 id="bypass2"><a href="#bypass2" class="headerlink" title="bypass2"></a>bypass2</h4><p>第二个是乘法，且条件为x &gt; 1 &amp;&amp; y &gt; 360 &amp;&amp; x * y =360</p>
-<p>这次利用整数溢出</p>
-<p>4294967295 + 361 = 4294967656 （0001 0000 0000 0000 0000 0000 0001 0110 1000）</p>
-<p>毫无疑问超过了32位，unsigned int 取前32位，自然就是0000 0000 0000 0000 0000 0001 0110 1000</p>
-<p>所以 只要x * y = 4294967656就可以通过</p>
+<ul>
+<li><code>tcache_prethread_struct</code> 是整个 tcache 的管理结构，其中有 64 项 entries。每个 entries 管理了若干个大小相同的 chunk，用单向链表 (<code>tcache_entry</code>) 的方式连接释放的 chunk，这一点上和 fastbin 很像</li>
+<li>每个 thread 都会维护一个 <code>tcache_prethread_struct</code></li>
+<li><code>tcache_prethread_struct</code> 中的 <code>counts</code> 记录 <code>entries</code> 中每一条链上 chunk 的数目，每条链上最多可以有 7 个 chunk</li>
+<li><code>tcache_entry</code>用于链接 chunk 结构体，其中的<code>next</code>指针指向下一个大小相同的 chunk<ul>
+<li>这里与 fastbin 不同的是 fastbin 的 fd 指向 chunk 开头的地址，而 tcache 的 next 指向 user data 的地方，即 chunk header 之后</li>
+</ul>
+</li>
+</ul>
+<p>问题呢，就在<code>tcache_entry</code>这里，众所周知，我们进行常规的tcache duping + tcache poisoning操作时，会对同一个chunk free两次，并malloc相同大小的chunk 三次，以此达到任意地址写的目的。</p>
+<p>那么有没有想过，你free两次，entries[]里面只记录了两次，也就是entries[2]，你malloc一次，entries[]中的数字就-1，那么你第三次malloc的时候，entries[]就变成了entries[-1]，可能很多人看到这个-1就明白过来了。</p>
+<p>是的，这个size的tcache bin被你溢出了。那么下次，你再次free 相同size的chunk时，tcache bin中这个size大小的entries[]就会认为本bin已经被填满，chunk就会根据size落入fastbin或者unsortedbin。</p>
+<p>此时，根据uaf漏洞，就可以show出main_arena。(如果允许malloc的size小于0x80，那么就拿不到main_arena)</p>
+<p>手法二:</p>
+<p>当然，如果malloc的size小于0x80，也是基于uaf漏洞的话，还有另外一种方法。</p>
+<p>在double free后，因为是单链表结构，bin中chunk的fd会储存下一个chunk的位置信息，double free，也就是把自己的地址写入了fd。如果存在uaf，自然可以在double free后，直接show本堆块，泄露地址。这样，通过uaf漏洞实现任意地址写，讲堆块的size位进行修改，改成大于0x400，free后落入unsortedbin，从而泄露main_arena。</p>
+<h2 id="大名鼎鼎unlink"><a href="#大名鼎鼎unlink" class="headerlink" title="大名鼎鼎unlink"></a>大名鼎鼎unlink</h2><p>网上有很多教程，我也就简略点一点自己在学习unlink时遇到的困难</p>
+<p>先说利用前提，存在溢出漏洞</p>
+<p>unlink实现手段:</p>
+<p>前向合并，在chunk1种fake chunk，fake chunk的fd 和bk分别设置为ptr-0x18和ptr-0x10(64位)</p>
+<p>32位是ptr - 12 ,ptr-8</p>
+<p>修改chunk2 head的prev_size为fake chunk size以及chunk2 的prev_inuse位 置0,free chunk2</p>
+<p>注意一下，这里的ptr指的是malloc(chunk1)的时候返回的指针地址，并不是堆块本身的地址，至于怎么找返回的指针地址，本人的笨办法是在malloc函数处下断点，如果没开pie那自然每次都是固定的。</p>
+<p>后向合并</p>
+<p>此时检查chunk1的下下个chunk的flag位，那么此时就在chunk2 faka chunk，并且将chunk3的prev_inuse位 置0，</p>
 
       
     </div>
@@ -428,6 +458,37 @@
 <div>
     
       
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2020/04/15/堆攻击手段整理总结/">堆攻击手段整理总结</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
+  <p><span>发布时间:</span>2020年04月15日 - 08:04</p>
+  <p><span>最后更新:</span>2020年04月24日 - 22:04</p>
+  <p><span>原始链接:</span><a href="/2020/04/15/堆攻击手段整理总结/" title="堆攻击手段整理总结">http://yoursite.com/2020/04/15/堆攻击手段整理总结/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/04/15/堆攻击手段整理总结/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
     
   </div>
    
@@ -445,7 +506,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/19/360赛/" title="360赛">http://yoursite.com/2019/10/19/360赛/</a>
+    <a href="http://yoursite.com/2020/04/15/堆攻击手段整理总结/" title="堆攻击手段整理总结">http://yoursite.com/2020/04/15/堆攻击手段整理总结/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -467,8 +528,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/18/第五空间线下赛（pwn）/" rel="next" title="第五空间线下赛（pwn）">
-                <i class="fa fa-chevron-left"></i> 第五空间线下赛（pwn）
+              <a href="/2020/03/22/docker的搭建/" rel="next" title="docker的搭建">
+                <i class="fa fa-chevron-left"></i> docker的搭建
               </a>
             
           </div>
@@ -476,10 +537,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/28/fastedbin-attack-探究/" rel="prev" title="fastedbin attack 探究">
-                fastedbin attack 探究 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -595,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwn2"><span class="nav-number">1.</span> <span class="nav-text">pwn2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bypass1"><span class="nav-number">1.1.</span> <span class="nav-text">bypass1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bypass2"><span class="nav-number">1.2.</span> <span class="nav-text">bypass2</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tcache-bin"><span class="nav-number">1.</span> <span class="nav-text">Tcache_bin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#某要点"><span class="nav-number">1.1.</span> <span class="nav-text">某要点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcache-dup"><span class="nav-number">1.2.</span> <span class="nav-text">tcache_dup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcache-House-of-Spirit"><span class="nav-number">1.3.</span> <span class="nav-text">tcache House of Spirit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcache-poisoning"><span class="nav-number">1.4.</span> <span class="nav-text">tcache poisoning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcache-perthread-corruption"><span class="nav-number">1.5.</span> <span class="nav-text">tcache perthread corruption</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于tcache下对于main-arena泄露的一些个人见解"><span class="nav-number">1.6.</span> <span class="nav-text">关于tcache下对于main_arena泄露的一些个人见解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tcache-entry"><span class="nav-number">1.6.1.</span> <span class="nav-text">tcache_entry</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcache-perthread-struct"><span class="nav-number">1.6.2.</span> <span class="nav-text">tcache_perthread_struct</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大名鼎鼎unlink"><span class="nav-number">2.</span> <span class="nav-text">大名鼎鼎unlink</span></a></li></ol></div>
             
 
           </div>
