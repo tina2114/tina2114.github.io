@@ -81,6 +81,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="zhz'blog" type="application/atom+xml">
+
 
 
 
@@ -93,12 +95,12 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2020/03/22/docker的搭建/D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png">
+<meta property="og:image" content="d:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png">
 <meta property="og:updated_time" content="2020-04-03T04:36:01.126Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker的搭建">
 <meta name="twitter:description" content="正常的docker安装由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本： 1$ sudo apt-get remove docker docker-engine docker-ce docker.io  更新apt包索引： 1$ sudo apt-get update  安装以下包以使apt可以通过HTTPS使用存储库（repository）： 1$ sudo apt-g">
-<meta name="twitter:image" content="http://yoursite.com/2020/03/22/docker的搭建/D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png">
+<meta name="twitter:image" content="d:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png">
 
 
 
@@ -455,7 +457,7 @@
 <p>最后就是用你的exp进行测试。</p>
 <h3 id="docker镜像的保存和导出"><a href="#docker镜像的保存和导出" class="headerlink" title="docker镜像的保存和导出"></a>docker镜像的保存和导出</h3><p>1.查看要要保存的镜像的ID</p>
 <p>docker  images</p>
-<p><img src="//yoursite.com/2020/03/22/docker的搭建/D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png" alt="image-20200403110914281"></p>
+<p><img src="D:%5Cblog%5CHexo%5Csource_posts%5Cdocker%E7%9A%84%E6%90%AD%E5%BB%BA%5Cimage-20200403110914281.png" alt="image-20200403110914281"></p>
 <p>2.保存镜像为tar包</p>
 <p>docker save  -o  gitlab.tar  <repository></repository></p>
 <p>3.用scp，xftp等等将已经压缩好的gitlab.tar包弄到服务器，虚拟机（你想弄到的地方）</p>
@@ -663,6 +665,13 @@
 
           </nav>
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           

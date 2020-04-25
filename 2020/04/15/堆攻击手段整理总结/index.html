@@ -81,6 +81,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="zhz'blog" type="application/atom+xml">
+
 
 
 
@@ -93,13 +95,13 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。 Tcache_bintcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO 某要点这里也点出一点和fastbin的malloc机制所不同的地方 首先来看tcache bin的malloc机制  计算对应的size是否在bin中">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png">
-<meta property="og:image" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223524506.png">
-<meta property="og:updated_time" content="2020-04-24T14:49:16.133Z">
+<meta property="og:image" content="d:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png">
+<meta property="og:image" content="d:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223524506.png">
+<meta property="og:updated_time" content="2020-04-24T14:53:07.467Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆攻击手段整理总结">
 <meta name="twitter:description" content="算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。 Tcache_bintcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO 某要点这里也点出一点和fastbin的malloc机制所不同的地方 首先来看tcache bin的malloc机制  计算对应的size是否在bin中">
-<meta name="twitter:image" content="http://yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png">
+<meta name="twitter:image" content="d:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png">
 
 
 
@@ -403,10 +405,10 @@
 <h2 id="Tcache-bin"><a href="#Tcache-bin" class="headerlink" title="Tcache_bin"></a>Tcache_bin</h2><p>tcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO</p>
 <h3 id="某要点"><a href="#某要点" class="headerlink" title="某要点"></a>某要点</h3><p>这里也点出一点和fastbin的malloc机制所不同的地方</p>
 <p>首先来看tcache bin的malloc机制</p>
-<p><img src="//yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png" alt="image-20200424223103869"></p>
-<p>计算对应的size是否在bin中存在chunk，tcache是否初始化。</p>
+<p><img src="D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223103869.png" alt="image-20200424223103869"></p>
+<p>计算对应的size是否在bin中存在chunk，tcache是否初始化。malloc不存在对size的检测。</p>
 <p>fast bin的malloc机制主要看这一段</p>
-<p><img src="//yoursite.com/2020/04/15/堆攻击手段整理总结/D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223524506.png" alt="image-20200424223524506"></p>
+<p><img src="D:%5Cblog%5CHexo%5Csource_posts%5C%E5%A0%86%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5%E6%95%B4%E7%90%86%E6%80%BB%E7%BB%93%5Cimage-20200424223524506.png" alt="image-20200424223524506"></p>
 <p>会对malloc的chunk的size位与fast bin中chunk的size位进行检测，是否匹配。</p>
 <p>照我理解，就是malloc(0x28)的时候，会对这个malloc里的size进行fastbin中chunk获取，获取完后会进行这里的第一重检测，也就是实际chunk中的size与fastbin中取出的chunk的size进行匹配。因为这一重检测，所以我们打malloc_hook的时候经常会-0x23这种操作，来使得size匹配。</p>
 <h3 id="tcache-dup"><a href="#tcache-dup" class="headerlink" title="tcache_dup"></a>tcache_dup</h3><p>因为tcache bin检查机制的问题，可以前后两次free同一个堆块，检查机制并不会报错。也就是常说的double free技巧。</p>
@@ -627,6 +629,13 @@
 
           </nav>
 
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
           
 
           
