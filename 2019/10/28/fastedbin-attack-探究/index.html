@@ -88,12 +88,12 @@
 
 
 
-<meta name="description" content="总结一下， fasted bin attack有两种打法 第一种是侧重free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。 第二种是侧重fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 （其实个人感觉，总的来说，最终目的都是针对于fd进行操作） fastbin double free Fastbin Double Free 是指 fastbin 的 c">
+<meta name="description" content="fastbin double free Fastbin Double Free 是指 fastbin 的 chunk 可以被多次释放，因此可以在 fastbin 链表中存在多次 。 类似于   此时，chunk1被再次释放，其fd指向chunk2。 我们进行第一次malloc，得到chunk1，然后在chunk1.fd的位置写入你想要的地址，然后进行第二次malloc，获得chunk2，再进行第三">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fastedbin attack 探究">
 <meta property="og:url" content="http://yoursite.com/2019/10/28/fastedbin-attack-探究/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="总结一下， fasted bin attack有两种打法 第一种是侧重free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。 第二种是侧重fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 （其实个人感觉，总的来说，最终目的都是针对于fd进行操作） fastbin double free Fastbin Double Free 是指 fastbin 的 c">
+<meta property="og:description" content="fastbin double free Fastbin Double Free 是指 fastbin 的 chunk 可以被多次释放，因此可以在 fastbin 链表中存在多次 。 类似于   此时，chunk1被再次释放，其fd指向chunk2。 我们进行第一次malloc，得到chunk1，然后在chunk1.fd的位置写入你想要的地址，然后进行第二次malloc，获得chunk2，再进行第三">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/figure/fastbin_free_chunk3.png">
 <meta property="og:image" content="d:%5Cblog%5CHexo%5Csource_posts%5C%C2%96fastedbin-attack-%E6%8E%A2%E7%A9%B6%5Cimage-20200415101909292.png">
@@ -111,10 +111,10 @@
 <meta property="og:image" content="https://bbs.pediy.com/upload/attach/201901/3_8D489B4GNW7QYK4.jpg">
 <meta property="og:image" content="https://bbs.pediy.com/upload/attach/201901/3_CPMMKR8DZNMSN73.jpg">
 <meta property="og:image" content="d:%5Cblog%5CHexo%5Csource_posts%5C%C2%96fastedbin-attack-%E6%8E%A2%E7%A9%B6%5Cimage-20191208011303551.png">
-<meta property="og:updated_time" content="2020-04-24T14:27:32.350Z">
+<meta property="og:updated_time" content="2020-04-29T10:00:30.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastedbin attack 探究">
-<meta name="twitter:description" content="总结一下， fasted bin attack有两种打法 第一种是侧重free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。 第二种是侧重fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。 （其实个人感觉，总的来说，最终目的都是针对于fd进行操作） fastbin double free Fastbin Double Free 是指 fastbin 的 c">
+<meta name="twitter:description" content="fastbin double free Fastbin Double Free 是指 fastbin 的 chunk 可以被多次释放，因此可以在 fastbin 链表中存在多次 。 类似于   此时，chunk1被再次释放，其fd指向chunk2。 我们进行第一次malloc，得到chunk1，然后在chunk1.fd的位置写入你想要的地址，然后进行第二次malloc，获得chunk2，再进行第三">
 <meta name="twitter:image" content="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/figure/fastbin_free_chunk3.png">
 
 
@@ -415,11 +415,7 @@
       
 
       
-        <p>总结一下， fasted bin attack有两种打法</p>
-<p>第一种是侧重free函数释放真的chunk或伪造的chunk，然后再次申请chunk进行攻击。</p>
-<p>第二种是侧重fd指针，将其修改，进行堆块的任意地址分配，从而达到任意地址写。</p>
-<p>（其实个人感觉，总的来说，最终目的都是针对于fd进行操作）</p>
-<h3 id="fastbin-double-free"><a href="#fastbin-double-free" class="headerlink" title="fastbin double free"></a>fastbin double free</h3><p> Fastbin Double Free 是指 fastbin 的 chunk 可以被多次释放，因此可以在 fastbin 链表中存在多次 。</p>
+        <h3 id="fastbin-double-free"><a href="#fastbin-double-free" class="headerlink" title="fastbin double free"></a>fastbin double free</h3><p> Fastbin Double Free 是指 fastbin 的 chunk 可以被多次释放，因此可以在 fastbin 链表中存在多次 。</p>
 <p>类似于 <img src="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/figure/fastbin_free_chunk3.png" alt="img"> </p>
 <p>此时，chunk1被再次释放，其fd指向chunk2。</p>
 <p>我们进行第一次malloc，得到chunk1，然后在chunk1.fd的位置写入你想要的地址，然后进行第二次malloc，获得chunk2，再进行第三次malloc，再次得到chunk1，因为此时chunk1的fd已经被你修改为你想要的地址，所以你进行第四次malloc的时候，会依据你chunk1.fd的内容在那个地址进行堆块分配。</p>
@@ -574,7 +570,7 @@
   <p><span>本文标题:</span><a href="/2019/10/28/fastedbin-attack-探究/">fastedbin attack 探究</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
   <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
-  <p><span>最后更新:</span>2020年04月24日 - 22:04</p>
+  <p><span>最后更新:</span>2020年04月29日 - 18:04</p>
   <p><span>原始链接:</span><a href="/2019/10/28/fastedbin-attack-探究/" title="fastedbin attack 探究">http://yoursite.com/2019/10/28/fastedbin-attack-探究/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/fastedbin-attack-探究/" aria-label="复制成功！"></i></span>
   </p>
