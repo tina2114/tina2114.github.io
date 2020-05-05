@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200424223524506.png">
 <meta property="og:image" content="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200505233038696.png">
 <meta property="og:image" content="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200506000743726.png">
-<meta property="og:updated_time" content="2020-05-05T17:37:55.043Z">
+<meta property="og:updated_time" content="2020-05-05T17:54:30.857Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆攻击手段整理总结">
 <meta name="twitter:description" content="算是对自己掌握的知识做一个总结吧。毕竟憨憨，经常脑子犯浑，自己把自己绕进去了。就趁着清醒的时候对于手法，原理进行一个记录吧。(慢慢✍吧，我也不知道多久能写完，懒癌选手) Tcache_bintcache在free中并不会被清除inuse标志，所以他们被认为是处于使用状态，不会被合并，LIFO 某要点这里也点出一点和fastbin的malloc机制所不同的地方 首先来看tcache bin的mall">
@@ -490,11 +490,12 @@
 <p>检测:</p>
 <p><img src="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200505233038696.png" alt></p>
 <p>也就是说，我们取small bin最后一个chunk的时候会进行检测，如果存在空闲堆块，就会进行检测。</p>
-<p>检测为获取最后一个堆块的bk(也就是获取倒数第二个堆块的地址)，检查倒数第二个堆块的fd是否为最后一个堆块。</p>
-<p>那么我们就可以利用这种检测，修改最后一个chunk的bk指向我们想要的地址（fake chunk的head部，不是mem）</p>
-<p>在那个地址构造好fake chunk，prev_size，size可以直接写0，无对这俩的检测。只需要构造fd和bk，</p>
+<p>检测为获取最后一个堆块的bk<!--(也就是获取倒数第二个堆块的地址)-->，检查倒数第二个堆块的fd是否为最后一个堆块。</p>
+<p>那么我们就可以利用这种检测，修改最后一个chunk的bk指向我们想要的地址<!--（fake_chunk的head部，不是mem）--></p>
+<p>在那个地址构造好fake_chunk，prev_size，size可以直接写0，无对这俩的检测。只需要构造fd和bk，</p>
 <p>fd为最后一个堆块地址，bk为fake_chunk2</p>
-<p>（注意一点，在打fake chunk地址的时候，会再进行一次上述检测，所以要在fake chunk后面再构造一个fake chunk2，这个fake chunk2不用构造prev_size,size什么的，只需要注意在fd位置写上fake_chunk地址就好）</p>
+<!--（注意一点，在打fake_chunk地址的时候，会再进行一次上述检测，所以要在fake_chunk后面再构造一个fake_chunk2，这个fake_chunk2不用构造prev_size,size什么的，只需要注意在fd位置写上fake_chunk地址就好）-->
+
 <p>说完检测，来说说第二个问题。</p>
 <p>不知道你们有没有，反正我学艺不精，在学这个的时候，想的是，我写的poc怎么size是在smallbin范围，free后全在unsortedbin，进不到smallbin里。</p>
 <p>此时来了解一下，unsorted bin 可以视为空闲 chunk 回归其所属 bin 之前的缓冲区</p>
