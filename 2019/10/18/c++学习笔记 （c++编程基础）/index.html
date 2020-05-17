@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="zhz&#39;blog">
 <meta property="og:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-05T01:23:24.588Z">
+<meta property="og:updated_time" content="2020-05-12T16:17:31.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c++学习笔记（c++编程基础）">
 <meta name="twitter:description" content="using namespace1using namespace  形象通俗的讲，就是为了防止同文件中同变量名或函数名产生冲突，只要它们属于不同的名空间 const1const int max_tries = 3 ;  被定义为const的对象，在获得初值以后，无法再有任何改动。如果你企图为const对象指定新值，会产生编译错误，例如： 1max_tries = 41 ; //错误：这是个const">
@@ -536,6 +536,12 @@
 <p>此时，a的真值为7，自低位输出，如有副本则输出副本，无副本输出现在a的真值7</p>
 <p>结果： 6 7 4 7 2 7</p>
 <p>（这里得感谢Delort师傅的文章）</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>调用这个类的时候就会自动运行这个函数，进行的一些处理。</p>
+<p>这个函数名必须和类名相同</p>
+<p>构造函数独有写法:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">complex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">complex</span> (<span class="keyword">double</span> r =<span class="number">0</span>,<span class="keyword">double</span> i = <span class="number">0</span>)</span><br><span class="line">		: re(r), im(i)</span><br><span class="line">	&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就是将r 和 i 赋值给re , im这两个变量</p>
 
       
     </div>
@@ -675,7 +681,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -719,7 +725,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-namespace"><span class="nav-number">1.</span> <span class="nav-text">using namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件运算符-‘-’-和’-’"><span class="nav-number">3.</span> <span class="nav-text">条件运算符 ‘?’ 和’:’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环语句之switch"><span class="nav-number">4.</span> <span class="nav-text">循环语句之switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array和Vector-数组"><span class="nav-number">5.</span> <span class="nav-text">Array和Vector 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">5.1.</span> <span class="nav-text">Array :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vector"><span class="nav-number">5.2.</span> <span class="nav-text">Vector :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">6.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">6.1.</span> <span class="nav-text">注：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的读写"><span class="nav-number">7.</span> <span class="nav-text">文件的读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#‘-‘-amp-“-“"><span class="nav-number">8.</span> <span class="nav-text">‘  ‘ &amp; “  “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-与-a的稍许差别"><span class="nav-number">9.</span> <span class="nav-text">a++ 与 ++a的稍许差别</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#using-namespace"><span class="nav-number">1.</span> <span class="nav-text">using namespace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件运算符-‘-’-和’-’"><span class="nav-number">3.</span> <span class="nav-text">条件运算符 ‘?’ 和’:’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环语句之switch"><span class="nav-number">4.</span> <span class="nav-text">循环语句之switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array和Vector-数组"><span class="nav-number">5.</span> <span class="nav-text">Array和Vector 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">5.1.</span> <span class="nav-text">Array :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vector"><span class="nav-number">5.2.</span> <span class="nav-text">Vector :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">6.</span> <span class="nav-text">指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">6.1.</span> <span class="nav-text">注：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的读写"><span class="nav-number">7.</span> <span class="nav-text">文件的读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#‘-‘-amp-“-“"><span class="nav-number">8.</span> <span class="nav-text">‘  ‘ &amp; “  “</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-与-a的稍许差别"><span class="nav-number">9.</span> <span class="nav-text">a++ 与 ++a的稍许差别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">10.</span> <span class="nav-text">构造函数</span></a></li></ol></div>
             
 
           </div>
